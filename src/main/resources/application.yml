@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-bp1c8cgc4866uqeq7wo.mysql.rds.aliyuncs.com:3306/basedb?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+    username: base
+    password: Base1024
+    druid:
+      #下面为连接池补充设置
+      initialSize: 5
+      # 配置获取连接等待超时的时间   
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒 
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据 
+      useGlobalDataSourceStat: true
+
+#  TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+logging:
+  level:
+    root: DEBUG
+
+
+mybatis:
+  type-aliases-package: com.chen.base.entity
+  mapper-locations: classpath:mapper/**/*.xml
+  check-config-location: true
+
+
+pagehelper:
+  autoDialect: true
+  closeConn: false
+  reasonable: true
+
+shiro:
+  loginUrl: /login         # 用户未登录时跳转的请求路径
+  unauthorizedUrl: /page/403  # 用户没有访问权限时跳转的请求路径
+  userNativeSessionManager: true
+  sessionManager:
+    cookie:
+      name: BIUSID

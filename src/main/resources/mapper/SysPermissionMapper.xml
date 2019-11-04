@@ -102,7 +102,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_permission
     where id = #{id,jdbcType=INTEGER}
@@ -127,9 +127,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into sys_permission (id, name, url, 
+    insert into sys_permission (id, name, url,
       method, desc)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
       #{method,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.SysPermission">
@@ -187,7 +187,7 @@
              left join sys_user_role on sys_user.id = sys_user_role.user_id
              left join sys_role on sys_user_role.role_id = sys_role.id
              left join sys_role_permission on sys_role.id = sys_role_permission.role_id
-             left join sys_permission on sys_role_permission.permission_id = sys_permission.id
+             right join sys_permission on sys_role_permission.permission_id = sys_permission.id
       where sys_user.id = #{userId}
     </select>
     <update id="updateByExampleSelective" parameterType="map">

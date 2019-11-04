@@ -104,7 +104,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_user
     where id = #{id,jdbcType=INTEGER}
@@ -129,11 +129,11 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into sys_user (id, login_name, password, 
-      salt, nick_name, user_status, 
+    insert into sys_user (id, login_name, password,
+      salt, nick_name, user_status,
       create_time)
-    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userStatus,jdbcType=TINYINT}, 
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userStatus,jdbcType=TINYINT},
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.SysUser">
@@ -197,10 +197,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-    <select id="findByUserName" resultType="com.chen.base.entity.SysUser">
-      select     <include refid="Base_Column_List" />
+    <select id="findByUserName" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
       from sys_user
-      where login_name = #{userName}
+      where login_name = #{userName,jdbcType=VARCHAR}
     </select>
     <update id="updateByExampleSelective" parameterType="map">
     <!--

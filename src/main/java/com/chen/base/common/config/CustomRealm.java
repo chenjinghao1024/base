@@ -29,7 +29,7 @@ public class CustomRealm extends AuthorizingRealm {
         //设置用于匹配密码的CredentialsMatcher
         HashedCredentialsMatcher hashMatcher = new HashedCredentialsMatcher();
         hashMatcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
-        hashMatcher.setStoredCredentialsHexEncoded(false);
+        hashMatcher.setStoredCredentialsHexEncoded(true);
         hashMatcher.setHashIterations(1024);
         this.setCredentialsMatcher(hashMatcher);
     }

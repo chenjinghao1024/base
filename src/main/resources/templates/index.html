@@ -40,25 +40,18 @@
         <div shiro:hasAnyRoles="admin">
             <p class="bg-info" >admin</p>
         </div>
+
         <div shiro:hasAnyRoles="first">
             <p class="bg-info" >first</p>
+            <p shiro:hasPermission="first:create" class="bg-info" >first:create</p>
+            <p shiro:hasPermission="first:delete" class="bg-info" >first:delete</p>
+            <p shiro:hasPermission="delete" class="bg-info" >delete</p>
+            <p class="bg-info" >first</p>
+            <p class="bg-info" >first</p>
         </div>
+
         <div shiro:hasAnyRoles="second">
             <p class="bg-info" >second</p>
-        </div>
-
-        <div shiro:hasPermission="first:delete">
-            <p class="bg-info">first:delete</p>
-        </div>
-        <div shiro:hasPermission="first:create">
-            <p class="bg-info">first:create</p>
-        </div>
-
-        <div shiro:hasPermission="second:delete">
-            <p class="bg-info">second:delete</p>
-        </div>
-        <div shiro:hasPermission="second:create">
-            <p class="bg-info">second:create</p>
         </div>
 
         <form th:action="@{/logout}" method="post">

@@ -2,9 +2,14 @@ package com.chen.base.controller;
 
 
 import com.chen.base.entity.SysUser;
+import com.chen.base.entity.vo.RegisterVO;
 import com.chen.base.entity.vo.ResultVO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.mgt.AuthorizingSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +28,6 @@ public class LoginController {
 
 
     /**
-     * 登录接口，由于UserService中是模拟返回用户信息的，
-     * 所以用户名随意，密码123456
-     * @param body
      * @return
      */
     @PostMapping("/login")
@@ -42,36 +44,39 @@ public class LoginController {
         }
 
         Subject currentUser = SecurityUtils.getSubject();
+
         try {
             //登录
-            currentUser.login( new UsernamePasswordToken(userName, password) );
+            currentUser.login(new UsernamePasswordToken(userName, password));
+
             //从session取出用户信息
             SysUser user = (SysUser) currentUser.getPrincipal();
-            if (user==null) {
+            if (user == null) {
                 throw new AuthenticationException();
             }
+
             //返回登录用户的信息给前台，含用户的所有角色和权限
             return ResultVO.succ(oper)
-                    .data("id",user.getId())
-                    .data("nick",user.getNickName())
-                    .data("roles",user.getRoles())
-                    .data("perms",user.getPermissions());
+                    .data("id", user.getId())
+                    .data("nick", user.getNickName())
+                    .data("roles", user.getRoles())
+                    .data("perms", user.getPermissions());
 
-        } catch ( UnknownAccountException uae ) {
+        } catch (UnknownAccountException uae) {
             log.warn("用户帐号不正确");
-            return ResultVO.fail(oper,"用户帐号或密码不正确");
+            return ResultVO.fail(oper, "用户帐号或密码不正确");
 
-        } catch ( IncorrectCredentialsException ice ) {
+        } catch (IncorrectCredentialsException ice) {
             log.warn("用户密码不正确");
-            return ResultVO.fail(oper,"用户帐号或密码不正确");
+            return ResultVO.fail(oper, "用户帐号或密码不正确");
 
-        } catch ( LockedAccountException lae ) {
+        } catch (LockedAccountException lae) {
             log.warn("用户帐号被锁定");
-            return ResultVO.fail(oper,"用户帐号被锁定不可用");
+            return ResultVO.fail(oper, "用户帐号被锁定不可用");
 
-        } catch ( AuthenticationException ae ) {
+        } catch (AuthenticationException ae) {
             log.warn("登录出错");
-            return ResultVO.fail(oper,"登录失败："+ae.getMessage());
+            return ResultVO.fail(oper, "登录失败：" + ae.getMessage());
         }
 
     }
@@ -82,5 +87,17 @@ public class LoginController {
         currentUser.logout();
         return "login";
     }
+
+
+    @PostMapping("/registered")
+    @ResponseBody
+    public String registered(RegisterVO register) {
+
+        String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
+        register.setSalt(salt);
+
+        return "login";
+    }
+
 
 }

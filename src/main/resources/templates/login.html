@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
       xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -99,48 +98,12 @@
                 }
             },
             error: function () {
-=======
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <title>Insert title here</title>
-</head>
 
-<body>
-错误信息：<h4 id="error"></h4>
-<p>账号：<input type="text" name="username" id="username" value="admin"/></p>
-<p>密码：<input type="text" name="password" id="password" value="123456"/></p>
-<p><input type="button" onclick="sendAjax()" value="登录" id="ajaxLogin"/></p>
-</body>
-<script th:src="@{jquery-3.4.0.min.js}"></script>
-<script>
-    function sendAjax(){
-        var username = $("#username").val();
-        var password = $("#password").val();
-        $.ajax({
-            url:"/login",
-            data:{"userName":username, "password": password},
-            type:"post",
-            dataType:"json",
-            success:function(data){
-                console.log(data);
-                if(data.code==1){
-                    location.href = "/index";
-                }else{
-                    $("#error").html(data.msg);
-                }
-            },
-            error: function() {
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
                 $("#error").html("登录失败");
             }
         });
     }
 </script>
-<<<<<<< HEAD
 </body>
 </html>
-=======
 
-</html>
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

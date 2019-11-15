@@ -104,11 +104,8 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-<<<<<<< HEAD
     select
-=======
-    select 
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
+
     <include refid="Base_Column_List" />
     from sys_user
     where id = #{id,jdbcType=INTEGER}
@@ -133,19 +130,12 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-<<<<<<< HEAD
     insert into sys_user (id, login_name, password,
       salt, nick_name, user_status,
       create_time)
     values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userStatus,jdbcType=TINYINT},
-=======
-    insert into sys_user (id, login_name, password, 
-      salt, nick_name, user_status, 
-      create_time)
-    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userStatus,jdbcType=TINYINT}, 
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
+
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.SysUser">
@@ -209,18 +199,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-<<<<<<< HEAD
     <select id="findByUserName" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List" />
       from sys_user
       where login_name = #{userName,jdbcType=VARCHAR}
-=======
-    <select id="findByUserName" resultType="com.chen.base.entity.SysUser">
-      select     <include refid="Base_Column_List" />
-      from sys_user
-      where login_name = #{userName}
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
+
     </select>
     <update id="updateByExampleSelective" parameterType="map">
     <!--
@@ -310,8 +294,4 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-<<<<<<< HEAD
 </mapper>
-=======
-</mapper>
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

@@ -2,7 +2,6 @@
 <html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-<<<<<<< HEAD
     <meta charset="utf-8">
     <title>首页</title>
     <link rel="icon" th:href="@{favicon.ico}" type="image/ico">
@@ -272,73 +271,4 @@
 <script type="text/javascript" th:src="@{js/index.min.js}"></script>
 </body>
 </html>
-=======
-    <meta content="text/html;charset=UTF-8"/>
-    <title ></title>
-    <link rel="stylesheet" th:href="@{bootstrap-3.3.7/css/bootstrap.css}"/>
-    <style type="text/css">
-        body {
-            padding-top: 50px;
-        }
-        .starter-template {
-            padding: 40px 15px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Spring Security演示</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a th:href="@{/}"> 首页 </a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
 
-
-<div class="container">
-
-    <div class="starter-template">
-        <h1></h1>
-
-        <p class="bg-primary"></p>
-
-        <div shiro:hasAnyRoles="admin">
-            <p class="bg-info" >admin</p>
-        </div>
-        <div shiro:hasAnyRoles="first">
-            <p class="bg-info" >first</p>
-        </div>
-        <div shiro:hasAnyRoles="second">
-            <p class="bg-info" >second</p>
-        </div>
-
-        <div shiro:hasPermission="first:delete">
-            <p class="bg-info">first:delete</p>
-        </div>
-        <div shiro:hasPermission="first:create">
-            <p class="bg-info">first:create</p>
-        </div>
-
-        <div shiro:hasPermission="second:delete">
-            <p class="bg-info">second:delete</p>
-        </div>
-        <div shiro:hasPermission="second:create">
-            <p class="bg-info">second:create</p>
-        </div>
-
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" class="btn btn-primary" value="注销"/>
-        </form>
-    </div>
-
-</div>
-
-</body>
-</html>
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

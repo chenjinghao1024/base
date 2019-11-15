@@ -19,15 +19,10 @@ public class ResultVO extends HashMap<String, Object> {
 
     /////////////////////// 默认的值 ///////////////////////
     private static final String DEFAULT_OPER_VAL = "default";
-<<<<<<< HEAD
     private static final int DEFAULT_SUCC_CODE = 200;
     private static final int DEFAULT_FAIL_CODE = -1;
     private static final String DEFAULT_SUCC_MSG = "success";
-=======
-    private static final int DEFAULT_SUCC_CODE = 1;
-    private static final int DEFAULT_FAIL_CODE = -1;
-    private static final String DEFAULT_SUCC_MSG = "ok";
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
+
     private static final String DEFAULT_FAIL_MSG = "fail";
 
 

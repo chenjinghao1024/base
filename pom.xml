@@ -127,7 +127,6 @@
             <artifactId>thymeleaf-extras-shiro</artifactId>
             <version>2.0.0</version>
         </dependency>
-<<<<<<< HEAD
 
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
@@ -136,8 +135,6 @@
             <version>1.12.1</version>
         </dependency>
 
-=======
->>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
     </dependencies>
 
     <build>

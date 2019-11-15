@@ -102,7 +102,11 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
+<<<<<<< HEAD
     select
+=======
+    select 
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
     <include refid="Base_Column_List" />
     from sys_permission
     where id = #{id,jdbcType=INTEGER}
@@ -127,9 +131,15 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
+<<<<<<< HEAD
     insert into sys_permission (id, name, url,
       method, desc)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+=======
+    insert into sys_permission (id, name, url, 
+      method, desc)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
       #{method,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.SysPermission">
@@ -187,7 +197,11 @@
              left join sys_user_role on sys_user.id = sys_user_role.user_id
              left join sys_role on sys_user_role.role_id = sys_role.id
              left join sys_role_permission on sys_role.id = sys_role_permission.role_id
+<<<<<<< HEAD
              right join sys_permission on sys_role_permission.permission_id = sys_permission.id
+=======
+             left join sys_permission on sys_role_permission.permission_id = sys_permission.id
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
       where sys_user.id = #{userId}
     </select>
     <update id="updateByExampleSelective" parameterType="map">
@@ -262,4 +276,8 @@
       desc = #{desc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+<<<<<<< HEAD
 </mapper>
+=======
+</mapper>
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

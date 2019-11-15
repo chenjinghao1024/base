@@ -9,9 +9,15 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
+<<<<<<< HEAD
     url: jdbc:mysql://tjlemai.noip.cn:3306/cost?serverTimezone=UTC
     username: root
     password: 123457
+=======
+    url: jdbc:mysql://rm-bp1c8cgc4866uqeq7wo.mysql.rds.aliyuncs.com:3306/basedb?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+    username: base
+    password: Base1024
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
     druid:
       #下面为连接池补充设置
       initialSize: 5
@@ -54,4 +60,8 @@ shiro:
   userNativeSessionManager: true
   sessionManager:
     cookie:
+<<<<<<< HEAD
       name: BIUSID
+=======
+      name: BIUSID
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

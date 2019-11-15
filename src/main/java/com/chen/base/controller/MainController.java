@@ -18,6 +18,7 @@ public class MainController {
         return "index";
     }
 
+<<<<<<< HEAD
     @GetMapping({"/main"})
     public String main(Model model){
         return "lyear_main";
@@ -33,6 +34,8 @@ public class MainController {
         return "lyear_pages_data_table";
     }
 
+=======
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
     @GetMapping("/login")
     public String login(Model model){
         return "login";

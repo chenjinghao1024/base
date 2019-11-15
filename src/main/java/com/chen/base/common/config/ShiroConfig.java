@@ -49,6 +49,7 @@ public class ShiroConfig {
         chain.addPathDefinition("/page/401", "anon");
         chain.addPathDefinition("/page/403", "anon");
 
+<<<<<<< HEAD
         chain.addPathDefinition("/**/*.js", "anon");
         chain.addPathDefinition("/**/*.css", "anon");
 
@@ -65,6 +66,15 @@ public class ShiroConfig {
 //        chain.addPathDefinition("/**", "authc");
         return chain;
 
+=======
+        chain.addPathDefinition("/first/hello", "anon");
+        chain.addPathDefinition("/**/*.js", "anon");
+        chain.addPathDefinition("/**/*.css", "anon");
+
+        //除了以上的请求外，其它请求都需要登录
+        chain.addPathDefinition("/**", "authc");
+        return chain;
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab
     }
 
     @Bean
@@ -86,4 +96,8 @@ public class ShiroConfig {
         hashedCredentialsMatcher.setHashIterations(1024);
         return hashedCredentialsMatcher;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4580d34994813900b3de0b8cc1cc88349f3a03ab

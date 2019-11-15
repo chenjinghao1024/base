@@ -49,13 +49,22 @@ public class ShiroConfig {
         chain.addPathDefinition("/page/401", "anon");
         chain.addPathDefinition("/page/403", "anon");
 
-        chain.addPathDefinition("/first/hello", "anon");
         chain.addPathDefinition("/**/*.js", "anon");
         chain.addPathDefinition("/**/*.css", "anon");
 
-        //除了以上的请求外，其它请求都需要登录
-        chain.addPathDefinition("/**", "authc");
+        chain.addPathDefinition("/**/*.eot", "anon");
+        chain.addPathDefinition("/**/*.svg", "anon");
+        chain.addPathDefinition("/**/*.ttf", "anon");
+        chain.addPathDefinition("/**/*.woff", "anon");
+        chain.addPathDefinition("/**/*.woff2", "anon");
+        chain.addPathDefinition("/**/*.png", "anon");
+        chain.addPathDefinition("/**/*.map", "anon");
+
+        //除了以上的请求外，其它请求都需要登录yi
+        chain.addPathDefinition("/**", "anon");
+//        chain.addPathDefinition("/**", "authc");
         return chain;
+
     }
 
     @Bean

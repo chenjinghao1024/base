@@ -95,7 +95,6 @@ public class LoginController {
 
         String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
         register.setSalt(salt);
-
         return "login";
     }
 

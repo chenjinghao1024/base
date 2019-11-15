@@ -18,6 +18,21 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping({"/main"})
+    public String main(Model model){
+        return "lyear_main";
+    }
+
+    @GetMapping({"/table"})
+    public String table(Model model){
+        return "lyear_ui_tables";
+    }
+
+    @GetMapping({"/table2"})
+    public String table2(Model model){
+        return "lyear_pages_data_table";
+    }
+
     @GetMapping("/login")
     public String login(Model model){
         return "login";

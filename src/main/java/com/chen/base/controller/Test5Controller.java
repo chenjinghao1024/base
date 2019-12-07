@@ -1,10 +1,13 @@
 package com.chen.base.controller;
 
 
+import com.chen.base.service.InterfaceService;
 import org.apache.shiro.authz.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * created by CaiBaoHong at 2018/4/18 15:51<br>
@@ -12,8 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Administrator
  */
 @RestController
-@RequestMapping("/t5")
+@RequestMapping("/demo")
 public class Test5Controller {
+
+    @Resource
+    InterfaceService interfaceService;
+
+    // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
+    @RequestMapping("/sync")
+    public String demo() {
+
+        interfaceService.getOrders(1008);
+
+        return "sync Count is ";
+    }
+
 
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @GetMapping("/hello")

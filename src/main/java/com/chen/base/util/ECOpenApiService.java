@@ -28,7 +28,7 @@ public class ECOpenApiService {
     /**
      * WMS域名
      */
-    private static String wmsDomain = "http://qy.ez-wms.com/";
+    private static String wmsDomain = "http://qy.ez-wms.com";
     /**
      * 账号
      */
@@ -41,6 +41,7 @@ public class ECOpenApiService {
 
     public static JSONObject soapRequest(String service, String systemCode, Map requestMap) {
         String requestParameterStr = new JSONObject(requestMap).toJSONString();
+
         return soapRequest(service, systemCode, requestParameterStr);
     }
 
@@ -54,8 +55,7 @@ public class ECOpenApiService {
      */
     public static JSONObject soapRequest(String service, String systemCode, String params) {
         JSONObject result = new JSONObject();
-        //转大写
-        systemCode = systemCode.toUpperCase();
+        systemCode = systemCode.toUpperCase();//转大写
         if (!systemCode.equals("EB") && !systemCode.equals("WMS")) {
             result.put("message", "systemCode Error");
             return result;
@@ -121,6 +121,7 @@ public class ECOpenApiService {
         }
         URL soapUrl = new URL(url);
         URLConnection conn = soapUrl.openConnection();
+        conn.setConnectTimeout(30000);
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
@@ -137,11 +138,16 @@ public class ECOpenApiService {
         // 获取webserivce返回的流
         InputStream is = conn.getInputStream();
         if (is != null) {
-            byte[] bytes = new byte[0];
-            bytes = new byte[is.available()];
-            is.read(bytes);
-            String str = new String(bytes);
-            return str;
+            int hasNext;
+            byte[] bytes;
+            StringBuffer stringBuffer = new StringBuffer();
+            do {
+                bytes = new byte[1024];
+                hasNext = is.read(bytes,0,bytes.length);
+                stringBuffer.append(new String(bytes).trim());
+            } while (hasNext != -1);
+
+            return stringBuffer.toString();
         } else {
             return null;
         }
@@ -152,14 +158,13 @@ public class ECOpenApiService {
         Map<String, Object> requestParameter = new HashMap(5);
         Map condition = new HashMap(6);
 
-        requestParameter.put("page", 0);
-        requestParameter.put("pageSize", 0);
+        requestParameter.put("page", 1);
+        requestParameter.put("pageSize", 50);
         requestParameter.put("getDetail", 1);
         requestParameter.put("getAddress", 0);
         requestParameter.put("condition", condition);
 
         JSONObject result = soapRequest("getOrderList", "EB", requestParameter);
-        System.out.println(result.toJSONString());
 
 //        obj.demo();//接口调用示例
     }

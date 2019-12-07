@@ -338,14 +338,14 @@
             data: params,
             dataType: 'json',
             success: function (data, status) {
-                console.log(data);
                 if (data.code == '200') {
+                    $('#addUser').modal('hide');
                     // 这里的状态显示有自定义样式区分，做单行的更新
                     $('.example-table').bootstrapTable('refresh');
-                    $('#addUser').modal('hide');
                 } else {
                     alert(data.msg);
                 }
+                $('#user_form').reset();
             },
             error: function () {
                 alert('修改失败，请稍后再试');

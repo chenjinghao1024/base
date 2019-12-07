@@ -19,9 +19,9 @@
 
         <jdbcConnection
                 driverClass="com.mysql.jdbc.Driver"
-                connectionURL="jdbc:mysql://rm-bp1c8cgc4866uqeq7wo.mysql.rds.aliyuncs.com:3306/basedb"
-                userId="base"
-                password="Base1024">
+                connectionURL="jdbc:mysql://tjlemai.noip.cn:3306/gross_profit?serverTimezone=UTC"
+                userId="root"
+                password="123457">
             <property name="useInformationSchema" value="true" />
         </jdbcConnection>
 
@@ -34,14 +34,10 @@
         <javaClientGenerator targetPackage="com.chen.base.mapper"
                              targetProject="src/main/java" type="XMLMAPPER"/>
 
+
         <!--tableName -> 表名  domainObjectName -> 实体类名 -->
-        <table tableName="sys_user">
-            <property name="modelOnly" value="false"/>
-        </table>
-        <table tableName="sys_role">
-            <property name="modelOnly" value="false"/>
-        </table>
-        <table tableName="sys_permission">
+
+        <table tableName="order_detail">
             <property name="modelOnly" value="false"/>
         </table>
 

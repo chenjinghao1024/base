@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.ProductBySkuMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.ProductBySku">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <id column="product_sku" jdbcType="VARCHAR" property="productSku" />
+    <result column="product_title_cn" jdbcType="VARCHAR" property="productTitleCn" />
+    <result column="product_title_en" jdbcType="VARCHAR" property="productTitleEn" />
+    <result column="product_weight" jdbcType="VARCHAR" property="productWeight" />
+    <result column="product_length" jdbcType="VARCHAR" property="productLength" />
+    <result column="product_width" jdbcType="VARCHAR" property="productWidth" />
+    <result column="product_height" jdbcType="VARCHAR" property="productHeight" />
+    <result column="is_combination" jdbcType="VARCHAR" property="isCombination" />
+    <result column="product_price" jdbcType="REAL" property="productPrice" />
+    <result column="procut_category_code1" jdbcType="VARCHAR" property="procutCategoryCode1" />
+    <result column="procut_category_code2" jdbcType="VARCHAR" property="procutCategoryCode2" />
+    <result column="procut_category_code3" jdbcType="VARCHAR" property="procutCategoryCode3" />
+    <result column="procut_category_name1" jdbcType="VARCHAR" property="procutCategoryName1" />
+    <result column="procut_category_name2" jdbcType="VARCHAR" property="procutCategoryName2" />
+    <result column="procut_category_name3" jdbcType="VARCHAR" property="procutCategoryName3" />
+    <result column="pu_name" jdbcType="VARCHAR" property="puName" />
+    <result column="user_organization_id" jdbcType="INTEGER" property="userOrganizationId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    product_sku, product_title_cn, product_title_en, product_weight, product_length, 
+    product_width, product_height, is_combination, product_price, procut_category_code1, 
+    procut_category_code2, procut_category_code3, procut_category_name1, procut_category_name2, 
+    procut_category_name3, pu_name, user_organization_id
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.ProductBySkuExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_by_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from product_by_sku
+    where product_sku = #{productSku,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from product_by_sku
+    where product_sku = #{productSku,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.ProductBySkuExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from product_by_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.ProductBySku">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into product_by_sku (product_sku, product_title_cn, product_title_en, 
+      product_weight, product_length, product_width, 
+      product_height, is_combination, product_price, 
+      procut_category_code1, procut_category_code2, 
+      procut_category_code3, procut_category_name1, 
+      procut_category_name2, procut_category_name3, 
+      pu_name, user_organization_id)
+    values (#{productSku,jdbcType=VARCHAR}, #{productTitleCn,jdbcType=VARCHAR}, #{productTitleEn,jdbcType=VARCHAR}, 
+      #{productWeight,jdbcType=VARCHAR}, #{productLength,jdbcType=VARCHAR}, #{productWidth,jdbcType=VARCHAR}, 
+      #{productHeight,jdbcType=VARCHAR}, #{isCombination,jdbcType=VARCHAR}, #{productPrice,jdbcType=REAL}, 
+      #{procutCategoryCode1,jdbcType=VARCHAR}, #{procutCategoryCode2,jdbcType=VARCHAR}, 
+      #{procutCategoryCode3,jdbcType=VARCHAR}, #{procutCategoryName1,jdbcType=VARCHAR}, 
+      #{procutCategoryName2,jdbcType=VARCHAR}, #{procutCategoryName3,jdbcType=VARCHAR}, 
+      #{puName,jdbcType=VARCHAR}, #{userOrganizationId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.ProductBySku">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into product_by_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productSku != null">
+        product_sku,
+      </if>
+      <if test="productTitleCn != null">
+        product_title_cn,
+      </if>
+      <if test="productTitleEn != null">
+        product_title_en,
+      </if>
+      <if test="productWeight != null">
+        product_weight,
+      </if>
+      <if test="productLength != null">
+        product_length,
+      </if>
+      <if test="productWidth != null">
+        product_width,
+      </if>
+      <if test="productHeight != null">
+        product_height,
+      </if>
+      <if test="isCombination != null">
+        is_combination,
+      </if>
+      <if test="productPrice != null">
+        product_price,
+      </if>
+      <if test="procutCategoryCode1 != null">
+        procut_category_code1,
+      </if>
+      <if test="procutCategoryCode2 != null">
+        procut_category_code2,
+      </if>
+      <if test="procutCategoryCode3 != null">
+        procut_category_code3,
+      </if>
+      <if test="procutCategoryName1 != null">
+        procut_category_name1,
+      </if>
+      <if test="procutCategoryName2 != null">
+        procut_category_name2,
+      </if>
+      <if test="procutCategoryName3 != null">
+        procut_category_name3,
+      </if>
+      <if test="puName != null">
+        pu_name,
+      </if>
+      <if test="userOrganizationId != null">
+        user_organization_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productSku != null">
+        #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="productTitleCn != null">
+        #{productTitleCn,jdbcType=VARCHAR},
+      </if>
+      <if test="productTitleEn != null">
+        #{productTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="productWeight != null">
+        #{productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="productLength != null">
+        #{productLength,jdbcType=VARCHAR},
+      </if>
+      <if test="productWidth != null">
+        #{productWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="productHeight != null">
+        #{productHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="isCombination != null">
+        #{isCombination,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null">
+        #{productPrice,jdbcType=REAL},
+      </if>
+      <if test="procutCategoryCode1 != null">
+        #{procutCategoryCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryCode2 != null">
+        #{procutCategoryCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryCode3 != null">
+        #{procutCategoryCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName1 != null">
+        #{procutCategoryName1,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName2 != null">
+        #{procutCategoryName2,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName3 != null">
+        #{procutCategoryName3,jdbcType=VARCHAR},
+      </if>
+      <if test="puName != null">
+        #{puName,jdbcType=VARCHAR},
+      </if>
+      <if test="userOrganizationId != null">
+        #{userOrganizationId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.chen.base.entity.ProductBySkuExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from product_by_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update product_by_sku
+    <set>
+      <if test="record.productSku != null">
+        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productTitleCn != null">
+        product_title_cn = #{record.productTitleCn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productTitleEn != null">
+        product_title_en = #{record.productTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productWeight != null">
+        product_weight = #{record.productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productLength != null">
+        product_length = #{record.productLength,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productWidth != null">
+        product_width = #{record.productWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productHeight != null">
+        product_height = #{record.productHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCombination != null">
+        is_combination = #{record.isCombination,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productPrice != null">
+        product_price = #{record.productPrice,jdbcType=REAL},
+      </if>
+      <if test="record.procutCategoryCode1 != null">
+        procut_category_code1 = #{record.procutCategoryCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procutCategoryCode2 != null">
+        procut_category_code2 = #{record.procutCategoryCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procutCategoryCode3 != null">
+        procut_category_code3 = #{record.procutCategoryCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procutCategoryName1 != null">
+        procut_category_name1 = #{record.procutCategoryName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procutCategoryName2 != null">
+        procut_category_name2 = #{record.procutCategoryName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procutCategoryName3 != null">
+        procut_category_name3 = #{record.procutCategoryName3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.puName != null">
+        pu_name = #{record.puName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userOrganizationId != null">
+        user_organization_id = #{record.userOrganizationId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update product_by_sku
+    set product_sku = #{record.productSku,jdbcType=VARCHAR},
+      product_title_cn = #{record.productTitleCn,jdbcType=VARCHAR},
+      product_title_en = #{record.productTitleEn,jdbcType=VARCHAR},
+      product_weight = #{record.productWeight,jdbcType=VARCHAR},
+      product_length = #{record.productLength,jdbcType=VARCHAR},
+      product_width = #{record.productWidth,jdbcType=VARCHAR},
+      product_height = #{record.productHeight,jdbcType=VARCHAR},
+      is_combination = #{record.isCombination,jdbcType=VARCHAR},
+      product_price = #{record.productPrice,jdbcType=REAL},
+      procut_category_code1 = #{record.procutCategoryCode1,jdbcType=VARCHAR},
+      procut_category_code2 = #{record.procutCategoryCode2,jdbcType=VARCHAR},
+      procut_category_code3 = #{record.procutCategoryCode3,jdbcType=VARCHAR},
+      procut_category_name1 = #{record.procutCategoryName1,jdbcType=VARCHAR},
+      procut_category_name2 = #{record.procutCategoryName2,jdbcType=VARCHAR},
+      procut_category_name3 = #{record.procutCategoryName3,jdbcType=VARCHAR},
+      pu_name = #{record.puName,jdbcType=VARCHAR},
+      user_organization_id = #{record.userOrganizationId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.ProductBySku">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update product_by_sku
+    <set>
+      <if test="productTitleCn != null">
+        product_title_cn = #{productTitleCn,jdbcType=VARCHAR},
+      </if>
+      <if test="productTitleEn != null">
+        product_title_en = #{productTitleEn,jdbcType=VARCHAR},
+      </if>
+      <if test="productWeight != null">
+        product_weight = #{productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="productLength != null">
+        product_length = #{productLength,jdbcType=VARCHAR},
+      </if>
+      <if test="productWidth != null">
+        product_width = #{productWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="productHeight != null">
+        product_height = #{productHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="isCombination != null">
+        is_combination = #{isCombination,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null">
+        product_price = #{productPrice,jdbcType=REAL},
+      </if>
+      <if test="procutCategoryCode1 != null">
+        procut_category_code1 = #{procutCategoryCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryCode2 != null">
+        procut_category_code2 = #{procutCategoryCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryCode3 != null">
+        procut_category_code3 = #{procutCategoryCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName1 != null">
+        procut_category_name1 = #{procutCategoryName1,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName2 != null">
+        procut_category_name2 = #{procutCategoryName2,jdbcType=VARCHAR},
+      </if>
+      <if test="procutCategoryName3 != null">
+        procut_category_name3 = #{procutCategoryName3,jdbcType=VARCHAR},
+      </if>
+      <if test="puName != null">
+        pu_name = #{puName,jdbcType=VARCHAR},
+      </if>
+      <if test="userOrganizationId != null">
+        user_organization_id = #{userOrganizationId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where product_sku = #{productSku,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.ProductBySku">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update product_by_sku
+    set product_title_cn = #{productTitleCn,jdbcType=VARCHAR},
+      product_title_en = #{productTitleEn,jdbcType=VARCHAR},
+      product_weight = #{productWeight,jdbcType=VARCHAR},
+      product_length = #{productLength,jdbcType=VARCHAR},
+      product_width = #{productWidth,jdbcType=VARCHAR},
+      product_height = #{productHeight,jdbcType=VARCHAR},
+      is_combination = #{isCombination,jdbcType=VARCHAR},
+      product_price = #{productPrice,jdbcType=REAL},
+      procut_category_code1 = #{procutCategoryCode1,jdbcType=VARCHAR},
+      procut_category_code2 = #{procutCategoryCode2,jdbcType=VARCHAR},
+      procut_category_code3 = #{procutCategoryCode3,jdbcType=VARCHAR},
+      procut_category_name1 = #{procutCategoryName1,jdbcType=VARCHAR},
+      procut_category_name2 = #{procutCategoryName2,jdbcType=VARCHAR},
+      procut_category_name3 = #{procutCategoryName3,jdbcType=VARCHAR},
+      pu_name = #{puName,jdbcType=VARCHAR},
+      user_organization_id = #{userOrganizationId,jdbcType=INTEGER}
+    where product_sku = #{productSku,jdbcType=VARCHAR}
+  </update>
+</mapper>

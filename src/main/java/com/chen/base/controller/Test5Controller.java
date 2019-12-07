@@ -25,7 +25,7 @@ public class Test5Controller {
     @RequestMapping("/sync")
     public String demo() {
 
-        interfaceService.getOrders(1008);
+        interfaceService.getOrders(1918);
 
         return "sync Count is ";
     }

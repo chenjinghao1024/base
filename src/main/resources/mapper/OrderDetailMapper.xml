@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.OrderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.OrderDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderlist_id" jdbcType="INTEGER" property="orderlistId" />
+    <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="price" jdbcType="REAL" property="price" />
+    <result column="declared_value" jdbcType="REAL" property="declaredValue" />
+    <result column="weight" jdbcType="REAL" property="weight" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="currency_rate" jdbcType="REAL" property="currencyRate" />
+    <result column="payment_platform_free" jdbcType="REAL" property="paymentPlatformFree" />
+    <result column="fba_fee" jdbcType="REAL" property="fbaFee" />
+    <result column="refund" jdbcType="REAL" property="refund" />
+    <result column="purchase_cost" jdbcType="REAL" property="purchaseCost" />
+    <result column="first_carrier_freight" jdbcType="REAL" property="firstCarrierFreight" />
+    <result column="declaration_customs_vat" jdbcType="REAL" property="declarationCustomsVat" />
+    <result column="output_tax_up" jdbcType="REAL" property="outputTaxUp" />
+    <result column="shipping_fee_fba" jdbcType="REAL" property="shippingFeeFba" />
+    <result column="shipping_fee" jdbcType="REAL" property="shippingFee" />
+    <result column="op_paypal_fee" jdbcType="REAL" property="opPaypalFee" />
+    <result column="platform_cost" jdbcType="REAL" property="platformCost" />
+    <result column="warehouse_storage_charges" jdbcType="REAL" property="warehouseStorageCharges" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    id, orderlist_id, product_sku, sku, quantity, price, declared_value, weight, currency, 
+    currency_rate, payment_platform_free, fba_fee, refund, purchase_cost, first_carrier_freight, 
+    declaration_customs_vat, output_tax_up, shipping_fee_fba, shipping_fee, op_paypal_fee, 
+    platform_cost, warehouse_storage_charges
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.OrderDetailExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.OrderDetailExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.OrderDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into order_detail (id, orderlist_id, product_sku, 
+      sku, quantity, price, 
+      declared_value, weight, currency, 
+      currency_rate, payment_platform_free, fba_fee, 
+      refund, purchase_cost, first_carrier_freight, 
+      declaration_customs_vat, output_tax_up, shipping_fee_fba, 
+      shipping_fee, op_paypal_fee, platform_cost, 
+      warehouse_storage_charges)
+    values (#{id,jdbcType=INTEGER}, #{orderlistId,jdbcType=INTEGER}, #{productSku,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{price,jdbcType=REAL}, 
+      #{declaredValue,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{currency,jdbcType=VARCHAR}, 
+      #{currencyRate,jdbcType=REAL}, #{paymentPlatformFree,jdbcType=REAL}, #{fbaFee,jdbcType=REAL}, 
+      #{refund,jdbcType=REAL}, #{purchaseCost,jdbcType=REAL}, #{firstCarrierFreight,jdbcType=REAL}, 
+      #{declarationCustomsVat,jdbcType=REAL}, #{outputTaxUp,jdbcType=REAL}, #{shippingFeeFba,jdbcType=REAL}, 
+      #{shippingFee,jdbcType=REAL}, #{opPaypalFee,jdbcType=REAL}, #{platformCost,jdbcType=REAL}, 
+      #{warehouseStorageCharges,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.OrderDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderlistId != null">
+        orderlist_id,
+      </if>
+      <if test="productSku != null">
+        product_sku,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="declaredValue != null">
+        declared_value,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="currencyRate != null">
+        currency_rate,
+      </if>
+      <if test="paymentPlatformFree != null">
+        payment_platform_free,
+      </if>
+      <if test="fbaFee != null">
+        fba_fee,
+      </if>
+      <if test="refund != null">
+        refund,
+      </if>
+      <if test="purchaseCost != null">
+        purchase_cost,
+      </if>
+      <if test="firstCarrierFreight != null">
+        first_carrier_freight,
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat,
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up,
+      </if>
+      <if test="shippingFeeFba != null">
+        shipping_fee_fba,
+      </if>
+      <if test="shippingFee != null">
+        shipping_fee,
+      </if>
+      <if test="opPaypalFee != null">
+        op_paypal_fee,
+      </if>
+      <if test="platformCost != null">
+        platform_cost,
+      </if>
+      <if test="warehouseStorageCharges != null">
+        warehouse_storage_charges,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderlistId != null">
+        #{orderlistId,jdbcType=INTEGER},
+      </if>
+      <if test="productSku != null">
+        #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="declaredValue != null">
+        #{declaredValue,jdbcType=REAL},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyRate != null">
+        #{currencyRate,jdbcType=REAL},
+      </if>
+      <if test="paymentPlatformFree != null">
+        #{paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="fbaFee != null">
+        #{fbaFee,jdbcType=REAL},
+      </if>
+      <if test="refund != null">
+        #{refund,jdbcType=REAL},
+      </if>
+      <if test="purchaseCost != null">
+        #{purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="firstCarrierFreight != null">
+        #{firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="shippingFeeFba != null">
+        #{shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="shippingFee != null">
+        #{shippingFee,jdbcType=REAL},
+      </if>
+      <if test="opPaypalFee != null">
+        #{opPaypalFee,jdbcType=REAL},
+      </if>
+      <if test="platformCost != null">
+        #{platformCost,jdbcType=REAL},
+      </if>
+      <if test="warehouseStorageCharges != null">
+        #{warehouseStorageCharges,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.chen.base.entity.OrderDetailExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update order_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderlistId != null">
+        orderlist_id = #{record.orderlistId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productSku != null">
+        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=REAL},
+      </if>
+      <if test="record.declaredValue != null">
+        declared_value = #{record.declaredValue,jdbcType=REAL},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=REAL},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currencyRate != null">
+        currency_rate = #{record.currencyRate,jdbcType=REAL},
+      </if>
+      <if test="record.paymentPlatformFree != null">
+        payment_platform_free = #{record.paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="record.fbaFee != null">
+        fba_fee = #{record.fbaFee,jdbcType=REAL},
+      </if>
+      <if test="record.refund != null">
+        refund = #{record.refund,jdbcType=REAL},
+      </if>
+      <if test="record.purchaseCost != null">
+        purchase_cost = #{record.purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="record.firstCarrierFreight != null">
+        first_carrier_freight = #{record.firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="record.declarationCustomsVat != null">
+        declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="record.outputTaxUp != null">
+        output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="record.shippingFeeFba != null">
+        shipping_fee_fba = #{record.shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="record.shippingFee != null">
+        shipping_fee = #{record.shippingFee,jdbcType=REAL},
+      </if>
+      <if test="record.opPaypalFee != null">
+        op_paypal_fee = #{record.opPaypalFee,jdbcType=REAL},
+      </if>
+      <if test="record.platformCost != null">
+        platform_cost = #{record.platformCost,jdbcType=REAL},
+      </if>
+      <if test="record.warehouseStorageCharges != null">
+        warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update order_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      orderlist_id = #{record.orderlistId,jdbcType=INTEGER},
+      product_sku = #{record.productSku,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=REAL},
+      declared_value = #{record.declaredValue,jdbcType=REAL},
+      weight = #{record.weight,jdbcType=REAL},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      currency_rate = #{record.currencyRate,jdbcType=REAL},
+      payment_platform_free = #{record.paymentPlatformFree,jdbcType=REAL},
+      fba_fee = #{record.fbaFee,jdbcType=REAL},
+      refund = #{record.refund,jdbcType=REAL},
+      purchase_cost = #{record.purchaseCost,jdbcType=REAL},
+      first_carrier_freight = #{record.firstCarrierFreight,jdbcType=REAL},
+      declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      shipping_fee_fba = #{record.shippingFeeFba,jdbcType=REAL},
+      shipping_fee = #{record.shippingFee,jdbcType=REAL},
+      op_paypal_fee = #{record.opPaypalFee,jdbcType=REAL},
+      platform_cost = #{record.platformCost,jdbcType=REAL},
+      warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.OrderDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update order_detail
+    <set>
+      <if test="orderlistId != null">
+        orderlist_id = #{orderlistId,jdbcType=INTEGER},
+      </if>
+      <if test="productSku != null">
+        product_sku = #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="declaredValue != null">
+        declared_value = #{declaredValue,jdbcType=REAL},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyRate != null">
+        currency_rate = #{currencyRate,jdbcType=REAL},
+      </if>
+      <if test="paymentPlatformFree != null">
+        payment_platform_free = #{paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="fbaFee != null">
+        fba_fee = #{fbaFee,jdbcType=REAL},
+      </if>
+      <if test="refund != null">
+        refund = #{refund,jdbcType=REAL},
+      </if>
+      <if test="purchaseCost != null">
+        purchase_cost = #{purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="firstCarrierFreight != null">
+        first_carrier_freight = #{firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="shippingFeeFba != null">
+        shipping_fee_fba = #{shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="shippingFee != null">
+        shipping_fee = #{shippingFee,jdbcType=REAL},
+      </if>
+      <if test="opPaypalFee != null">
+        op_paypal_fee = #{opPaypalFee,jdbcType=REAL},
+      </if>
+      <if test="platformCost != null">
+        platform_cost = #{platformCost,jdbcType=REAL},
+      </if>
+      <if test="warehouseStorageCharges != null">
+        warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.OrderDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update order_detail
+    set orderlist_id = #{orderlistId,jdbcType=INTEGER},
+      product_sku = #{productSku,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL},
+      declared_value = #{declaredValue,jdbcType=REAL},
+      weight = #{weight,jdbcType=REAL},
+      currency = #{currency,jdbcType=VARCHAR},
+      currency_rate = #{currencyRate,jdbcType=REAL},
+      payment_platform_free = #{paymentPlatformFree,jdbcType=REAL},
+      fba_fee = #{fbaFee,jdbcType=REAL},
+      refund = #{refund,jdbcType=REAL},
+      purchase_cost = #{purchaseCost,jdbcType=REAL},
+      first_carrier_freight = #{firstCarrierFreight,jdbcType=REAL},
+      declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      shipping_fee_fba = #{shippingFeeFba,jdbcType=REAL},
+      shipping_fee = #{shippingFee,jdbcType=REAL},
+      op_paypal_fee = #{opPaypalFee,jdbcType=REAL},
+      platform_cost = #{platformCost,jdbcType=REAL},
+      warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

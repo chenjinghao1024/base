@@ -121,7 +121,8 @@ public class ECOpenApiService {
         }
         URL soapUrl = new URL(url);
         URLConnection conn = soapUrl.openConnection();
-        conn.setConnectTimeout(30000);
+        conn.setConnectTimeout(30*1000);
+        conn.setReadTimeout(60*1000);
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);

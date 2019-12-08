@@ -7,25 +7,25 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
+ * 
  *
  * @author Mr.D
- * @date 2019/11/22
+ * @date 2019/12/08
  */
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class OrderDetail implements Serializable {
     /**
-     *
+     * 
      */
     private Integer id;
 
     /**
-     *
+     * 
      */
     @NonNull
-    private Integer orderlistId;
+    private Integer orderInfoId;
 
     /**
      * 销售sku
@@ -126,6 +126,11 @@ public class OrderDetail implements Serializable {
      * 仓租，自己算的
      */
     private Float warehouseStorageCharges;
+
+    /**
+     * 采购税费
+     */
+    private Float purchaseTaxationFee;
 
     /**
      * serialVersionUID

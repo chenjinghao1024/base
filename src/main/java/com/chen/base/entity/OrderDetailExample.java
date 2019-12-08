@@ -108,7 +108,7 @@ public class OrderDetailExample {
     /**
      *
      * @author  Generator
-     * @date 2019/11/22
+     * @date 2019/12/08
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -211,63 +211,63 @@ public class OrderDetailExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdIsNull() {
-            addCriterion("orderlist_id is null");
+        public Criteria andOrderInfoIdIsNull() {
+            addCriterion("order_info_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdIsNotNull() {
-            addCriterion("orderlist_id is not null");
+        public Criteria andOrderInfoIdIsNotNull() {
+            addCriterion("order_info_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdEqualTo(Integer value) {
-            addCriterion("orderlist_id =", value, "orderlistId");
+        public Criteria andOrderInfoIdEqualTo(Integer value) {
+            addCriterion("order_info_id =", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdNotEqualTo(Integer value) {
-            addCriterion("orderlist_id <>", value, "orderlistId");
+        public Criteria andOrderInfoIdNotEqualTo(Integer value) {
+            addCriterion("order_info_id <>", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdGreaterThan(Integer value) {
-            addCriterion("orderlist_id >", value, "orderlistId");
+        public Criteria andOrderInfoIdGreaterThan(Integer value) {
+            addCriterion("order_info_id >", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("orderlist_id >=", value, "orderlistId");
+        public Criteria andOrderInfoIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_info_id >=", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdLessThan(Integer value) {
-            addCriterion("orderlist_id <", value, "orderlistId");
+        public Criteria andOrderInfoIdLessThan(Integer value) {
+            addCriterion("order_info_id <", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdLessThanOrEqualTo(Integer value) {
-            addCriterion("orderlist_id <=", value, "orderlistId");
+        public Criteria andOrderInfoIdLessThanOrEqualTo(Integer value) {
+            addCriterion("order_info_id <=", value, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdIn(List<Integer> values) {
-            addCriterion("orderlist_id in", values, "orderlistId");
+        public Criteria andOrderInfoIdIn(List<Integer> values) {
+            addCriterion("order_info_id in", values, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdNotIn(List<Integer> values) {
-            addCriterion("orderlist_id not in", values, "orderlistId");
+        public Criteria andOrderInfoIdNotIn(List<Integer> values) {
+            addCriterion("order_info_id not in", values, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdBetween(Integer value1, Integer value2) {
-            addCriterion("orderlist_id between", value1, value2, "orderlistId");
+        public Criteria andOrderInfoIdBetween(Integer value1, Integer value2) {
+            addCriterion("order_info_id between", value1, value2, "orderInfoId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderlistIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("orderlist_id not between", value1, value2, "orderlistId");
+        public Criteria andOrderInfoIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_info_id not between", value1, value2, "orderInfoId");
             return (Criteria) this;
         }
 
@@ -1500,13 +1500,73 @@ public class OrderDetailExample {
             addCriterion("warehouse_storage_charges not between", value1, value2, "warehouseStorageCharges");
             return (Criteria) this;
         }
+
+        public Criteria andPurchaseTaxationFeeIsNull() {
+            addCriterion("purchase_taxation_fee is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeIsNotNull() {
+            addCriterion("purchase_taxation_fee is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeEqualTo(Float value) {
+            addCriterion("purchase_taxation_fee =", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeNotEqualTo(Float value) {
+            addCriterion("purchase_taxation_fee <>", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeGreaterThan(Float value) {
+            addCriterion("purchase_taxation_fee >", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeGreaterThanOrEqualTo(Float value) {
+            addCriterion("purchase_taxation_fee >=", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeLessThan(Float value) {
+            addCriterion("purchase_taxation_fee <", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeLessThanOrEqualTo(Float value) {
+            addCriterion("purchase_taxation_fee <=", value, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeIn(List<Float> values) {
+            addCriterion("purchase_taxation_fee in", values, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeNotIn(List<Float> values) {
+            addCriterion("purchase_taxation_fee not in", values, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeBetween(Float value1, Float value2) {
+            addCriterion("purchase_taxation_fee between", value1, value2, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTaxationFeeNotBetween(Float value1, Float value2) {
+            addCriterion("purchase_taxation_fee not between", value1, value2, "purchaseTaxationFee");
+            return (Criteria) this;
+        }
     }
 
     /**
      * This class was generated by MyBatis Generator.
      * This class corresponds to the database table order_detail
      *
-     * @mbg.generated do_not_delete_during_merge Fri Nov 22 14:40:02 CST 2019
+     * @mbg.generated do_not_delete_during_merge Sun Dec 08 11:35:54 CST 2019
      */
     public static class Criteria extends GeneratedCriteria {
 
@@ -1518,7 +1578,7 @@ public class OrderDetailExample {
     /**
      *
      * @author  Generator
-     * @date 2019/11/22
+     * @date 2019/12/08
      */
     public static class Criterion {
         private String condition;

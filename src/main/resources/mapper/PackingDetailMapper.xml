@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.PackingDetailMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.PackingDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="packing_info_id" jdbcType="INTEGER" property="packingInfoId" />
+    <result column="country_id" jdbcType="VARCHAR" property="countryId" />
+    <result column="eccang_sku" jdbcType="VARCHAR" property="eccangSku" />
+    <result column="sku_num" jdbcType="INTEGER" property="skuNum" />
+    <result column="first_carrier_freight_up" jdbcType="REAL" property="firstCarrierFreightUp" />
+    <result column="op_declared_value" jdbcType="REAL" property="opDeclaredValue" />
+    <result column="op_declared_currency" jdbcType="REAL" property="opDeclaredCurrency" />
+    <result column="declaration_customs_vat" jdbcType="REAL" property="declarationCustomsVat" />
+    <result column="output_tax_up" jdbcType="REAL" property="outputTaxUp" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sku_taxes" jdbcType="REAL" property="skuTaxes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    id, packing_info_id, country_id, eccang_sku, sku_num, first_carrier_freight_up, op_declared_value, 
+    op_declared_currency, declaration_customs_vat, output_tax_up, create_time, sku_taxes
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.PackingDetailExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from packing_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from packing_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from packing_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.PackingDetailExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from packing_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.PackingDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into packing_detail (id, packing_info_id, country_id, 
+      eccang_sku, sku_num, first_carrier_freight_up, 
+      op_declared_value, op_declared_currency, declaration_customs_vat, 
+      output_tax_up, create_time, sku_taxes
+      )
+    values (#{id,jdbcType=INTEGER}, #{packingInfoId,jdbcType=INTEGER}, #{countryId,jdbcType=VARCHAR}, 
+      #{eccangSku,jdbcType=VARCHAR}, #{skuNum,jdbcType=INTEGER}, #{firstCarrierFreightUp,jdbcType=REAL}, 
+      #{opDeclaredValue,jdbcType=REAL}, #{opDeclaredCurrency,jdbcType=REAL}, #{declarationCustomsVat,jdbcType=REAL}, 
+      #{outputTaxUp,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{skuTaxes,jdbcType=REAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.PackingDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into packing_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="packingInfoId != null">
+        packing_info_id,
+      </if>
+      <if test="countryId != null">
+        country_id,
+      </if>
+      <if test="eccangSku != null">
+        eccang_sku,
+      </if>
+      <if test="skuNum != null">
+        sku_num,
+      </if>
+      <if test="firstCarrierFreightUp != null">
+        first_carrier_freight_up,
+      </if>
+      <if test="opDeclaredValue != null">
+        op_declared_value,
+      </if>
+      <if test="opDeclaredCurrency != null">
+        op_declared_currency,
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat,
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="skuTaxes != null">
+        sku_taxes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="packingInfoId != null">
+        #{packingInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="countryId != null">
+        #{countryId,jdbcType=VARCHAR},
+      </if>
+      <if test="eccangSku != null">
+        #{eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNum != null">
+        #{skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="firstCarrierFreightUp != null">
+        #{firstCarrierFreightUp,jdbcType=REAL},
+      </if>
+      <if test="opDeclaredValue != null">
+        #{opDeclaredValue,jdbcType=REAL},
+      </if>
+      <if test="opDeclaredCurrency != null">
+        #{opDeclaredCurrency,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skuTaxes != null">
+        #{skuTaxes,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.chen.base.entity.PackingDetailExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from packing_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update packing_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.packingInfoId != null">
+        packing_info_id = #{record.packingInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="record.countryId != null">
+        country_id = #{record.countryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eccangSku != null">
+        eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuNum != null">
+        sku_num = #{record.skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.firstCarrierFreightUp != null">
+        first_carrier_freight_up = #{record.firstCarrierFreightUp,jdbcType=REAL},
+      </if>
+      <if test="record.opDeclaredValue != null">
+        op_declared_value = #{record.opDeclaredValue,jdbcType=REAL},
+      </if>
+      <if test="record.opDeclaredCurrency != null">
+        op_declared_currency = #{record.opDeclaredCurrency,jdbcType=REAL},
+      </if>
+      <if test="record.declarationCustomsVat != null">
+        declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="record.outputTaxUp != null">
+        output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.skuTaxes != null">
+        sku_taxes = #{record.skuTaxes,jdbcType=REAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update packing_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      packing_info_id = #{record.packingInfoId,jdbcType=INTEGER},
+      country_id = #{record.countryId,jdbcType=VARCHAR},
+      eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
+      sku_num = #{record.skuNum,jdbcType=INTEGER},
+      first_carrier_freight_up = #{record.firstCarrierFreightUp,jdbcType=REAL},
+      op_declared_value = #{record.opDeclaredValue,jdbcType=REAL},
+      op_declared_currency = #{record.opDeclaredCurrency,jdbcType=REAL},
+      declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      sku_taxes = #{record.skuTaxes,jdbcType=REAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.PackingDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update packing_detail
+    <set>
+      <if test="packingInfoId != null">
+        packing_info_id = #{packingInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="countryId != null">
+        country_id = #{countryId,jdbcType=VARCHAR},
+      </if>
+      <if test="eccangSku != null">
+        eccang_sku = #{eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNum != null">
+        sku_num = #{skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="firstCarrierFreightUp != null">
+        first_carrier_freight_up = #{firstCarrierFreightUp,jdbcType=REAL},
+      </if>
+      <if test="opDeclaredValue != null">
+        op_declared_value = #{opDeclaredValue,jdbcType=REAL},
+      </if>
+      <if test="opDeclaredCurrency != null">
+        op_declared_currency = #{opDeclaredCurrency,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skuTaxes != null">
+        sku_taxes = #{skuTaxes,jdbcType=REAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.PackingDetail">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update packing_detail
+    set packing_info_id = #{packingInfoId,jdbcType=INTEGER},
+      country_id = #{countryId,jdbcType=VARCHAR},
+      eccang_sku = #{eccangSku,jdbcType=VARCHAR},
+      sku_num = #{skuNum,jdbcType=INTEGER},
+      first_carrier_freight_up = #{firstCarrierFreightUp,jdbcType=REAL},
+      op_declared_value = #{opDeclaredValue,jdbcType=REAL},
+      op_declared_currency = #{opDeclaredCurrency,jdbcType=REAL},
+      declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      sku_taxes = #{skuTaxes,jdbcType=REAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -6,7 +6,7 @@
     该方法由生成器生成,请勿修改
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="orderlist_id" jdbcType="INTEGER" property="orderlistId" />
+    <result column="order_info_id" jdbcType="INTEGER" property="orderInfoId" />
     <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
@@ -27,6 +27,7 @@
     <result column="op_paypal_fee" jdbcType="REAL" property="opPaypalFee" />
     <result column="platform_cost" jdbcType="REAL" property="platformCost" />
     <result column="warehouse_storage_charges" jdbcType="REAL" property="warehouseStorageCharges" />
+    <result column="purchase_taxation_fee" jdbcType="REAL" property="purchaseTaxationFee" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -96,10 +97,10 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, orderlist_id, product_sku, sku, quantity, price, declared_value, weight, currency, 
+    id, order_info_id, product_sku, sku, quantity, price, declared_value, weight, currency, 
     currency_rate, payment_platform_free, fba_fee, refund, purchase_cost, first_carrier_freight, 
     declaration_customs_vat, output_tax_up, shipping_fee_fba, shipping_fee, op_paypal_fee, 
-    platform_cost, warehouse_storage_charges
+    platform_cost, warehouse_storage_charges, purchase_taxation_fee
   </sql>
   <select id="selectByExample" parameterType="com.chen.base.entity.OrderDetailExample" resultMap="BaseResultMap">
     <!--
@@ -147,22 +148,22 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into order_detail (id, orderlist_id, product_sku, 
+    insert into order_detail (id, order_info_id, product_sku, 
       sku, quantity, price, 
       declared_value, weight, currency, 
       currency_rate, payment_platform_free, fba_fee, 
       refund, purchase_cost, first_carrier_freight, 
       declaration_customs_vat, output_tax_up, shipping_fee_fba, 
       shipping_fee, op_paypal_fee, platform_cost, 
-      warehouse_storage_charges)
-    values (#{id,jdbcType=INTEGER}, #{orderlistId,jdbcType=INTEGER}, #{productSku,jdbcType=VARCHAR}, 
+      warehouse_storage_charges, purchase_taxation_fee)
+    values (#{id,jdbcType=INTEGER}, #{orderInfoId,jdbcType=INTEGER}, #{productSku,jdbcType=VARCHAR}, 
       #{sku,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{price,jdbcType=REAL}, 
       #{declaredValue,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{currency,jdbcType=VARCHAR}, 
       #{currencyRate,jdbcType=REAL}, #{paymentPlatformFree,jdbcType=REAL}, #{fbaFee,jdbcType=REAL}, 
       #{refund,jdbcType=REAL}, #{purchaseCost,jdbcType=REAL}, #{firstCarrierFreight,jdbcType=REAL}, 
       #{declarationCustomsVat,jdbcType=REAL}, #{outputTaxUp,jdbcType=REAL}, #{shippingFeeFba,jdbcType=REAL}, 
       #{shippingFee,jdbcType=REAL}, #{opPaypalFee,jdbcType=REAL}, #{platformCost,jdbcType=REAL}, 
-      #{warehouseStorageCharges,jdbcType=REAL})
+      #{warehouseStorageCharges,jdbcType=REAL}, #{purchaseTaxationFee,jdbcType=REAL})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.OrderDetail">
     <!--
@@ -173,8 +174,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="orderlistId != null">
-        orderlist_id,
+      <if test="orderInfoId != null">
+        order_info_id,
       </if>
       <if test="productSku != null">
         product_sku,
@@ -236,13 +237,16 @@
       <if test="warehouseStorageCharges != null">
         warehouse_storage_charges,
       </if>
+      <if test="purchaseTaxationFee != null">
+        purchase_taxation_fee,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="orderlistId != null">
-        #{orderlistId,jdbcType=INTEGER},
+      <if test="orderInfoId != null">
+        #{orderInfoId,jdbcType=INTEGER},
       </if>
       <if test="productSku != null">
         #{productSku,jdbcType=VARCHAR},
@@ -304,6 +308,9 @@
       <if test="warehouseStorageCharges != null">
         #{warehouseStorageCharges,jdbcType=REAL},
       </if>
+      <if test="purchaseTaxationFee != null">
+        #{purchaseTaxationFee,jdbcType=REAL},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.chen.base.entity.OrderDetailExample" resultType="java.lang.Long">
@@ -324,8 +331,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderlistId != null">
-        orderlist_id = #{record.orderlistId,jdbcType=INTEGER},
+      <if test="record.orderInfoId != null">
+        order_info_id = #{record.orderInfoId,jdbcType=INTEGER},
       </if>
       <if test="record.productSku != null">
         product_sku = #{record.productSku,jdbcType=VARCHAR},
@@ -387,6 +394,9 @@
       <if test="record.warehouseStorageCharges != null">
         warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
       </if>
+      <if test="record.purchaseTaxationFee != null">
+        purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -398,7 +408,7 @@
     -->
     update order_detail
     set id = #{record.id,jdbcType=INTEGER},
-      orderlist_id = #{record.orderlistId,jdbcType=INTEGER},
+      order_info_id = #{record.orderInfoId,jdbcType=INTEGER},
       product_sku = #{record.productSku,jdbcType=VARCHAR},
       sku = #{record.sku,jdbcType=VARCHAR},
       quantity = #{record.quantity,jdbcType=INTEGER},
@@ -418,7 +428,8 @@
       shipping_fee = #{record.shippingFee,jdbcType=REAL},
       op_paypal_fee = #{record.opPaypalFee,jdbcType=REAL},
       platform_cost = #{record.platformCost,jdbcType=REAL},
-      warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL}
+      warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
+      purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -429,8 +440,8 @@
     -->
     update order_detail
     <set>
-      <if test="orderlistId != null">
-        orderlist_id = #{orderlistId,jdbcType=INTEGER},
+      <if test="orderInfoId != null">
+        order_info_id = #{orderInfoId,jdbcType=INTEGER},
       </if>
       <if test="productSku != null">
         product_sku = #{productSku,jdbcType=VARCHAR},
@@ -492,6 +503,9 @@
       <if test="warehouseStorageCharges != null">
         warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
       </if>
+      <if test="purchaseTaxationFee != null">
+        purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -500,7 +514,7 @@
     该方法由生成器生成,请勿修改
     -->
     update order_detail
-    set orderlist_id = #{orderlistId,jdbcType=INTEGER},
+    set order_info_id = #{orderInfoId,jdbcType=INTEGER},
       product_sku = #{productSku,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
@@ -520,7 +534,8 @@
       shipping_fee = #{shippingFee,jdbcType=REAL},
       op_paypal_fee = #{opPaypalFee,jdbcType=REAL},
       platform_cost = #{platformCost,jdbcType=REAL},
-      warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL}
+      warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
+      purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

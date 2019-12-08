@@ -226,6 +226,7 @@ public class InterfaceService {
             List<OrderInfo> orderinfos = orderInfoMapper.selectByExample(orderInfoExample);
             for (OrderInfo orderInfo : orderinfos) {
                 doID = orderInfo.getId();
+                System.out.println("orderInfo id is "+doID);
                 Map<String, Object> getOrdersParameter = new HashMap(5);
                 List list = new ArrayList<>();
                 list.add(orderInfo.getWarehouseOrderCode());
@@ -244,7 +245,7 @@ public class InterfaceService {
                     String sku = productJSON.getString("platformSalesSku");
                     OrderDetailExample orderDetailExample = new OrderDetailExample();
                     OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
-                    criteria.andOrderlistIdEqualTo(orderInfo.getId());
+                    criteria.andOrderInfoIdEqualTo(orderInfo.getId());
                     criteria.andProductSkuEqualTo(sku);
                     List<OrderDetail> details = orderDetailMapper.selectByExample(orderDetailExample);
                     if (details.size() == 0) {
@@ -292,7 +293,7 @@ public class InterfaceService {
                     String sku = productJSON.getString("op_platform_sales_sku");
                     OrderDetailExample orderDetailExample = new OrderDetailExample();
                     OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
-                    criteria.andOrderlistIdEqualTo(orderInfo.getId());
+                    criteria.andOrderInfoIdEqualTo(orderInfo.getId());
                     criteria.andProductSkuEqualTo(sku);
                     List<OrderDetail> details = orderDetailMapper.selectByExample(orderDetailExample);
                     if (details.size() == 0) {
@@ -306,13 +307,41 @@ public class InterfaceService {
                     orderDetail.setOpPaypalFee(op_paypal_fee);
                     // shippingFee
                     if ("1".equals(getOrderInfoOrder.get("is_fba"))) {
-                        orderDetail.setShippingFeeFba(productJSON.getFloatValue("shippingFee"));
+                        orderDetail.setShippingFeeFba(productJSON.getFloatValue("op_shipping_fee"));
                     }else {
-                        orderDetail.setShippingFee(productJSON.getFloatValue("shippingFee"));
+                        orderDetail.setShippingFee(productJSON.getFloatValue("op_shipping_fee"));
                     }
                     orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
 
                 }
+
+
+                OrderDetailExample orderDetailExample = new OrderDetailExample();
+                OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
+                criteria.andOrderInfoIdEqualTo(orderInfo.getId());
+                List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
+                for (OrderDetail orderDetail : orderDetails) {
+                    String sku = orderDetail.getProductSku();
+                    String warehouseOrderCode = orderInfo.getWarehouseOrderCode();
+                    Map<String, Object> requestParameter = new HashMap(5);
+                    ArrayList<Object> skus = new ArrayList<>();
+                    skus.add(sku);
+                    ArrayList<Object> warehouseOrderCodes = new ArrayList<>();
+                    warehouseOrderCodes.add(warehouseOrderCode);
+                    requestParameter.put("productSku", skus);
+                    requestParameter.put("orderCode", warehouseOrderCodes);
+
+                    JSONObject costDetailResult = soapRequest("getOrderCostDetailSku", "WMS", requestParameter);
+                    JSONArray datas = costDetailResult.getJSONArray("data");
+                    if (datas.size() > 0) {
+                        JSONObject data = datas.getJSONObject(0);
+                        float purchaseTaxationFee = data.getFloatValue("purchaseTaxationFee");
+                        orderDetail.setPurchaseTaxationFee(purchaseTaxationFee);
+                        orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+                    }
+
+                }
+
             }
         }catch (Exception e){
             getOrders(doID);

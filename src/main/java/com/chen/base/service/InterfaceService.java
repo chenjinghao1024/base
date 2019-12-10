@@ -6,7 +6,7 @@ import com.chen.base.entity.*;
 import com.chen.base.mapper.OrderDetailMapper;
 import com.chen.base.mapper.OrderInfoMapper;
 import com.chen.base.mapper.ProductBySkuMapper;
-import com.chen.base.mapper.WarehouseListMapper;
+import com.chen.base.mapper.WarehouseRelationMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,10 +29,9 @@ public class InterfaceService {
     @Resource
     ProductBySkuMapper productBySkuMapper;
     @Resource
-    WarehouseListMapper warehouseListMapper;
-    @Resource
     OrderInfoMapper orderInfoMapper;
-
+    @Resource
+    WarehouseRelationMapper warehouseRelationMapper;
     @Resource
     OrderDetailMapper orderDetailMapper;
 
@@ -193,8 +192,7 @@ public class InterfaceService {
     }
 
     public int warehouseSync() {
-        Map<String, Object> requestParameter = new HashMap(5);
-        JSONObject result = soapRequest("getWarehouse", "WMS", requestParameter);
+        JSONObject result = soapRequest("getWarehouse", "WMS");
         int count = 0;
 
         JSONObject datas = result.getJSONObject("data");
@@ -204,12 +202,12 @@ public class InterfaceService {
         for (String s : keySet) {
             JSONObject warehouseJSON = datas.getJSONObject(s);
 
-            WarehouseList warehouse = new WarehouseList();
+            WarehouseRelation warehouse = new WarehouseRelation();
+            warehouse.setWarehouseId(warehouseJSON.getInteger("warehouseId"));
+            warehouse.setWarehouseCode(warehouseJSON.getString("warehouseCode"));
+            warehouse.setWarehouseDesc(warehouseJSON.getString("warehouseDesc"));
 
-            warehouse.setId(warehouseJSON.getInteger("warehouseId"));
-            warehouse.setCountryId(warehouseJSON.getInteger("countryId"));
-
-            count += warehouseListMapper.insertSelective(warehouse);
+            count+=warehouseRelationMapper.insertSelective(warehouse);
         }
 
 
@@ -218,7 +216,7 @@ public class InterfaceService {
 
 
     public void getOrders(Integer id) {
-        int doID = 0;
+        int doID = id;
         try {
             OrderInfoExample orderInfoExample = new OrderInfoExample();
             OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
@@ -278,9 +276,6 @@ public class InterfaceService {
 
                 }
 
-
-
-
                 Map<String, Object> getOrderInfoParameter = new HashMap(5);
                 getOrderInfoParameter.put("orderCode", orderInfo.getWarehouseOrderCode());
                 JSONObject result = soapRequest("getOrderInfo", "WMS", getOrderInfoParameter);
@@ -336,6 +331,7 @@ public class InterfaceService {
                     if (datas.size() > 0) {
                         JSONObject data = datas.getJSONObject(0);
                         float purchaseTaxationFee = data.getFloatValue("purchaseTaxationFee");
+                        float purchaseShippingFee = data.getFloatValue("purchaseShippingFee");
                         orderDetail.setPurchaseTaxationFee(purchaseTaxationFee);
                         orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
                     }
@@ -349,67 +345,9 @@ public class InterfaceService {
     }
 
     public void sync(){
-        int pageSize = 100;
-        Map<String, Object> requestParameter = new HashMap(5);
-        Map condition = new HashMap(0);
 
-        int count = 0;
-        int page = 412;
-        int totalCount = 0;
-
-        requestParameter.put("pageSize", pageSize);
-        requestParameter.put("getDetail", 1);
-        requestParameter.put("getAddress", 0);
-        requestParameter.put("condition", condition);
-        // 5332 5356 5381
-
-        condition.put("warehouseShipDateFrom", "2019-10-01 00:00:00");
-        condition.put("warehouseShipDateEnd", "2019-11-01 00:00:00");
-
-        do {
-            ++page;
-            System.out.println("sync page > " + page);
-            requestParameter.put("page", page);
-            JSONObject result = null;
-            try {
-                System.out.println("soap start ");
-                result = soapRequest("getOrderList", "EB", requestParameter);
-                totalCount = result.getInteger("totalCount");
-            } catch (Exception e) {
-                page--;
-                continue;
-            }
-
-            System.out.println("deal data");
-
-            JSONArray orders = result.getJSONArray("data");
-
-            for (Object data : orders) {
-
-                JSONObject orderJSON = (JSONObject) data;
-//
-                String platform = orderJSON.getString("platform");
-                if (!sync_platforms.contains(platform)){
-                    continue;
-                }
-                OrderInfoExample orderInfoExample = new OrderInfoExample();
-                OrderInfoExample.Criteria criteria = orderInfoExample.createCriteria();
-                criteria.andSaleOrderCodeEqualTo(orderJSON.getString("saleOrderCode"));
-                List<OrderInfo> order = orderInfoMapper.selectByExample(orderInfoExample);
-                OrderInfo orderInfo = order.get(0);
-                JSONArray orderDetails = orderJSON.getJSONArray("orderDetails");
-
-                orderDetails.forEach(JSON -> {
-                    JSONObject orderDetailJSON= (JSONObject) JSON;
-                    OrderDetail orderDetail = new OrderDetail(orderInfo.getId());
-
-                    orderDetail.setProductSku(orderDetailJSON.getString("productSku"));
-                    orderDetail.setSku(orderDetailJSON.getString("sku"));
-                    orderDetail.setQuantity(orderDetailJSON.getIntValue("qty"));
-                    orderDetailMapper.insertSelective(orderDetail);
-                });
-            }
-        } while (page * pageSize < totalCount);
+        JSONObject result = soapRequest("getWarehouses", "WMS");
+        result.getJSONArray("data");
 
     }
 }

@@ -39,6 +39,9 @@ public class ECOpenApiService {
     private static String userPass = "hui416420";
 
 
+    public static JSONObject soapRequest(String service, String systemCode) {
+        return soapRequest(service, systemCode, "{}");
+    }
     public static JSONObject soapRequest(String service, String systemCode, Map requestMap) {
         String requestParameterStr = new JSONObject(requestMap).toJSONString();
 

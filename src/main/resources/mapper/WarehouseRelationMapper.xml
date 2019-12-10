@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chen.base.mapper.WarehouseInfoMapper">
-  <resultMap id="BaseResultMap" type="com.chen.base.entity.WarehouseInfo">
+<mapper namespace="com.chen.base.mapper.WarehouseRelationMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.WarehouseRelation">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    <result column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="virtual_warehouse_id" jdbcType="INTEGER" property="virtualWarehouseId" />
     <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
-    <result column="eccang_warehouse_id" jdbcType="INTEGER" property="eccangWarehouseId" />
+    <result column="warehouse_code" jdbcType="VARCHAR" property="warehouseCode" />
+    <result column="warehouse_desc" jdbcType="VARCHAR" property="warehouseDesc" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -77,9 +79,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, warehouse_id, eccang_warehouse_id
+    id, virtual_warehouse_id, warehouse_id, warehouse_code, warehouse_desc
   </sql>
-  <select id="selectByExample" parameterType="com.chen.base.entity.WarehouseInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.chen.base.entity.WarehouseRelationExample" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
@@ -88,7 +90,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from warehouse_info
+    from warehouse_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -96,57 +98,85 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.chen.base.entity.WarehouseInfoExample">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_info
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse_relation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from warehouse_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.WarehouseRelationExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from warehouse_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.chen.base.entity.WarehouseInfo">
+  <insert id="insert" parameterType="com.chen.base.entity.WarehouseRelation">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_info (id, warehouse_id, eccang_warehouse_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{eccangWarehouseId,jdbcType=INTEGER}
-      )
+    insert into warehouse_relation (id, virtual_warehouse_id, warehouse_id, 
+      warehouse_code, warehouse_desc)
+    values (#{id,jdbcType=INTEGER}, #{virtualWarehouseId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, 
+      #{warehouseCode,jdbcType=VARCHAR}, #{warehouseDesc,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseInfo">
+  <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseRelation">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_info
+    insert into warehouse_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
+      <if test="virtualWarehouseId != null">
+        virtual_warehouse_id,
+      </if>
       <if test="warehouseId != null">
         warehouse_id,
       </if>
-      <if test="eccangWarehouseId != null">
-        eccang_warehouse_id,
+      <if test="warehouseCode != null">
+        warehouse_code,
+      </if>
+      <if test="warehouseDesc != null">
+        warehouse_desc,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="virtualWarehouseId != null">
+        #{virtualWarehouseId,jdbcType=INTEGER},
+      </if>
       <if test="warehouseId != null">
         #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="eccangWarehouseId != null">
-        #{eccangWarehouseId,jdbcType=INTEGER},
+      <if test="warehouseCode != null">
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseDesc != null">
+        #{warehouseDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseRelationExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select count(*) from warehouse_info
+    select count(*) from warehouse_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -155,16 +185,22 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_info
+    update warehouse_relation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.virtualWarehouseId != null">
+        virtual_warehouse_id = #{record.virtualWarehouseId,jdbcType=INTEGER},
+      </if>
       <if test="record.warehouseId != null">
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="record.eccangWarehouseId != null">
-        eccang_warehouse_id = #{record.eccangWarehouseId,jdbcType=INTEGER},
+      <if test="record.warehouseCode != null">
+        warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseDesc != null">
+        warehouse_desc = #{record.warehouseDesc,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -175,12 +211,46 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_info
+    update warehouse_relation
     set id = #{record.id,jdbcType=INTEGER},
+      virtual_warehouse_id = #{record.virtualWarehouseId,jdbcType=INTEGER},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      eccang_warehouse_id = #{record.eccangWarehouseId,jdbcType=INTEGER}
+      warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
+      warehouse_desc = #{record.warehouseDesc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.WarehouseRelation">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update warehouse_relation
+    <set>
+      <if test="virtualWarehouseId != null">
+        virtual_warehouse_id = #{virtualWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseCode != null">
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseDesc != null">
+        warehouse_desc = #{warehouseDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.WarehouseRelation">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update warehouse_relation
+    set virtual_warehouse_id = #{virtualWarehouseId,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      warehouse_desc = #{warehouseDesc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

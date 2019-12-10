@@ -4,25 +4,26 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * 仓库list表
+ * 虚拟仓库表
  *
  * @author Mr.D
- * @date 2019/11/21
+ * @date 2019/12/10
  */
 @Data
-public class WarehouseList implements Serializable {
+public class WarehouseVirtual implements Serializable {
     /**
-     * 仓库id
+     * 
      */
     private Integer id;
 
     /**
-     * 仓库名称
+     * 虚拟仓库名称
+
      */
     private String warehouseName;
 
     /**
-     * 国家id
+     * 国家ID
      */
     private Integer countryId;
 

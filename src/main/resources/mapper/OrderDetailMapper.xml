@@ -28,6 +28,7 @@
     <result column="platform_cost" jdbcType="REAL" property="platformCost" />
     <result column="warehouse_storage_charges" jdbcType="REAL" property="warehouseStorageCharges" />
     <result column="purchase_taxation_fee" jdbcType="REAL" property="purchaseTaxationFee" />
+    <result column="purchase_shipping_fee" jdbcType="REAL" property="purchaseShippingFee" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -100,7 +101,7 @@
     id, order_info_id, product_sku, sku, quantity, price, declared_value, weight, currency, 
     currency_rate, payment_platform_free, fba_fee, refund, purchase_cost, first_carrier_freight, 
     declaration_customs_vat, output_tax_up, shipping_fee_fba, shipping_fee, op_paypal_fee, 
-    platform_cost, warehouse_storage_charges, purchase_taxation_fee
+    platform_cost, warehouse_storage_charges, purchase_taxation_fee, purchase_shipping_fee
   </sql>
   <select id="selectByExample" parameterType="com.chen.base.entity.OrderDetailExample" resultMap="BaseResultMap">
     <!--
@@ -155,7 +156,8 @@
       refund, purchase_cost, first_carrier_freight, 
       declaration_customs_vat, output_tax_up, shipping_fee_fba, 
       shipping_fee, op_paypal_fee, platform_cost, 
-      warehouse_storage_charges, purchase_taxation_fee)
+      warehouse_storage_charges, purchase_taxation_fee, 
+      purchase_shipping_fee)
     values (#{id,jdbcType=INTEGER}, #{orderInfoId,jdbcType=INTEGER}, #{productSku,jdbcType=VARCHAR}, 
       #{sku,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{price,jdbcType=REAL}, 
       #{declaredValue,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{currency,jdbcType=VARCHAR}, 
@@ -163,7 +165,8 @@
       #{refund,jdbcType=REAL}, #{purchaseCost,jdbcType=REAL}, #{firstCarrierFreight,jdbcType=REAL}, 
       #{declarationCustomsVat,jdbcType=REAL}, #{outputTaxUp,jdbcType=REAL}, #{shippingFeeFba,jdbcType=REAL}, 
       #{shippingFee,jdbcType=REAL}, #{opPaypalFee,jdbcType=REAL}, #{platformCost,jdbcType=REAL}, 
-      #{warehouseStorageCharges,jdbcType=REAL}, #{purchaseTaxationFee,jdbcType=REAL})
+      #{warehouseStorageCharges,jdbcType=REAL}, #{purchaseTaxationFee,jdbcType=REAL}, 
+      #{purchaseShippingFee,jdbcType=REAL})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.OrderDetail">
     <!--
@@ -240,6 +243,9 @@
       <if test="purchaseTaxationFee != null">
         purchase_taxation_fee,
       </if>
+      <if test="purchaseShippingFee != null">
+        purchase_shipping_fee,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -310,6 +316,9 @@
       </if>
       <if test="purchaseTaxationFee != null">
         #{purchaseTaxationFee,jdbcType=REAL},
+      </if>
+      <if test="purchaseShippingFee != null">
+        #{purchaseShippingFee,jdbcType=REAL},
       </if>
     </trim>
   </insert>
@@ -397,6 +406,9 @@
       <if test="record.purchaseTaxationFee != null">
         purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL},
       </if>
+      <if test="record.purchaseShippingFee != null">
+        purchase_shipping_fee = #{record.purchaseShippingFee,jdbcType=REAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -429,7 +441,8 @@
       op_paypal_fee = #{record.opPaypalFee,jdbcType=REAL},
       platform_cost = #{record.platformCost,jdbcType=REAL},
       warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
-      purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL}
+      purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL},
+      purchase_shipping_fee = #{record.purchaseShippingFee,jdbcType=REAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -506,6 +519,9 @@
       <if test="purchaseTaxationFee != null">
         purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL},
       </if>
+      <if test="purchaseShippingFee != null">
+        purchase_shipping_fee = #{purchaseShippingFee,jdbcType=REAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -535,7 +551,8 @@
       op_paypal_fee = #{opPaypalFee,jdbcType=REAL},
       platform_cost = #{platformCost,jdbcType=REAL},
       warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
-      purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL}
+      purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL},
+      purchase_shipping_fee = #{purchaseShippingFee,jdbcType=REAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

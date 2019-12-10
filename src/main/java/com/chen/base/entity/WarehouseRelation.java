@@ -7,24 +7,34 @@ import lombok.Data;
  * 仓库明细对应表
  *
  * @author Mr.D
- * @date 2019/11/21
+ * @date 2019/12/10
  */
 @Data
-public class WarehouseInfo implements Serializable {
+public class WarehouseRelation implements Serializable {
     /**
      * 
      */
     private Integer id;
 
     /**
-     * 仓库id
+     * 虚拟仓库id
+     */
+    private Integer virtualWarehouseId;
+
+    /**
+     * 易仓仓库ID
      */
     private Integer warehouseId;
 
     /**
-     * 
+     * 仓库代码
      */
-    private Integer eccangWarehouseId;
+    private String warehouseCode;
+
+    /**
+     * 仓库描述
+     */
+    private String warehouseDesc;
 
     /**
      * serialVersionUID

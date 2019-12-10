@@ -34,7 +34,7 @@ spring:
 #  TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 logging:
   level:
-    root: ERROR
+    root: DEBUG
 
 
 mybatis:

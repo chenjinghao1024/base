@@ -24,7 +24,7 @@ public class Test5Controller {
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @RequestMapping("/sync")
     public String demo() {
-        return "sync Count is "+interfaceService.warehouseSync();
+        return "sync Count is "+interfaceService.orderSync();
     }
 
 

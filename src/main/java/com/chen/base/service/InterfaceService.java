@@ -234,7 +234,6 @@ public class InterfaceService {
                 if (getOrdersResults.size() == 0) {
                     System.out.println(orderInfo.getWarehouseOrderCode());
                 }
-//            SO19100190066
                 JSONArray orderProductList = getOrdersResults.getJSONObject(0).getJSONArray("productList");
 
                 for (Object product : orderProductList) {
@@ -333,6 +332,7 @@ public class InterfaceService {
                         float purchaseTaxationFee = data.getFloatValue("purchaseTaxationFee");
                         float purchaseShippingFee = data.getFloatValue("purchaseShippingFee");
                         orderDetail.setPurchaseTaxationFee(purchaseTaxationFee);
+                        orderDetail.setPurchaseShippingFee(purchaseShippingFee);
                         orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
                     }
 

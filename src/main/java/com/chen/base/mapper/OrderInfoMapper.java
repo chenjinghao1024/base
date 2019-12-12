@@ -3,8 +3,9 @@ package com.chen.base.mapper;
 import com.chen.base.entity.OrderInfo;
 import com.chen.base.entity.OrderInfoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
@@ -34,12 +35,6 @@ public interface OrderInfoMapper {
      */
     int insertSelective(OrderInfo record);
 
-    /**
-     *
-     * @param orderInfo
-     * @return
-     */
-//    @Options(useGeneratedKeys = true, keyProperty = "save_id")
     int insertSelectiveReturnId(OrderInfo orderInfo);
 
     /**
@@ -71,5 +66,7 @@ public interface OrderInfoMapper {
      * updateByPrimaryKey
      */
     int updateByPrimaryKey(OrderInfo record);
+
+    List<Map> selectAMZTotalSalesGroupBySite();
 
 }

@@ -8,12 +8,12 @@ import lombok.Data;
  * 订单列表
  *
  * @author Mr.D
- * @date 2019/11/22
+ * @date 2019/12/11
  */
 @Data
 public class OrderInfo implements Serializable {
     /**
-     *
+     * 
      */
     private Integer id;
 
@@ -73,8 +73,12 @@ public class OrderInfo implements Serializable {
     private Date createTime;
 
     /**
+     * 订单站点
+     */
+    private String site;
+
+    /**
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
-
 }

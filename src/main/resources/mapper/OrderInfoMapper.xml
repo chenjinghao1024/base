@@ -17,6 +17,7 @@
     <result column="currency" jdbcType="VARCHAR" property="currency" />
     <result column="date_warehouse_shipping" jdbcType="TIMESTAMP" property="dateWarehouseShipping" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -29,8 +30,8 @@
             <foreach collection="criteria.criteria" item="criterion">
               <choose>
                 <when test="criterion.noValue">
-                and ${criterion.condition}
-              </when>
+                  and ${criterion.condition}
+                </when>
                 <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
@@ -86,8 +87,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, platform, sale_order_code, warehouse_order_code, company_code, user_account,
-    warehouse_id, amountpaid, subtotal, currency, date_warehouse_shipping, create_time
+    id, platform, sale_order_code, warehouse_order_code, company_code, user_account, 
+    warehouse_id, amountpaid, subtotal, currency, date_warehouse_shipping, create_time, 
+    site
   </sql>
   <select id="selectByExample" parameterType="com.chen.base.entity.OrderInfoExample" resultMap="BaseResultMap">
     <!--
@@ -110,7 +112,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select
+    select 
     <include refid="Base_Column_List" />
     from order_info
     where id = #{id,jdbcType=INTEGER}
@@ -135,16 +137,16 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into order_info (id, platform, sale_order_code,
-      warehouse_order_code, company_code, user_account,
-      warehouse_id, amountpaid, subtotal,
-      currency, date_warehouse_shipping, create_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{platform,jdbcType=VARCHAR}, #{saleOrderCode,jdbcType=VARCHAR},
-      #{warehouseOrderCode,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR},
-      #{warehouseId,jdbcType=INTEGER}, #{amountpaid,jdbcType=REAL}, #{subtotal,jdbcType=REAL},
-      #{currency,jdbcType=VARCHAR}, #{dateWarehouseShipping,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into order_info (id, platform, sale_order_code, 
+      warehouse_order_code, company_code, user_account, 
+      warehouse_id, amountpaid, subtotal, 
+      currency, date_warehouse_shipping, create_time, 
+      site)
+    values (#{id,jdbcType=INTEGER}, #{platform,jdbcType=VARCHAR}, #{saleOrderCode,jdbcType=VARCHAR}, 
+      #{warehouseOrderCode,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, 
+      #{warehouseId,jdbcType=INTEGER}, #{amountpaid,jdbcType=REAL}, #{subtotal,jdbcType=REAL}, 
+      #{currency,jdbcType=VARCHAR}, #{dateWarehouseShipping,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{site,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.OrderInfo">
     <!--
@@ -188,6 +190,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="site != null">
+        site,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -225,6 +230,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -268,6 +276,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="site != null">
+        site,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -306,8 +317,12 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
+
   <select id="countByExample" parameterType="com.chen.base.entity.OrderInfoExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
@@ -359,6 +374,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.site != null">
+        site = #{record.site,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -380,7 +398,8 @@
       subtotal = #{record.subtotal,jdbcType=REAL},
       currency = #{record.currency,jdbcType=VARCHAR},
       date_warehouse_shipping = #{record.dateWarehouseShipping,jdbcType=TIMESTAMP},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      site = #{record.site,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -424,6 +443,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="site != null">
+        site = #{site,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -442,7 +464,14 @@
       subtotal = #{subtotal,jdbcType=REAL},
       currency = #{currency,jdbcType=VARCHAR},
       date_warehouse_shipping = #{dateWarehouseShipping,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      site = #{site,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectAMZTotalSalesGroupBySite" resultType="java.util.Map">
+    select site,  sum(subtotal) as subtotal,currency
+    from order_info
+    where platform = 'amazon'
+    group by site;
+  </select>
 </mapper>

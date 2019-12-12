@@ -4,7 +4,7 @@ import com.chen.base.entity.*;
 import com.chen.base.mapper.*;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CipherService {
@@ -23,8 +23,19 @@ public class CipherService {
 
     @Resource
     ProductBySkuMapper productBySkuMapper;
+
+    @Resource
+    OrderInfoMapper orderInfoMapper;
+    @Resource
+    OrderDetailMapper orderDetailMapper;
+    @Resource
+    CountryMapper countryMapper;
+    @Resource
+    CurrencyRateMapper currencyRateMapper;
+
     /**
      * 税费
+     *
      * @param packingInfoId
      */
     public void tariffCipher(Integer packingInfoId) {
@@ -38,7 +49,7 @@ public class CipherService {
             String countryId = packingDetail.getCountryId();
 
             TariffRateExample tariffRateExample = new TariffRateExample();
-            TariffRateExample.Criteria tariffRateExampleCriteria= tariffRateExample.createCriteria();
+            TariffRateExample.Criteria tariffRateExampleCriteria = tariffRateExample.createCriteria();
             tariffRateExampleCriteria.andCountryIdEqualTo(Integer.valueOf(countryId));
             tariffRateExampleCriteria.andEccangSkuEqualTo(sku);
             List<TariffRate> tariffRates = tariffRateMapper.selectByExample(tariffRateExample);
@@ -53,6 +64,7 @@ public class CipherService {
 
     /**
      * 清关VAT单价
+     *
      * @param packingInfoId
      */
     public void CCVATCipher(Integer packingInfoId) {
@@ -78,6 +90,7 @@ public class CipherService {
 
     /**
      * 头程运费
+     *
      * @param packingInfoId
      */
     public void firstWayCipher(Integer packingInfoId) {
@@ -107,7 +120,18 @@ public class CipherService {
             packingDetailMapper.updateByPrimaryKeySelective(packingDetail);
 
         }
+    }
 
+    /**
+     * 采购价格
+     *
+     * @return
+     */
+    public float priceCipher(Integer orderDetailId) {
+        OrderDetail orderDetail = orderDetailMapper.selectByPrimaryKey(orderDetailId);
+        float price = orderDetail.getPurchaseCost() + orderDetail.getPurchaseShippingFee() +
+                orderDetail.getPurchaseTaxationFee();
+        return price;
 
     }
 

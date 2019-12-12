@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.CurrencyRateMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.CurrencyRate">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <id column="currency_code" jdbcType="VARCHAR" property="currencyCode" />
+    <result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
+    <result column="currency_rate" jdbcType="REAL" property="currencyRate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    currency_code, currency_name, currency_rate
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.CurrencyRateExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from currency_rate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from currency_rate
+    where currency_code = #{currencyCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from currency_rate
+    where currency_code = #{currencyCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.CurrencyRateExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from currency_rate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.CurrencyRate">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into currency_rate (currency_code, currency_name, currency_rate
+      )
+    values (#{currencyCode,jdbcType=VARCHAR}, #{currencyName,jdbcType=VARCHAR}, #{currencyRate,jdbcType=REAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.CurrencyRate">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into currency_rate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="currencyCode != null">
+        currency_code,
+      </if>
+      <if test="currencyName != null">
+        currency_name,
+      </if>
+      <if test="currencyRate != null">
+        currency_rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="currencyCode != null">
+        #{currencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyName != null">
+        #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyRate != null">
+        #{currencyRate,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.chen.base.entity.CurrencyRateExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from currency_rate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update currency_rate
+    <set>
+      <if test="record.currencyCode != null">
+        currency_code = #{record.currencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currencyName != null">
+        currency_name = #{record.currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currencyRate != null">
+        currency_rate = #{record.currencyRate,jdbcType=REAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update currency_rate
+    set currency_code = #{record.currencyCode,jdbcType=VARCHAR},
+      currency_name = #{record.currencyName,jdbcType=VARCHAR},
+      currency_rate = #{record.currencyRate,jdbcType=REAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.CurrencyRate">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update currency_rate
+    <set>
+      <if test="currencyName != null">
+        currency_name = #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyRate != null">
+        currency_rate = #{currencyRate,jdbcType=REAL},
+      </if>
+    </set>
+    where currency_code = #{currencyCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.CurrencyRate">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update currency_rate
+    set currency_name = #{currencyName,jdbcType=VARCHAR},
+      currency_rate = #{currencyRate,jdbcType=REAL}
+    where currency_code = #{currencyCode,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

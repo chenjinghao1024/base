@@ -7,7 +7,7 @@ import lombok.Data;
  * 仓库明细对应表
  *
  * @author Mr.D
- * @date 2019/12/10
+ * @date 2019/12/11
  */
 @Data
 public class WarehouseRelation implements Serializable {
@@ -35,6 +35,11 @@ public class WarehouseRelation implements Serializable {
      * 仓库描述
      */
     private String warehouseDesc;
+
+    /**
+     * 仓库ID
+     */
+    private Integer countryId;
 
     /**
      * serialVersionUID

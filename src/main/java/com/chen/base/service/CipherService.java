@@ -135,4 +135,153 @@ public class CipherService {
 
     }
 
+
+
+
+    public List<CipherResult> orderCipher() {
+
+        Map siteTotal = getTotalBySite();
+
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+        OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
+//        orderInfoCriteria.andIdLessThanOrEqualTo(100);
+        orderInfoCriteria.andIdEqualTo(163);
+        List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
+
+        OrderDetailExample orderDetailExample = new OrderDetailExample();
+        PackingInfoExample packingInfoExample = new PackingInfoExample();
+        PackingDetailExample packingDetailExample = new PackingDetailExample();
+        CountryExample countryExample = new CountryExample();
+
+        List<CipherResult> cipherResults = new ArrayList<>();
+        Integer countryId;
+        for (OrderInfo orderInfo : orderInfos) {
+
+            CipherResult cipherResult = new CipherResult(orderInfo.getId(), orderInfo.getSaleOrderCode());
+            cipherResults.add(cipherResult);
+
+            orderDetailExample.clear();
+            OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
+            criteria.andOrderInfoIdEqualTo(orderInfo.getId());
+            String site = orderInfo.getSite();
+            String countryCode;
+            if (site.lastIndexOf('.') != -1) {
+                countryCode=site.substring(site.lastIndexOf('.') + 1, site.length());
+            } else {
+                countryCode = site;
+            }
+
+
+            countryExample.clear();
+            CountryExample.Criteria countryExampleCriteria = countryExample.createCriteria();
+            countryExampleCriteria.andCodeEqualTo(countryCode.toUpperCase());
+            List<Country> countries = countryMapper.selectByExample(countryExample);
+            if (countries.size() == 0) {
+                continue;
+            }else {
+                countryId = countries.get(0).getId();
+            }
+
+            System.out.println(countryId);
+
+            List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
+            for (OrderDetail orderDetail : orderDetails) {
+                Integer quantity = orderDetail.getQuantity();
+
+                buyingPrice(cipherResult, orderDetail, quantity);
+                clearVAT(packingDetailExample, countryId, cipherResult,orderDetail,quantity);
+
+                outputTax(siteTotal, packingInfoExample, countryId, orderInfo, cipherResult, site, orderDetail, quantity);
+
+
+            }
+
+        }
+
+        return cipherResults;
+    }
+
+    private void outputTax(Map siteTotal, PackingInfoExample packingInfoExample, Integer countryId, OrderInfo orderInfo,
+                           CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity) {
+        if (orderInfo.getPlatform().equals("amazon")){
+            Double total = (Double) siteTotal.get(site);
+            if (total > 0) {
+                double unitPriceRatio = orderDetail.getPrice() / total;
+                packingInfoExample.clear();
+                PackingInfoExample.Criteria packingInfoExampleCriteria = packingInfoExample.createCriteria();
+                packingInfoExampleCriteria.andCountryIdEqualTo(String.valueOf(countryId));
+                List<PackingInfo> packingInfos = packingInfoMapper.selectByExample(packingInfoExample);
+                if (packingInfos.size() > 0) {
+                    Float outputTaxVatAll = packingInfos.get(0).getOutputTaxVatAll();
+                    if (outputTaxVatAll != null) {
+                        double outputTax = outputTaxVatAll * unitPriceRatio;
+                        cipherResult.addToOutputTax(outputTax * quantity);
+                    }
+                }
+            }
+        }
+    }
+
+    private void clearVAT(PackingDetailExample packingDetailExample, Integer countryId, CipherResult cipherResult,OrderDetail orderDetail, Integer quantity) {
+        // 清关VAT
+
+        packingDetailExample.clear();
+        PackingDetailExample.Criteria packingDetailExampleCriteria1 = packingDetailExample.createCriteria();
+        packingDetailExampleCriteria1.andCountryIdEqualTo(String.valueOf(countryId));
+        packingDetailExampleCriteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
+
+        PackingDetailExample.Criteria packingDetailExampleCriteria2 = packingDetailExample.or();
+        packingDetailExampleCriteria2.andCountryIdEqualTo(String.valueOf(countryId));
+        String sku = orderDetail.getSku();
+        sku=sku.substring(0, sku.indexOf("*"));
+        packingDetailExampleCriteria2.andEccangSkuEqualTo(sku);
+        System.out.println(sku);
+        List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
+
+        if (packingDetails.size() > 0) {
+            cipherResult.addToClearVAT(packingDetails.get(0).getDeclarationCustomsVat()*quantity);
+            cipherResult.addToHeadway(packingDetails.get(0).getFirstCarrierFreightUp()*quantity);
+            cipherResult.addToTariff(packingDetails.get(0).getSkuTaxes()*quantity);
+        }
+
+
+    }
+
+    /**
+     * 计算采购价格
+     * @param cipherResult
+     * @param orderDetail
+     * @param quantity
+     */
+    private void buyingPrice(CipherResult cipherResult, OrderDetail orderDetail, Integer quantity) {
+        // 计算采购价格
+        float purchaseCost = orderDetail.getPurchaseCost();
+        Float purchaseShippingFee = orderDetail.getPurchaseShippingFee();
+        Float purchaseTaxationFee = orderDetail.getPurchaseTaxationFee();
+
+        if (purchaseTaxationFee == null) {
+            purchaseTaxationFee = 0.0f;
+        }if (purchaseShippingFee == null) {
+            purchaseShippingFee = 0.0f;
+        }
+        float buyingPrice = purchaseCost + purchaseShippingFee + purchaseTaxationFee;
+        cipherResult.addToBuyingPrice(quantity*buyingPrice);
+    }
+
+    private Map getTotalBySite(){
+        Map siteTotal = new HashMap();
+        List<Map> maps = orderInfoMapper.selectAMZTotalSalesGroupBySite();
+        for (Map map : maps) {
+            String site = (String) map.get("site");
+            Double subtotal= (Double) map.get("subtotal");
+            String currency= (String) map.get("currency");
+
+            CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(currency);
+            Float rate = currencyRate.getCurrencyRate();
+            if (site.startsWith("Amazon")) {
+                siteTotal.put(site, subtotal * rate);
+            }
+        }
+        return siteTotal;
+    }
 }

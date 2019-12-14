@@ -305,6 +305,8 @@ public class InterfaceService {
                     JSONObject product = (JSONObject) getOrderInfoProduct;
                     op_paypal_fee += product.getFloatValue("op_paypal_fee");
 
+                    orderDetail.setWarehouseId(getOrderInfoOrder.getInteger("warehouse_id"));
+
                     orderDetail.setOpPaypalFee(op_paypal_fee);
                     // shippingFee
                     if ("1".equals(getOrderInfoOrder.get("is_fba"))) {

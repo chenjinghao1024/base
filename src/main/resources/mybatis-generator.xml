@@ -37,7 +37,7 @@
 
         <!--tableName -> 表名  domainObjectName -> 实体类名 -->
 
-        <table tableName="warehouse_rent">
+        <table tableName="order_detail">
             <property name="modelOnly" value="false"/>
         </table>
 

@@ -51,6 +51,7 @@ public class CipherResult {
     public void addToBuyingPrice(float buyingPrice) {
         this.buyingPrice += buyingPrice;
     }
+
     public void addToClearVAT(float clearVAT) {
         this.clearVAT += clearVAT;
     }
@@ -58,10 +59,14 @@ public class CipherResult {
     public void addToHeadway(float headway){
         this.headway += headway;
     }
+
     public void addToTariff(float tariff){
         this.tariff += tariff;
     }
     public void addToOutputTax(double outputTax){
         this.outputTax += outputTax;
+    }
+    public void addToWarehouseRental(float warehouseRental){
+        this.warehouseRental += warehouseRental;
     }
 }

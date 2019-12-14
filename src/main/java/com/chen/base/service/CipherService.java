@@ -33,6 +33,8 @@ public class CipherService {
     @Resource
     CurrencyRateMapper currencyRateMapper;
 
+    @Resource
+    WarehouseRentMapper warehouseRentMapper;
     /**
      * 税费
      *
@@ -144,14 +146,16 @@ public class CipherService {
 
         OrderInfoExample orderInfoExample = new OrderInfoExample();
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
-//        orderInfoCriteria.andIdLessThanOrEqualTo(100);
-        orderInfoCriteria.andIdEqualTo(163);
+        orderInfoCriteria.andIdLessThanOrEqualTo(10);
+//        orderInfoCriteria.andIdEqualTo(163);
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
 
         OrderDetailExample orderDetailExample = new OrderDetailExample();
         PackingInfoExample packingInfoExample = new PackingInfoExample();
         PackingDetailExample packingDetailExample = new PackingDetailExample();
         CountryExample countryExample = new CountryExample();
+        WarehouseRentExample warehouseRentExample = new WarehouseRentExample();
+
 
         List<CipherResult> cipherResults = new ArrayList<>();
         Integer countryId;
@@ -182,20 +186,36 @@ public class CipherService {
                 countryId = countries.get(0).getId();
             }
 
-            System.out.println(countryId);
 
             List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
             for (OrderDetail orderDetail : orderDetails) {
                 Integer quantity = orderDetail.getQuantity();
 
                 buyingPrice(cipherResult, orderDetail, quantity);
+
                 clearVAT(packingDetailExample, countryId, cipherResult,orderDetail,quantity);
 
                 outputTax(siteTotal, packingInfoExample, countryId, orderInfo, cipherResult, site, orderDetail, quantity);
 
+                String sku = orderDetail.getSku();
+                sku=sku.substring(0, sku.indexOf("*"));
+                warehouseRentExample.clear();
+                WarehouseRentExample.Criteria warehouseRentExampleCriteria = warehouseRentExample.createCriteria();
+                warehouseRentExampleCriteria.andSkuEqualTo(sku);
+                warehouseRentExampleCriteria.andCountryIdEqualTo(countryId);
 
+                List<WarehouseRent> warehouseRents = warehouseRentMapper.selectByExample(warehouseRentExample);
+                if (warehouseRents.size() > 0) {
+                    float rent = 0;
+                    for (WarehouseRent warehouseRent : warehouseRents) {
+                        CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(warehouseRent.getCurrency());
+                        Float rate = currencyRate.getCurrencyRate();
+                        rent += warehouseRent.getRent() * rate;
+                    }
+                    cipherResult.addToWarehouseRental(rent / warehouseRents.size());
+                }
             }
-
+            System.out.println(cipherResult.toString());
         }
 
         return cipherResults;
@@ -235,7 +255,6 @@ public class CipherService {
         String sku = orderDetail.getSku();
         sku=sku.substring(0, sku.indexOf("*"));
         packingDetailExampleCriteria2.andEccangSkuEqualTo(sku);
-        System.out.println(sku);
         List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
 
         if (packingDetails.size() > 0) {

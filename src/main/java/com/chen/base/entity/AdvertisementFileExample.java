@@ -1,9 +1,10 @@
 package com.chen.base.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class WarehouseRentExample {
+public class AdvertisementFileExample {
     /**
      * orderByClause
      */
@@ -20,9 +21,9 @@ public class WarehouseRentExample {
     protected List<Criteria> oredCriteria;
 
     /**
-     * WarehouseRentExample
+     * AdvertisementFileExample
      */
-    public WarehouseRentExample() {
+    public AdvertisementFileExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -108,7 +109,7 @@ public class WarehouseRentExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/18
+     * @date 2019/12/16
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -211,342 +212,282 @@ public class WarehouseRentExample {
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeIsNull() {
-            addCriterion("warehouse_code is null");
+        public Criteria andAdvertisementFileSysnameIsNull() {
+            addCriterion("advertisement_file_sysname is null");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeIsNotNull() {
-            addCriterion("warehouse_code is not null");
+        public Criteria andAdvertisementFileSysnameIsNotNull() {
+            addCriterion("advertisement_file_sysname is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeEqualTo(String value) {
-            addCriterion("warehouse_code =", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameEqualTo(String value) {
+            addCriterion("advertisement_file_sysname =", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeNotEqualTo(String value) {
-            addCriterion("warehouse_code <>", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameNotEqualTo(String value) {
+            addCriterion("advertisement_file_sysname <>", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeGreaterThan(String value) {
-            addCriterion("warehouse_code >", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameGreaterThan(String value) {
+            addCriterion("advertisement_file_sysname >", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("warehouse_code >=", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameGreaterThanOrEqualTo(String value) {
+            addCriterion("advertisement_file_sysname >=", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeLessThan(String value) {
-            addCriterion("warehouse_code <", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameLessThan(String value) {
+            addCriterion("advertisement_file_sysname <", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeLessThanOrEqualTo(String value) {
-            addCriterion("warehouse_code <=", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameLessThanOrEqualTo(String value) {
+            addCriterion("advertisement_file_sysname <=", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeLike(String value) {
-            addCriterion("warehouse_code like", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameLike(String value) {
+            addCriterion("advertisement_file_sysname like", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeNotLike(String value) {
-            addCriterion("warehouse_code not like", value, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameNotLike(String value) {
+            addCriterion("advertisement_file_sysname not like", value, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeIn(List<String> values) {
-            addCriterion("warehouse_code in", values, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameIn(List<String> values) {
+            addCriterion("advertisement_file_sysname in", values, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeNotIn(List<String> values) {
-            addCriterion("warehouse_code not in", values, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameNotIn(List<String> values) {
+            addCriterion("advertisement_file_sysname not in", values, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeBetween(String value1, String value2) {
-            addCriterion("warehouse_code between", value1, value2, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameBetween(String value1, String value2) {
+            addCriterion("advertisement_file_sysname between", value1, value2, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseCodeNotBetween(String value1, String value2) {
-            addCriterion("warehouse_code not between", value1, value2, "warehouseCode");
+        public Criteria andAdvertisementFileSysnameNotBetween(String value1, String value2) {
+            addCriterion("advertisement_file_sysname not between", value1, value2, "advertisementFileSysname");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdIsNull() {
-            addCriterion("warehouse_id is null");
+        public Criteria andAdvertisementFileNameIsNull() {
+            addCriterion("advertisement_file_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdIsNotNull() {
-            addCriterion("warehouse_id is not null");
+        public Criteria andAdvertisementFileNameIsNotNull() {
+            addCriterion("advertisement_file_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdEqualTo(Integer value) {
-            addCriterion("warehouse_id =", value, "warehouseId");
+        public Criteria andAdvertisementFileNameEqualTo(String value) {
+            addCriterion("advertisement_file_name =", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdNotEqualTo(Integer value) {
-            addCriterion("warehouse_id <>", value, "warehouseId");
+        public Criteria andAdvertisementFileNameNotEqualTo(String value) {
+            addCriterion("advertisement_file_name <>", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdGreaterThan(Integer value) {
-            addCriterion("warehouse_id >", value, "warehouseId");
+        public Criteria andAdvertisementFileNameGreaterThan(String value) {
+            addCriterion("advertisement_file_name >", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("warehouse_id >=", value, "warehouseId");
+        public Criteria andAdvertisementFileNameGreaterThanOrEqualTo(String value) {
+            addCriterion("advertisement_file_name >=", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdLessThan(Integer value) {
-            addCriterion("warehouse_id <", value, "warehouseId");
+        public Criteria andAdvertisementFileNameLessThan(String value) {
+            addCriterion("advertisement_file_name <", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdLessThanOrEqualTo(Integer value) {
-            addCriterion("warehouse_id <=", value, "warehouseId");
+        public Criteria andAdvertisementFileNameLessThanOrEqualTo(String value) {
+            addCriterion("advertisement_file_name <=", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdIn(List<Integer> values) {
-            addCriterion("warehouse_id in", values, "warehouseId");
+        public Criteria andAdvertisementFileNameLike(String value) {
+            addCriterion("advertisement_file_name like", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdNotIn(List<Integer> values) {
-            addCriterion("warehouse_id not in", values, "warehouseId");
+        public Criteria andAdvertisementFileNameNotLike(String value) {
+            addCriterion("advertisement_file_name not like", value, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdBetween(Integer value1, Integer value2) {
-            addCriterion("warehouse_id between", value1, value2, "warehouseId");
+        public Criteria andAdvertisementFileNameIn(List<String> values) {
+            addCriterion("advertisement_file_name in", values, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andWarehouseIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("warehouse_id not between", value1, value2, "warehouseId");
+        public Criteria andAdvertisementFileNameNotIn(List<String> values) {
+            addCriterion("advertisement_file_name not in", values, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andSkuIsNull() {
-            addCriterion("sku is null");
+        public Criteria andAdvertisementFileNameBetween(String value1, String value2) {
+            addCriterion("advertisement_file_name between", value1, value2, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andSkuIsNotNull() {
-            addCriterion("sku is not null");
+        public Criteria andAdvertisementFileNameNotBetween(String value1, String value2) {
+            addCriterion("advertisement_file_name not between", value1, value2, "advertisementFileName");
             return (Criteria) this;
         }
 
-        public Criteria andSkuEqualTo(String value) {
-            addCriterion("sku =", value, "sku");
+        public Criteria andUrlFileIsNull() {
+            addCriterion("url_file is null");
             return (Criteria) this;
         }
 
-        public Criteria andSkuNotEqualTo(String value) {
-            addCriterion("sku <>", value, "sku");
+        public Criteria andUrlFileIsNotNull() {
+            addCriterion("url_file is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSkuGreaterThan(String value) {
-            addCriterion("sku >", value, "sku");
+        public Criteria andUrlFileEqualTo(String value) {
+            addCriterion("url_file =", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuGreaterThanOrEqualTo(String value) {
-            addCriterion("sku >=", value, "sku");
+        public Criteria andUrlFileNotEqualTo(String value) {
+            addCriterion("url_file <>", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuLessThan(String value) {
-            addCriterion("sku <", value, "sku");
+        public Criteria andUrlFileGreaterThan(String value) {
+            addCriterion("url_file >", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuLessThanOrEqualTo(String value) {
-            addCriterion("sku <=", value, "sku");
+        public Criteria andUrlFileGreaterThanOrEqualTo(String value) {
+            addCriterion("url_file >=", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuLike(String value) {
-            addCriterion("sku like", value, "sku");
+        public Criteria andUrlFileLessThan(String value) {
+            addCriterion("url_file <", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuNotLike(String value) {
-            addCriterion("sku not like", value, "sku");
+        public Criteria andUrlFileLessThanOrEqualTo(String value) {
+            addCriterion("url_file <=", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuIn(List<String> values) {
-            addCriterion("sku in", values, "sku");
+        public Criteria andUrlFileLike(String value) {
+            addCriterion("url_file like", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuNotIn(List<String> values) {
-            addCriterion("sku not in", values, "sku");
+        public Criteria andUrlFileNotLike(String value) {
+            addCriterion("url_file not like", value, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuBetween(String value1, String value2) {
-            addCriterion("sku between", value1, value2, "sku");
+        public Criteria andUrlFileIn(List<String> values) {
+            addCriterion("url_file in", values, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andSkuNotBetween(String value1, String value2) {
-            addCriterion("sku not between", value1, value2, "sku");
+        public Criteria andUrlFileNotIn(List<String> values) {
+            addCriterion("url_file not in", values, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andRentIsNull() {
-            addCriterion("rent is null");
+        public Criteria andUrlFileBetween(String value1, String value2) {
+            addCriterion("url_file between", value1, value2, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andRentIsNotNull() {
-            addCriterion("rent is not null");
+        public Criteria andUrlFileNotBetween(String value1, String value2) {
+            addCriterion("url_file not between", value1, value2, "urlFile");
             return (Criteria) this;
         }
 
-        public Criteria andRentEqualTo(Float value) {
-            addCriterion("rent =", value, "rent");
+        public Criteria andPcraddTimeIsNull() {
+            addCriterion("pcradd_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRentNotEqualTo(Float value) {
-            addCriterion("rent <>", value, "rent");
+        public Criteria andPcraddTimeIsNotNull() {
+            addCriterion("pcradd_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRentGreaterThan(Float value) {
-            addCriterion("rent >", value, "rent");
+        public Criteria andPcraddTimeEqualTo(Date value) {
+            addCriterion("pcradd_time =", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentGreaterThanOrEqualTo(Float value) {
-            addCriterion("rent >=", value, "rent");
+        public Criteria andPcraddTimeNotEqualTo(Date value) {
+            addCriterion("pcradd_time <>", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentLessThan(Float value) {
-            addCriterion("rent <", value, "rent");
+        public Criteria andPcraddTimeGreaterThan(Date value) {
+            addCriterion("pcradd_time >", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentLessThanOrEqualTo(Float value) {
-            addCriterion("rent <=", value, "rent");
+        public Criteria andPcraddTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("pcradd_time >=", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentIn(List<Float> values) {
-            addCriterion("rent in", values, "rent");
+        public Criteria andPcraddTimeLessThan(Date value) {
+            addCriterion("pcradd_time <", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentNotIn(List<Float> values) {
-            addCriterion("rent not in", values, "rent");
+        public Criteria andPcraddTimeLessThanOrEqualTo(Date value) {
+            addCriterion("pcradd_time <=", value, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentBetween(Float value1, Float value2) {
-            addCriterion("rent between", value1, value2, "rent");
+        public Criteria andPcraddTimeIn(List<Date> values) {
+            addCriterion("pcradd_time in", values, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andRentNotBetween(Float value1, Float value2) {
-            addCriterion("rent not between", value1, value2, "rent");
+        public Criteria andPcraddTimeNotIn(List<Date> values) {
+            addCriterion("pcradd_time not in", values, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andCurrencyIsNull() {
-            addCriterion("currency is null");
+        public Criteria andPcraddTimeBetween(Date value1, Date value2) {
+            addCriterion("pcradd_time between", value1, value2, "pcraddTime");
             return (Criteria) this;
         }
 
-        public Criteria andCurrencyIsNotNull() {
-            addCriterion("currency is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyEqualTo(String value) {
-            addCriterion("currency =", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNotEqualTo(String value) {
-            addCriterion("currency <>", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyGreaterThan(String value) {
-            addCriterion("currency >", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyGreaterThanOrEqualTo(String value) {
-            addCriterion("currency >=", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyLessThan(String value) {
-            addCriterion("currency <", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyLessThanOrEqualTo(String value) {
-            addCriterion("currency <=", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyLike(String value) {
-            addCriterion("currency like", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNotLike(String value) {
-            addCriterion("currency not like", value, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyIn(List<String> values) {
-            addCriterion("currency in", values, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNotIn(List<String> values) {
-            addCriterion("currency not in", values, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyBetween(String value1, String value2) {
-            addCriterion("currency between", value1, value2, "currency");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNotBetween(String value1, String value2) {
-            addCriterion("currency not between", value1, value2, "currency");
+        public Criteria andPcraddTimeNotBetween(Date value1, Date value2) {
+            addCriterion("pcradd_time not between", value1, value2, "pcraddTime");
             return (Criteria) this;
         }
     }
 
     /**
      * This class was generated by MyBatis Generator.
-     * This class corresponds to the database table warehouse_rent
+     * This class corresponds to the database table advertisement_file
      *
-     * @mbg.generated do_not_delete_during_merge Wed Dec 18 09:54:07 CST 2019
+     * @mbg.generated do_not_delete_during_merge Mon Dec 16 13:08:52 CST 2019
      */
     public static class Criteria extends GeneratedCriteria {
 
@@ -558,7 +499,7 @@ public class WarehouseRentExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/18
+     * @date 2019/12/16
      */
     public static class Criterion {
         private String condition;

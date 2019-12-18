@@ -6,9 +6,8 @@
     该方法由生成器生成,请勿修改
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="country_id" jdbcType="VARCHAR" property="countryId" />
     <result column="packing_id" jdbcType="VARCHAR" property="packingId" />
-    <result column="target_warehouseId" jdbcType="INTEGER" property="targetWarehouseid" />
+    <result column="target_warehouse_id" jdbcType="INTEGER" property="targetWarehouseId" />
     <result column="first_carrier_freight_all" jdbcType="REAL" property="firstCarrierFreightAll" />
     <result column="output_tax_vat_all" jdbcType="REAL" property="outputTaxVatAll" />
     <result column="pcradd_time" jdbcType="TIMESTAMP" property="pcraddTime" />
@@ -84,7 +83,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, country_id, packing_id, target_warehouseId, first_carrier_freight_all, output_tax_vat_all, 
+    id, packing_id, target_warehouse_id, first_carrier_freight_all, output_tax_vat_all,
     pcradd_time, flie_name, file_name_sysname, file_url
   </sql>
   <select id="selectByExample" parameterType="com.chen.base.entity.PackingInfoExample" resultMap="BaseResultMap">
@@ -108,7 +107,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
     from packing_info
     where id = #{id,jdbcType=INTEGER}
@@ -133,14 +132,14 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into packing_info (id, country_id, packing_id, 
-      target_warehouseId, first_carrier_freight_all, 
-      output_tax_vat_all, pcradd_time, flie_name, 
-      file_name_sysname, file_url)
-    values (#{id,jdbcType=INTEGER}, #{countryId,jdbcType=VARCHAR}, #{packingId,jdbcType=VARCHAR}, 
-      #{targetWarehouseid,jdbcType=INTEGER}, #{firstCarrierFreightAll,jdbcType=REAL}, 
-      #{outputTaxVatAll,jdbcType=REAL}, #{pcraddTime,jdbcType=TIMESTAMP}, #{flieName,jdbcType=VARCHAR}, 
-      #{fileNameSysname,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR})
+    insert into packing_info (id, packing_id, target_warehouse_id,
+      first_carrier_freight_all, output_tax_vat_all, pcradd_time,
+      flie_name, file_name_sysname, file_url
+      )
+    values (#{id,jdbcType=INTEGER}, #{packingId,jdbcType=VARCHAR}, #{targetWarehouseId,jdbcType=INTEGER},
+      #{firstCarrierFreightAll,jdbcType=REAL}, #{outputTaxVatAll,jdbcType=REAL}, #{pcraddTime,jdbcType=TIMESTAMP},
+      #{flieName,jdbcType=VARCHAR}, #{fileNameSysname,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.PackingInfo">
     <!--
@@ -151,14 +150,11 @@
       <if test="id != null">
         id,
       </if>
-      <if test="countryId != null">
-        country_id,
-      </if>
       <if test="packingId != null">
         packing_id,
       </if>
-      <if test="targetWarehouseid != null">
-        target_warehouseId,
+      <if test="targetWarehouseId != null">
+        target_warehouse_id,
       </if>
       <if test="firstCarrierFreightAll != null">
         first_carrier_freight_all,
@@ -183,14 +179,11 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="countryId != null">
-        #{countryId,jdbcType=VARCHAR},
-      </if>
       <if test="packingId != null">
         #{packingId,jdbcType=VARCHAR},
       </if>
-      <if test="targetWarehouseid != null">
-        #{targetWarehouseid,jdbcType=INTEGER},
+      <if test="targetWarehouseId != null">
+        #{targetWarehouseId,jdbcType=INTEGER},
       </if>
       <if test="firstCarrierFreightAll != null">
         #{firstCarrierFreightAll,jdbcType=REAL},
@@ -212,7 +205,72 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.PackingInfoExample" resultType="java.lang.Long">
+  <insert id="insertSelectiveReturnId" parameterType="com.chen.base.entity.PackingInfo"
+          useGeneratedKeys="true" keyProperty="id">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into packing_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="packingId != null">
+        packing_id,
+      </if>
+      <if test="targetWarehouseId != null">
+        target_warehouse_id,
+      </if>
+      <if test="firstCarrierFreightAll != null">
+        first_carrier_freight_all,
+      </if>
+      <if test="outputTaxVatAll != null">
+        output_tax_vat_all,
+      </if>
+      <if test="pcraddTime != null">
+        pcradd_time,
+      </if>
+      <if test="flieName != null">
+        flie_name,
+      </if>
+      <if test="fileNameSysname != null">
+        file_name_sysname,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="packingId != null">
+        #{packingId,jdbcType=VARCHAR},
+      </if>
+      <if test="targetWarehouseId != null">
+        #{targetWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="firstCarrierFreightAll != null">
+        #{firstCarrierFreightAll,jdbcType=REAL},
+      </if>
+      <if test="outputTaxVatAll != null">
+        #{outputTaxVatAll,jdbcType=REAL},
+      </if>
+      <if test="pcraddTime != null">
+        #{pcraddTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flieName != null">
+        #{flieName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNameSysname != null">
+        #{fileNameSysname,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <select id="countByExample" parameterType="com.chen.base.entity.PackingInfoExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
     -->
@@ -230,14 +288,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.countryId != null">
-        country_id = #{record.countryId,jdbcType=VARCHAR},
-      </if>
       <if test="record.packingId != null">
         packing_id = #{record.packingId,jdbcType=VARCHAR},
       </if>
-      <if test="record.targetWarehouseid != null">
-        target_warehouseId = #{record.targetWarehouseid,jdbcType=INTEGER},
+      <if test="record.targetWarehouseId != null">
+        target_warehouse_id = #{record.targetWarehouseId,jdbcType=INTEGER},
       </if>
       <if test="record.firstCarrierFreightAll != null">
         first_carrier_freight_all = #{record.firstCarrierFreightAll,jdbcType=REAL},
@@ -268,9 +323,8 @@
     -->
     update packing_info
     set id = #{record.id,jdbcType=INTEGER},
-      country_id = #{record.countryId,jdbcType=VARCHAR},
       packing_id = #{record.packingId,jdbcType=VARCHAR},
-      target_warehouseId = #{record.targetWarehouseid,jdbcType=INTEGER},
+      target_warehouse_id = #{record.targetWarehouseId,jdbcType=INTEGER},
       first_carrier_freight_all = #{record.firstCarrierFreightAll,jdbcType=REAL},
       output_tax_vat_all = #{record.outputTaxVatAll,jdbcType=REAL},
       pcradd_time = #{record.pcraddTime,jdbcType=TIMESTAMP},
@@ -287,14 +341,11 @@
     -->
     update packing_info
     <set>
-      <if test="countryId != null">
-        country_id = #{countryId,jdbcType=VARCHAR},
-      </if>
       <if test="packingId != null">
         packing_id = #{packingId,jdbcType=VARCHAR},
       </if>
-      <if test="targetWarehouseid != null">
-        target_warehouseId = #{targetWarehouseid,jdbcType=INTEGER},
+      <if test="targetWarehouseId != null">
+        target_warehouse_id = #{targetWarehouseId,jdbcType=INTEGER},
       </if>
       <if test="firstCarrierFreightAll != null">
         first_carrier_freight_all = #{firstCarrierFreightAll,jdbcType=REAL},
@@ -322,9 +373,8 @@
     该方法由生成器生成,请勿修改
     -->
     update packing_info
-    set country_id = #{countryId,jdbcType=VARCHAR},
-      packing_id = #{packingId,jdbcType=VARCHAR},
-      target_warehouseId = #{targetWarehouseid,jdbcType=INTEGER},
+    set packing_id = #{packingId,jdbcType=VARCHAR},
+      target_warehouse_id = #{targetWarehouseId,jdbcType=INTEGER},
       first_carrier_freight_all = #{firstCarrierFreightAll,jdbcType=REAL},
       output_tax_vat_all = #{outputTaxVatAll,jdbcType=REAL},
       pcradd_time = #{pcraddTime,jdbcType=TIMESTAMP},

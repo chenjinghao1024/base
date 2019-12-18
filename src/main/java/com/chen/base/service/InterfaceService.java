@@ -35,6 +35,10 @@ public class InterfaceService {
     CurrencyRateMapper currencyRateMapper;
     @Resource
     CountryMapper countryMapper;
+    @Resource
+    WarehouseRentMapper warehouseRentMapper;
+    @Resource
+    PackingDetailMapper packingDetailMapper;
 
     public int orderSync() {
 
@@ -388,57 +392,48 @@ public class InterfaceService {
         return count;
     }
 
-    public int sync() {
-        Map<String, Object> requestParameter = new HashMap(5);
-        Map condition = new HashMap(0);
-
-        int count = 0;
+    public void refundSync() {
         int page = 0;
+        int pageSize = 50;
         int totalCount = 0;
+        Map<String, Object> refundParameter = new HashMap();
 
-        requestParameter.put("pageSize", 1000);
-        requestParameter.put("getDetail", 1);
-        requestParameter.put("getAddress", 0);
-        requestParameter.put("condition", condition);
-
-        condition.put("warehouseShipDateFrom", "2019-10-01 00:00:00");
-        condition.put("warehouseShipDateEnd", "2019-11-01 00:00:00");
-
+        refundParameter.put("pageSize", pageSize);
+        refundParameter.put("create_date_form", "2019-10-01 00:00:00");
+        refundParameter.put("create_date_to", "2019-11-01 00:00:00");
         do {
-            ++page;
-            requestParameter.put("page", page);
-            JSONObject result = null;
-            try {
-                System.out.println("soap start ");
-                result = soapRequest("getOrderList", "EB", requestParameter);
-                totalCount = result.getInteger("totalCount");
-            } catch (Exception e) {
-                page--;
-                continue;
-            }
-
-            JSONArray orders = result.getJSONArray("data");
-
-            for (Object data : orders) {
-
-                JSONObject orderJSON = (JSONObject) data;
-//
-                String platform = orderJSON.getString("platform");
-                if (!sync_platforms.contains(platform)) {
-                    continue;
-                }
-                String saleOrderCode = orderJSON.getString("saleOrderCode");
-
-                OrderInfoExample example = new OrderInfoExample();
+            page++;
+            refundParameter.put("page", page);
+            JSONObject result = soapRequest("rmaRefundList", "EB", refundParameter);
+            totalCount = result.getInteger("total");
+            JSONArray refundResults = result.getJSONArray("data");
+            for (int i = 0; i < refundResults.size(); i++) {
+                JSONObject refundResult = refundResults.getJSONObject(i);
+                OrderInfoExample example= new OrderInfoExample();
                 OrderInfoExample.Criteria criteria = example.createCriteria();
-                criteria.andSaleOrderCodeEqualTo(saleOrderCode);
-                OrderInfo order = orderInfoMapper.selectByExample(example).get(0);
-                order.setSite(orderJSON.getString("site"));
-                count += orderInfoMapper.updateByPrimaryKeySelective(order);
-            }
-        } while (page * 100 < totalCount);
+                criteria.andWarehouseOrderCodeEqualTo(refundResult.getString("warehouse_ref_no"));
+                List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(example);
+                if (orderInfos.size() > 0) {
+                    OrderInfo orderInfo = orderInfos.get(0);
+                    Integer orderInfoId = orderInfo.getId();
 
-        return count;
+                    String sku = refundResult.getString("product_sku");
+                    OrderDetailExample detailExample = new OrderDetailExample();
+                    OrderDetailExample.Criteria detailExampleCriteria = detailExample.createCriteria();
+                    detailExampleCriteria.andOrderInfoIdEqualTo(orderInfoId);
+                    detailExampleCriteria.andSkuLike(sku + "%");
+                    List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(detailExample);
+                    if (orderDetails.size() > 0) {
+                        OrderDetail orderDetail = orderDetails.get(0);
+                        orderDetail.setRefund(refundResult.getFloatValue("amount_refund"));
+                        orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+                    }
+
+                }
+            }
+
+        } while (page * pageSize < totalCount);
+
     }
 
 }

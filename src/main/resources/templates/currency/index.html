@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title></title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/js/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/js/bootstrapvalidator-master/css/bootstrapValidator.css}" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header"><h4>税率维护</h4></div>
+                <div class="card-body">
+
+                    <div id="toolbar" class="toolbar-btn-action">
+                        <button type="button" class="btn btn-primary m-r-5"
+                                data-toggle="modal" data-target="#addUser" >
+                            <span class="mdi mdi-plus" aria-hidden="true"></span>新增
+                        </button>
+                    </div>
+                    <table id="tb_departments"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUserLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addUserLabel">新增用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="user_form">
+                        <input type="hidden" name="primaryKey" id="primaryKey">
+                        <div class="form-group">
+                            <label  class="control-label">用户名</label>
+                            <input type="text" class="form-control" name="loginName">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="submit()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table/bootstrap-table.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table/bootstrap-table-zh-CN.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/bootstrapvalidator-master/js/bootstrapValidator.js}"></script>
+
+<!--行内编辑插件-->
+<link th:href="@{/js/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.min.css}" rel="stylesheet">
+<script type="text/javascript" th:src="@{/js/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<script type="text/javascript">
+
+    $('#user_form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            loginName: {
+                message: '用户名无效!',
+                validators: {
+                    notEmpty: {
+                        message: '用户名不可为空!'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30,
+                        message: '用户名必须超过6个且少于30个字符!'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: '用户名只能包含字母，数字，点和下划线!'
+                    }
+                }
+            },
+            nickName:{
+                validators: {
+                    notEmpty: {
+                        message: '用户名不可为空!'
+                    },
+                    stringLength: {
+                        max: 30,
+                        message: '用户名不能超过30个字符!'
+                    },
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: '密码为必填项，不能为空!'
+                    },
+                    identical: {
+                        field: 'repeatPassword',
+                        message: '两次输入的密码不一致!'
+                    }
+                }
+            },
+            repeatPassword: {
+                validators: {
+                    notEmpty: {
+                        message: '确认密码为必填项，不能为空!'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: '两次输入的密码不一致!'
+                    }
+                }
+            },
+        }
+    });
+
+    $('#tb_departments').bootstrapTable({
+        classes: 'table table-bordered table-hover table-striped',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        url: '/currency/list',
+        dataField: 'list',
+        method: 'post',
+        dataType: 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+        uniqueId: 'id',
+        idField: 'id',             // 每行的唯一标识字段
+        toolbar: '#toolbar',       // 工具按钮容器
+        //clickToSelect: true,     // 是否启用点击选中行
+        showColumns: true,         // 是否显示所有的列
+        showRefresh: true,         // 是否显示刷新按钮
+        //showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+        pagination: true,                    // 是否显示分页
+        sortOrder: "asc",                    // 排序方式
+        queryParamsType: "",
+        queryParams: function (params) {
+            console.log(params)
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
+                searchMap:{
+                    endDate:$("#end_date").val(),
+                }
+            };
+            return param;
+        },                                   // 传递参数
+        sidePagination: "server",            // 分页方式：client客户端分页，server服务端分页
+        pageNumber: 1,                       // 初始化加载第一页，默认第一页
+        pageSize: 10,                        // 每页的记录行数
+        // pageList: [],         // 可供选择的每页的行数
+        //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+        //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+        //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+        columns: [{
+            checkbox: true    // 是否显示复选框
+        }, {
+            field: 'currencyCode',
+            title: '币种代码'
+        }, {
+            field: 'currencyName',
+            title: '币种名称'
+        }, {
+            field: 'currencyRate',
+            title: '汇率'
+        }, {
+            field: 'operate',
+            title: '操作',
+            formatter: btnGroup,  // 自定义方法
+            events: {
+                'click .edit-btn': function (event, value, row, index) {
+                    editUser(row.currencyCode);
+                }
+            }
+        }],
+        /*
+        onEditableSave: function (field, row, oldValue, $el) {
+            $.ajax({
+                type: "get",
+                url: "http://www.bixiaguangnian.com/index/test/testEditTwo",
+                data: row,
+                dataType: 'jsonp',
+                success: function (data, status) {
+                    if (data.code == '200') {
+                        // 这里的状态显示有自定义样式区分，做单行的更新
+                        $('.example-table').bootstrapTable('updateRow', {index: row.id, row: row});
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('修改失败，请稍后再试');
+                }
+            });
+        }
+        */
+        onLoadSuccess: function (data) {
+            console.log(data);
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    });
+
+    $('#addUser').on('show.bs.modal', function (event) {
+        let modal = $(this);
+        let userId = modal.find('.modal-body #primaryKey').val();
+
+        console.log(userId);
+
+        $.ajax({
+            type: "post",
+            url: "/currency/getById",
+            data: {id: userId},
+            dataType: 'json',
+            success: function (result, status) {
+                console.log(result);
+                modal.find("#user_form").loadDatatoFrom(result.data);
+
+                if (result.code == '200') {
+                    // 这里的状态显示有自定义样式区分，做单行的更新
+                } else {
+                    alert(data.msg);
+                }
+            },
+            error: function () {
+                alert('修改失败，请稍后再试');
+            }
+        });
+
+
+
+    });
+
+    // 操作按钮
+    function btnGroup() {
+        let html =
+            '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>';
+        return html;
+    }
+
+    // 操作方法 - 编辑
+    function editUser(id) {
+        $("#primaryKey").val(id);
+        $('#addUser').modal('show');
+    }
+
+
+    function submit() {
+        let pass=$('#user_form').data('bootstrapValidator').validate();
+
+        let params = $("#user_form").serializeObject();
+
+        $.ajax({
+            type: "post",
+            url: "/currency/createOrEditUser",
+            data: params,
+            dataType: 'json',
+            success: function (data, status) {
+                if (data.code == '200') {
+                    $('#addUser').modal('hide');
+                    // 这里的状态显示有自定义样式区分，做单行的更新
+                    $('.example-table').bootstrapTable('refresh');
+                } else {
+                    alert(data.msg);
+                }
+                $('#user_form').reset();
+            },
+            error: function () {
+                alert('修改失败，请稍后再试');
+            }
+        });
+    }
+</script>
+</body>
+</html>

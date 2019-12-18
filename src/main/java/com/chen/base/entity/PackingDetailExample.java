@@ -109,7 +109,7 @@ public class PackingDetailExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/07
+     * @date 2019/12/17
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -272,73 +272,73 @@ public class PackingDetailExample {
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdIsNull() {
-            addCriterion("country_id is null");
+        public Criteria andWarehouseIdIsNull() {
+            addCriterion("warehouse_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdIsNotNull() {
-            addCriterion("country_id is not null");
+        public Criteria andWarehouseIdIsNotNull() {
+            addCriterion("warehouse_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdEqualTo(String value) {
-            addCriterion("country_id =", value, "countryId");
+        public Criteria andWarehouseIdEqualTo(String value) {
+            addCriterion("warehouse_id =", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdNotEqualTo(String value) {
-            addCriterion("country_id <>", value, "countryId");
+        public Criteria andWarehouseIdNotEqualTo(String value) {
+            addCriterion("warehouse_id <>", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdGreaterThan(String value) {
-            addCriterion("country_id >", value, "countryId");
+        public Criteria andWarehouseIdGreaterThan(String value) {
+            addCriterion("warehouse_id >", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdGreaterThanOrEqualTo(String value) {
-            addCriterion("country_id >=", value, "countryId");
+        public Criteria andWarehouseIdGreaterThanOrEqualTo(String value) {
+            addCriterion("warehouse_id >=", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdLessThan(String value) {
-            addCriterion("country_id <", value, "countryId");
+        public Criteria andWarehouseIdLessThan(String value) {
+            addCriterion("warehouse_id <", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdLessThanOrEqualTo(String value) {
-            addCriterion("country_id <=", value, "countryId");
+        public Criteria andWarehouseIdLessThanOrEqualTo(String value) {
+            addCriterion("warehouse_id <=", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdLike(String value) {
-            addCriterion("country_id like", value, "countryId");
+        public Criteria andWarehouseIdLike(String value) {
+            addCriterion("warehouse_id like", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdNotLike(String value) {
-            addCriterion("country_id not like", value, "countryId");
+        public Criteria andWarehouseIdNotLike(String value) {
+            addCriterion("warehouse_id not like", value, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdIn(List<String> values) {
-            addCriterion("country_id in", values, "countryId");
+        public Criteria andWarehouseIdIn(List<String> values) {
+            addCriterion("warehouse_id in", values, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdNotIn(List<String> values) {
-            addCriterion("country_id not in", values, "countryId");
+        public Criteria andWarehouseIdNotIn(List<String> values) {
+            addCriterion("warehouse_id not in", values, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdBetween(String value1, String value2) {
-            addCriterion("country_id between", value1, value2, "countryId");
+        public Criteria andWarehouseIdBetween(String value1, String value2) {
+            addCriterion("warehouse_id between", value1, value2, "warehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdNotBetween(String value1, String value2) {
-            addCriterion("country_id not between", value1, value2, "countryId");
+        public Criteria andWarehouseIdNotBetween(String value1, String value2) {
+            addCriterion("warehouse_id not between", value1, value2, "warehouseId");
             return (Criteria) this;
         }
 
@@ -469,6 +469,66 @@ public class PackingDetailExample {
 
         public Criteria andSkuNumNotBetween(Integer value1, Integer value2) {
             addCriterion("sku_num not between", value1, value2, "skuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffIsNull() {
+            addCriterion("tariff is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffIsNotNull() {
+            addCriterion("tariff is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffEqualTo(Float value) {
+            addCriterion("tariff =", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffNotEqualTo(Float value) {
+            addCriterion("tariff <>", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffGreaterThan(Float value) {
+            addCriterion("tariff >", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffGreaterThanOrEqualTo(Float value) {
+            addCriterion("tariff >=", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffLessThan(Float value) {
+            addCriterion("tariff <", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffLessThanOrEqualTo(Float value) {
+            addCriterion("tariff <=", value, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffIn(List<Float> values) {
+            addCriterion("tariff in", values, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffNotIn(List<Float> values) {
+            addCriterion("tariff not in", values, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffBetween(Float value1, Float value2) {
+            addCriterion("tariff between", value1, value2, "tariff");
+            return (Criteria) this;
+        }
+
+        public Criteria andTariffNotBetween(Float value1, Float value2) {
+            addCriterion("tariff not between", value1, value2, "tariff");
             return (Criteria) this;
         }
 
@@ -897,7 +957,7 @@ public class PackingDetailExample {
      * This class was generated by MyBatis Generator.
      * This class corresponds to the database table packing_detail
      *
-     * @mbg.generated do_not_delete_during_merge Sat Dec 07 09:56:32 CST 2019
+     * @mbg.generated do_not_delete_during_merge Tue Dec 17 12:45:41 CST 2019
      */
     public static class Criteria extends GeneratedCriteria {
 
@@ -909,7 +969,7 @@ public class PackingDetailExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/07
+     * @date 2019/12/17
      */
     public static class Criterion {
         private String condition;

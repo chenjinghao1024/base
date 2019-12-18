@@ -109,7 +109,7 @@ public class PackingInfoExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/07
+     * @date 2019/12/17
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -212,76 +212,6 @@ public class PackingInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andCountryIdIsNull() {
-            addCriterion("country_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdIsNotNull() {
-            addCriterion("country_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdEqualTo(String value) {
-            addCriterion("country_id =", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdNotEqualTo(String value) {
-            addCriterion("country_id <>", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdGreaterThan(String value) {
-            addCriterion("country_id >", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdGreaterThanOrEqualTo(String value) {
-            addCriterion("country_id >=", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdLessThan(String value) {
-            addCriterion("country_id <", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdLessThanOrEqualTo(String value) {
-            addCriterion("country_id <=", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdLike(String value) {
-            addCriterion("country_id like", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdNotLike(String value) {
-            addCriterion("country_id not like", value, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdIn(List<String> values) {
-            addCriterion("country_id in", values, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdNotIn(List<String> values) {
-            addCriterion("country_id not in", values, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdBetween(String value1, String value2) {
-            addCriterion("country_id between", value1, value2, "countryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCountryIdNotBetween(String value1, String value2) {
-            addCriterion("country_id not between", value1, value2, "countryId");
-            return (Criteria) this;
-        }
-
         public Criteria andPackingIdIsNull() {
             addCriterion("packing_id is null");
             return (Criteria) this;
@@ -352,63 +282,63 @@ public class PackingInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidIsNull() {
-            addCriterion("target_warehouseId is null");
+        public Criteria andTargetWarehouseIdIsNull() {
+            addCriterion("target_warehouse_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidIsNotNull() {
-            addCriterion("target_warehouseId is not null");
+        public Criteria andTargetWarehouseIdIsNotNull() {
+            addCriterion("target_warehouse_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidEqualTo(Integer value) {
-            addCriterion("target_warehouseId =", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdEqualTo(Integer value) {
+            addCriterion("target_warehouse_id =", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidNotEqualTo(Integer value) {
-            addCriterion("target_warehouseId <>", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdNotEqualTo(Integer value) {
+            addCriterion("target_warehouse_id <>", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidGreaterThan(Integer value) {
-            addCriterion("target_warehouseId >", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdGreaterThan(Integer value) {
+            addCriterion("target_warehouse_id >", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("target_warehouseId >=", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("target_warehouse_id >=", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidLessThan(Integer value) {
-            addCriterion("target_warehouseId <", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdLessThan(Integer value) {
+            addCriterion("target_warehouse_id <", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidLessThanOrEqualTo(Integer value) {
-            addCriterion("target_warehouseId <=", value, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdLessThanOrEqualTo(Integer value) {
+            addCriterion("target_warehouse_id <=", value, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidIn(List<Integer> values) {
-            addCriterion("target_warehouseId in", values, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdIn(List<Integer> values) {
+            addCriterion("target_warehouse_id in", values, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidNotIn(List<Integer> values) {
-            addCriterion("target_warehouseId not in", values, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdNotIn(List<Integer> values) {
+            addCriterion("target_warehouse_id not in", values, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidBetween(Integer value1, Integer value2) {
-            addCriterion("target_warehouseId between", value1, value2, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdBetween(Integer value1, Integer value2) {
+            addCriterion("target_warehouse_id between", value1, value2, "targetWarehouseId");
             return (Criteria) this;
         }
 
-        public Criteria andTargetWarehouseidNotBetween(Integer value1, Integer value2) {
-            addCriterion("target_warehouseId not between", value1, value2, "targetWarehouseid");
+        public Criteria andTargetWarehouseIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("target_warehouse_id not between", value1, value2, "targetWarehouseId");
             return (Criteria) this;
         }
 
@@ -807,7 +737,7 @@ public class PackingInfoExample {
      * This class was generated by MyBatis Generator.
      * This class corresponds to the database table packing_info
      *
-     * @mbg.generated do_not_delete_during_merge Sat Dec 07 09:56:32 CST 2019
+     * @mbg.generated do_not_delete_during_merge Tue Dec 17 12:45:41 CST 2019
      */
     public static class Criteria extends GeneratedCriteria {
 
@@ -819,7 +749,7 @@ public class PackingInfoExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/07
+     * @date 2019/12/17
      */
     public static class Criterion {
         private String condition;

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chen.base.mapper.WarehouseRentMapper">
-  <resultMap id="BaseResultMap" type="com.chen.base.entity.WarehouseRent">
+<mapper namespace="com.chen.base.mapper.AdvertisementDetailMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.AdvertisementDetail">
     <!--
     该方法由生成器生成,请勿修改
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="warehouse_code" jdbcType="VARCHAR" property="warehouseCode" />
-    <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
-    <result column="sku" jdbcType="VARCHAR" property="sku" />
-    <result column="rent" jdbcType="REAL" property="rent" />
+    <result column="advertisement_file_id" jdbcType="INTEGER" property="advertisementFileId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+    <result column="eccang_sku" jdbcType="VARCHAR" property="eccangSku" />
+    <result column="cost" jdbcType="REAL" property="cost" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="country_id" jdbcType="VARCHAR" property="countryId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -80,9 +82,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, warehouse_code, warehouse_id, sku, rent, currency
+    id, advertisement_file_id, user_account, site, eccang_sku, cost, currency, country_id
   </sql>
-  <select id="selectByExample" parameterType="com.chen.base.entity.WarehouseRentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.chen.base.entity.AdvertisementDetailExample" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
@@ -91,7 +93,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from warehouse_rent
+    from advertisement_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -105,85 +107,99 @@
     -->
     select 
     <include refid="Base_Column_List" />
-    from warehouse_rent
+    from advertisement_detail
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_rent
+    delete from advertisement_detail
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.chen.base.entity.WarehouseRentExample">
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.AdvertisementDetailExample">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_rent
+    delete from advertisement_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.chen.base.entity.WarehouseRent">
+  <insert id="insert" parameterType="com.chen.base.entity.AdvertisementDetail">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_rent (id, warehouse_code, warehouse_id, 
-      sku, rent, currency)
-    values (#{id,jdbcType=INTEGER}, #{warehouseCode,jdbcType=VARCHAR}, #{warehouseId,jdbcType=INTEGER}, 
-      #{sku,jdbcType=VARCHAR}, #{rent,jdbcType=REAL}, #{currency,jdbcType=VARCHAR})
+    insert into advertisement_detail (id, advertisement_file_id, user_account, 
+      site, eccang_sku, cost, 
+      currency, country_id)
+    values (#{id,jdbcType=INTEGER}, #{advertisementFileId,jdbcType=INTEGER}, #{userAccount,jdbcType=VARCHAR}, 
+      #{site,jdbcType=VARCHAR}, #{eccangSku,jdbcType=VARCHAR}, #{cost,jdbcType=REAL}, 
+      #{currency,jdbcType=VARCHAR}, #{countryId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseRent">
+  <insert id="insertSelective" parameterType="com.chen.base.entity.AdvertisementDetail">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_rent
+    insert into advertisement_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="warehouseCode != null">
-        warehouse_code,
+      <if test="advertisementFileId != null">
+        advertisement_file_id,
       </if>
-      <if test="warehouseId != null">
-        warehouse_id,
+      <if test="userAccount != null">
+        user_account,
       </if>
-      <if test="sku != null">
-        sku,
+      <if test="site != null">
+        site,
       </if>
-      <if test="rent != null">
-        rent,
+      <if test="eccangSku != null">
+        eccang_sku,
+      </if>
+      <if test="cost != null">
+        cost,
       </if>
       <if test="currency != null">
         currency,
+      </if>
+      <if test="countryId != null">
+        country_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="warehouseCode != null">
-        #{warehouseCode,jdbcType=VARCHAR},
+      <if test="advertisementFileId != null">
+        #{advertisementFileId,jdbcType=INTEGER},
       </if>
-      <if test="warehouseId != null">
-        #{warehouseId,jdbcType=INTEGER},
+      <if test="userAccount != null">
+        #{userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="sku != null">
-        #{sku,jdbcType=VARCHAR},
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
       </if>
-      <if test="rent != null">
-        #{rent,jdbcType=REAL},
+      <if test="eccangSku != null">
+        #{eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=REAL},
       </if>
       <if test="currency != null">
         #{currency,jdbcType=VARCHAR},
       </if>
+      <if test="countryId != null">
+        #{countryId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseRentExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.chen.base.entity.AdvertisementDetailExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select count(*) from warehouse_rent
+    select count(*) from advertisement_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -192,25 +208,31 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_detail
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.warehouseCode != null">
-        warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
+      <if test="record.advertisementFileId != null">
+        advertisement_file_id = #{record.advertisementFileId,jdbcType=INTEGER},
       </if>
-      <if test="record.warehouseId != null">
-        warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      <if test="record.userAccount != null">
+        user_account = #{record.userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.sku != null">
-        sku = #{record.sku,jdbcType=VARCHAR},
+      <if test="record.site != null">
+        site = #{record.site,jdbcType=VARCHAR},
       </if>
-      <if test="record.rent != null">
-        rent = #{record.rent,jdbcType=REAL},
+      <if test="record.eccangSku != null">
+        eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cost != null">
+        cost = #{record.cost,jdbcType=REAL},
       </if>
       <if test="record.currency != null">
         currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countryId != null">
+        country_id = #{record.countryId,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -221,51 +243,61 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_detail
     set id = #{record.id,jdbcType=INTEGER},
-      warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
-      warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      sku = #{record.sku,jdbcType=VARCHAR},
-      rent = #{record.rent,jdbcType=REAL},
-      currency = #{record.currency,jdbcType=VARCHAR}
+      advertisement_file_id = #{record.advertisementFileId,jdbcType=INTEGER},
+      user_account = #{record.userAccount,jdbcType=VARCHAR},
+      site = #{record.site,jdbcType=VARCHAR},
+      eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
+      cost = #{record.cost,jdbcType=REAL},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      country_id = #{record.countryId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.WarehouseRent">
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.AdvertisementDetail">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_detail
     <set>
-      <if test="warehouseCode != null">
-        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      <if test="advertisementFileId != null">
+        advertisement_file_id = #{advertisementFileId,jdbcType=INTEGER},
       </if>
-      <if test="warehouseId != null">
-        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      <if test="userAccount != null">
+        user_account = #{userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="sku != null">
-        sku = #{sku,jdbcType=VARCHAR},
+      <if test="site != null">
+        site = #{site,jdbcType=VARCHAR},
       </if>
-      <if test="rent != null">
-        rent = #{rent,jdbcType=REAL},
+      <if test="eccangSku != null">
+        eccang_sku = #{eccangSku,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=REAL},
       </if>
       <if test="currency != null">
         currency = #{currency,jdbcType=VARCHAR},
       </if>
+      <if test="countryId != null">
+        country_id = #{countryId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.WarehouseRent">
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.AdvertisementDetail">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
-    set warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
-      warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      sku = #{sku,jdbcType=VARCHAR},
-      rent = #{rent,jdbcType=REAL},
-      currency = #{currency,jdbcType=VARCHAR}
+    update advertisement_detail
+    set advertisement_file_id = #{advertisementFileId,jdbcType=INTEGER},
+      user_account = #{userAccount,jdbcType=VARCHAR},
+      site = #{site,jdbcType=VARCHAR},
+      eccang_sku = #{eccangSku,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=REAL},
+      currency = #{currency,jdbcType=VARCHAR},
+      country_id = #{countryId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

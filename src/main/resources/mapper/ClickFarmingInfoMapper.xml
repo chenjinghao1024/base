@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.ClickFarmingInfoMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.ClickFarmingInfo">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="click_farming_file_sysname" jdbcType="VARCHAR" property="clickFarmingFileSysname" />
+    <result column="click_farming_file_name" jdbcType="VARCHAR" property="clickFarmingFileName" />
+    <result column="url_file" jdbcType="VARCHAR" property="urlFile" />
+    <result column="pcradd_time" jdbcType="TIMESTAMP" property="pcraddTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    id, click_farming_file_sysname, click_farming_file_name, url_file, pcradd_time
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.ClickFarmingInfoExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from click_farming_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.ClickFarmingInfoExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from click_farming_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.ClickFarmingInfo">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into click_farming_info (id, click_farming_file_sysname, click_farming_file_name,
+      url_file, pcradd_time)
+    values (#{id,jdbcType=INTEGER}, #{clickFarmingFileSysname,jdbcType=VARCHAR}, #{clickFarmingFileName,jdbcType=VARCHAR},
+      #{urlFile,jdbcType=VARCHAR}, #{pcraddTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.ClickFarmingInfo">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into click_farming_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clickFarmingFileSysname != null">
+        click_farming_file_sysname,
+      </if>
+      <if test="clickFarmingFileName != null">
+        click_farming_file_name,
+      </if>
+      <if test="urlFile != null">
+        url_file,
+      </if>
+      <if test="pcraddTime != null">
+        pcradd_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="clickFarmingFileSysname != null">
+        #{clickFarmingFileSysname,jdbcType=VARCHAR},
+      </if>
+      <if test="clickFarmingFileName != null">
+        #{clickFarmingFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFile != null">
+        #{urlFile,jdbcType=VARCHAR},
+      </if>
+      <if test="pcraddTime != null">
+        #{pcraddTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertSelectiveReturnId" parameterType="com.chen.base.entity.ClickFarmingInfo"
+          useGeneratedKeys="true" keyProperty="id">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into click_farming_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clickFarmingFileSysname != null">
+        click_farming_file_sysname,
+      </if>
+      <if test="clickFarmingFileName != null">
+        click_farming_file_name,
+      </if>
+      <if test="urlFile != null">
+        url_file,
+      </if>
+      <if test="pcraddTime != null">
+        pcradd_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="clickFarmingFileSysname != null">
+        #{clickFarmingFileSysname,jdbcType=VARCHAR},
+      </if>
+      <if test="clickFarmingFileName != null">
+        #{clickFarmingFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFile != null">
+        #{urlFile,jdbcType=VARCHAR},
+      </if>
+      <if test="pcraddTime != null">
+        #{pcraddTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.chen.base.entity.ClickFarmingInfoExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from click_farming_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update click_farming_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.clickFarmingFileSysname != null">
+        click_farming_file_sysname = #{record.clickFarmingFileSysname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clickFarmingFileName != null">
+        click_farming_file_name = #{record.clickFarmingFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.urlFile != null">
+        url_file = #{record.urlFile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcraddTime != null">
+        pcradd_time = #{record.pcraddTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update click_farming_info
+    set id = #{record.id,jdbcType=INTEGER},
+      click_farming_file_sysname = #{record.clickFarmingFileSysname,jdbcType=VARCHAR},
+      click_farming_file_name = #{record.clickFarmingFileName,jdbcType=VARCHAR},
+      url_file = #{record.urlFile,jdbcType=VARCHAR},
+      pcradd_time = #{record.pcraddTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -32,6 +32,7 @@ public interface PackingInfoMapper {
      * insertSelective
      */
     int insertSelective(PackingInfo record);
+    int insertSelectiveReturnId(PackingInfo packingInfo);
 
     /**
      * selectByExample
@@ -62,4 +63,5 @@ public interface PackingInfoMapper {
      * updateByPrimaryKey
      */
     int updateByPrimaryKey(PackingInfo record);
+
 }

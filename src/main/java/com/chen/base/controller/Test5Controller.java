@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Map;
 
 /**
  * created by CaiBaoHong at 2018/4/18 15:51<br>
@@ -29,17 +29,15 @@ public class Test5Controller {
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @RequestMapping("/sync")
     public String demo() {
-        interfaceService.getOrders(0);
+        interfaceService.refundSync();
         return "sync Count is ";
     }
 
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @RequestMapping("/cipher")
-    public List<CipherResult> cipher() {
+    public Map<String, CipherResult> cipher() {
         return cipherService.orderCipher();
     }
-
-
 
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @GetMapping("/hello")

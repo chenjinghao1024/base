@@ -22,25 +22,54 @@
             <div class="card">
                 <div class="card-header"><h4>bootstrap-table简单示例</h4></div>
                 <div class="card-body">
+                    <form id="upload_form" class="form-horizontal" onsubmit="return false;" >
+                        <div class="form-group">
+                            <label class="col-xs-12" >装箱单上传</label>
+                            <div class="col-xs-12">
+                                <input type="file" id="1" name="file" multiple="multiple">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary" onclick="upload()">装箱单上传</button>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="col-xs-12" >上传1</label>
-                        <div class="col-xs-12">
-                            <input type="file" id="1" name="example-file-input">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header"><h4>bootstrap-table简单示例</h4></div>
+                <div class="card-body">
+                    <form id="adv_upload_form"  class="form-horizontal" onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="col-xs-12" >adv上传</label>
+                            <div class="col-xs-12">
+                                <input type="file" id="1" name="file" multiple="multiple">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-xs-12" >上传2</label>
-                        <div class="col-xs-12">
-                            <input type="file" id="2" name="example-file-input">
+                        <div class="form-group">
+                            <label class="col-xs-12" for="example-select">选择框</label>
+                            <div class="col-xs-12">
+                                <select class="form-control" id="example-select" name="advType">
+                                    <option value="amz">amazon</option>
+                                    <option value="cd">CD</option>
+                                    <option value="ebay">eBay</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-xs-12" >上传3</label>
-                        <div class="col-xs-12">
-                            <input type="file" id="3" name="example-file-input">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary" onclick="adv_upload()">广告上传</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                 </div>
             </div>
@@ -48,6 +77,56 @@
 
     </div>
 
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header"><h4>bootstrap-table简单示例</h4></div>
+                <div class="card-body">
+                    <form id="cf_upload_form" class="form-horizontal" onsubmit="return false;" >
+                        <div class="form-group">
+                            <label class="col-xs-12" >CF上传</label>
+                            <div class="col-xs-12">
+                                <input type="file" id="1" name="file" multiple="multiple">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary" onclick="cf_upload()">CF上传</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header"><h4>bootstrap-table简单示例</h4></div>
+                <div class="card-body">
+                    <form id="cdR_upload_form" class="form-horizontal" onsubmit="return false;" >
+                        <div class="form-group">
+                            <label class="col-xs-12" >CF上传</label>
+                            <div class="col-xs-12">
+                                <input type="file" id="1" name="file" multiple="multiple">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary" onclick="cdR_upload()">CF上传</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -67,29 +146,67 @@
 <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
 <script type="text/javascript">
 
-    function submit() {
-        let pass=$('#user_form').data('bootstrapValidator').validate();
-
-        let params = $("#user_form").serializeObject();
-
+    function upload() {
+        let formData = new FormData($('#adv_upload_form')[0]);
         $.ajax({
-            type: "post",
-            url: "/user/createOrEditUser",
-            data: params,
-            dataType: 'json',
-            success: function (data, status) {
-                if (data.code == '200') {
-                    $('#addUser').modal('hide');
-                    // 这里的状态显示有自定义样式区分，做单行的更新
-                    $('.example-table').bootstrapTable('refresh');
-                } else {
-                    alert(data.msg);
-                }
-                $('#user_form').reset();
-            },
-            error: function () {
-                alert('修改失败，请稍后再试');
-            }
+            type: 'post',
+            url: "/import/uploadExcel",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+        }).success(function (data) {
+
+        }).error(function () {
+            alert("上传失败");
+        });
+    }
+
+    function adv_upload() {
+        let formData = new FormData($('#adv_upload_form')[0]);
+        $.ajax({
+            type: 'post',
+            url: "/import/uploadAdv",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+        }).success(function (data) {
+
+        }).error(function () {
+            alert("上传失败");
+        });
+    }
+
+    function cf_upload() {
+        let formData = new FormData($('#cf_upload_form')[0]);
+        $.ajax({
+            type: 'post',
+            url: "/import/uploadCF",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+        }).success(function (data) {
+
+        }).error(function () {
+            alert("上传失败");
+        });
+    }
+
+    function cdR_upload() {
+        let formData = new FormData($('#cdR_upload_form')[0]);
+        $.ajax({
+            type: 'post',
+            url: "/import/uploadCDRefund",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+        }).success(function (data) {
+
+        }).error(function () {
+            alert("上传失败");
         });
     }
 </script>

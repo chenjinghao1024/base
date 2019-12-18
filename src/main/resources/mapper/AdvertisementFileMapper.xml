@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chen.base.mapper.WarehouseRentMapper">
-  <resultMap id="BaseResultMap" type="com.chen.base.entity.WarehouseRent">
+<mapper namespace="com.chen.base.mapper.AdvertisementFileMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.AdvertisementFile">
     <!--
     该方法由生成器生成,请勿修改
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="warehouse_code" jdbcType="VARCHAR" property="warehouseCode" />
-    <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
-    <result column="sku" jdbcType="VARCHAR" property="sku" />
-    <result column="rent" jdbcType="REAL" property="rent" />
-    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="advertisement_file_sysname" jdbcType="VARCHAR" property="advertisementFileSysname" />
+    <result column="advertisement_file_name" jdbcType="VARCHAR" property="advertisementFileName" />
+    <result column="url_file" jdbcType="VARCHAR" property="urlFile" />
+    <result column="pcradd_time" jdbcType="TIMESTAMP" property="pcraddTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -80,9 +79,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, warehouse_code, warehouse_id, sku, rent, currency
+    id, advertisement_file_sysname, advertisement_file_name, url_file, pcradd_time
   </sql>
-  <select id="selectByExample" parameterType="com.chen.base.entity.WarehouseRentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.chen.base.entity.AdvertisementFileExample" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
@@ -91,7 +90,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from warehouse_rent
+    from advertisement_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -103,87 +102,123 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
-    from warehouse_rent
+    from advertisement_file
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_rent
+    delete from advertisement_file
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.chen.base.entity.WarehouseRentExample">
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.AdvertisementFileExample">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_rent
+    delete from advertisement_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.chen.base.entity.WarehouseRent">
+  <insert id="insert" parameterType="com.chen.base.entity.AdvertisementFile">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_rent (id, warehouse_code, warehouse_id, 
-      sku, rent, currency)
-    values (#{id,jdbcType=INTEGER}, #{warehouseCode,jdbcType=VARCHAR}, #{warehouseId,jdbcType=INTEGER}, 
-      #{sku,jdbcType=VARCHAR}, #{rent,jdbcType=REAL}, #{currency,jdbcType=VARCHAR})
+    insert into advertisement_file (id, advertisement_file_sysname, advertisement_file_name,
+      url_file, pcradd_time)
+    values (#{id,jdbcType=INTEGER}, #{advertisementFileSysname,jdbcType=VARCHAR}, #{advertisementFileName,jdbcType=VARCHAR},
+      #{urlFile,jdbcType=VARCHAR}, #{pcraddTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseRent">
+  <insert id="insertSelective" parameterType="com.chen.base.entity.AdvertisementFile">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_rent
+    insert into advertisement_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="warehouseCode != null">
-        warehouse_code,
+      <if test="advertisementFileSysname != null">
+        advertisement_file_sysname,
       </if>
-      <if test="warehouseId != null">
-        warehouse_id,
+      <if test="advertisementFileName != null">
+        advertisement_file_name,
       </if>
-      <if test="sku != null">
-        sku,
+      <if test="urlFile != null">
+        url_file,
       </if>
-      <if test="rent != null">
-        rent,
-      </if>
-      <if test="currency != null">
-        currency,
+      <if test="pcraddTime != null">
+        pcradd_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="warehouseCode != null">
-        #{warehouseCode,jdbcType=VARCHAR},
+      <if test="advertisementFileSysname != null">
+        #{advertisementFileSysname,jdbcType=VARCHAR},
       </if>
-      <if test="warehouseId != null">
-        #{warehouseId,jdbcType=INTEGER},
+      <if test="advertisementFileName != null">
+        #{advertisementFileName,jdbcType=VARCHAR},
       </if>
-      <if test="sku != null">
-        #{sku,jdbcType=VARCHAR},
+      <if test="urlFile != null">
+        #{urlFile,jdbcType=VARCHAR},
       </if>
-      <if test="rent != null">
-        #{rent,jdbcType=REAL},
-      </if>
-      <if test="currency != null">
-        #{currency,jdbcType=VARCHAR},
+      <if test="pcraddTime != null">
+        #{pcraddTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseRentExample" resultType="java.lang.Long">
+  <insert id="insertSelectiveReturnId" parameterType="com.chen.base.entity.AdvertisementFile"
+          useGeneratedKeys="true" keyProperty="id">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select count(*) from warehouse_rent
+    insert into advertisement_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="advertisementFileSysname != null">
+        advertisement_file_sysname,
+      </if>
+      <if test="advertisementFileName != null">
+        advertisement_file_name,
+      </if>
+      <if test="urlFile != null">
+        url_file,
+      </if>
+      <if test="pcraddTime != null">
+        pcradd_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="advertisementFileSysname != null">
+        #{advertisementFileSysname,jdbcType=VARCHAR},
+      </if>
+      <if test="advertisementFileName != null">
+        #{advertisementFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFile != null">
+        #{urlFile,jdbcType=VARCHAR},
+      </if>
+      <if test="pcraddTime != null">
+        #{pcraddTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+    <select id="countByExample" parameterType="com.chen.base.entity.AdvertisementFileExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from advertisement_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -192,25 +227,22 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_file
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.warehouseCode != null">
-        warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
+      <if test="record.advertisementFileSysname != null">
+        advertisement_file_sysname = #{record.advertisementFileSysname,jdbcType=VARCHAR},
       </if>
-      <if test="record.warehouseId != null">
-        warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      <if test="record.advertisementFileName != null">
+        advertisement_file_name = #{record.advertisementFileName,jdbcType=VARCHAR},
       </if>
-      <if test="record.sku != null">
-        sku = #{record.sku,jdbcType=VARCHAR},
+      <if test="record.urlFile != null">
+        url_file = #{record.urlFile,jdbcType=VARCHAR},
       </if>
-      <if test="record.rent != null">
-        rent = #{record.rent,jdbcType=REAL},
-      </if>
-      <if test="record.currency != null">
-        currency = #{record.currency,jdbcType=VARCHAR},
+      <if test="record.pcraddTime != null">
+        pcradd_time = #{record.pcraddTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -221,51 +253,46 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_file
     set id = #{record.id,jdbcType=INTEGER},
-      warehouse_code = #{record.warehouseCode,jdbcType=VARCHAR},
-      warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      sku = #{record.sku,jdbcType=VARCHAR},
-      rent = #{record.rent,jdbcType=REAL},
-      currency = #{record.currency,jdbcType=VARCHAR}
+      advertisement_file_sysname = #{record.advertisementFileSysname,jdbcType=VARCHAR},
+      advertisement_file_name = #{record.advertisementFileName,jdbcType=VARCHAR},
+      url_file = #{record.urlFile,jdbcType=VARCHAR},
+      pcradd_time = #{record.pcraddTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.WarehouseRent">
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.AdvertisementFile">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
+    update advertisement_file
     <set>
-      <if test="warehouseCode != null">
-        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      <if test="advertisementFileSysname != null">
+        advertisement_file_sysname = #{advertisementFileSysname,jdbcType=VARCHAR},
       </if>
-      <if test="warehouseId != null">
-        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      <if test="advertisementFileName != null">
+        advertisement_file_name = #{advertisementFileName,jdbcType=VARCHAR},
       </if>
-      <if test="sku != null">
-        sku = #{sku,jdbcType=VARCHAR},
+      <if test="urlFile != null">
+        url_file = #{urlFile,jdbcType=VARCHAR},
       </if>
-      <if test="rent != null">
-        rent = #{rent,jdbcType=REAL},
-      </if>
-      <if test="currency != null">
-        currency = #{currency,jdbcType=VARCHAR},
+      <if test="pcraddTime != null">
+        pcradd_time = #{pcraddTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.WarehouseRent">
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.AdvertisementFile">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_rent
-    set warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
-      warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      sku = #{sku,jdbcType=VARCHAR},
-      rent = #{rent,jdbcType=REAL},
-      currency = #{currency,jdbcType=VARCHAR}
+    update advertisement_file
+    set advertisement_file_sysname = #{advertisementFileSysname,jdbcType=VARCHAR},
+      advertisement_file_name = #{advertisementFileName,jdbcType=VARCHAR},
+      url_file = #{urlFile,jdbcType=VARCHAR},
+      pcradd_time = #{pcraddTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

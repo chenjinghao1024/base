@@ -8,7 +8,7 @@ import lombok.Data;
  * 装箱单列表
  *
  * @author Mr.D
- * @date 2019/12/07
+ * @date 2019/12/17
  */
 @Data
 public class PackingInfo implements Serializable {
@@ -18,11 +18,6 @@ public class PackingInfo implements Serializable {
     private Integer id;
 
     /**
-     * 国家id
-     */
-    private String countryId;
-
-    /**
      * 装箱单id
      */
     private String packingId;
@@ -30,7 +25,7 @@ public class PackingInfo implements Serializable {
     /**
      * 目的仓库
      */
-    private Integer targetWarehouseid;
+    private Integer targetWarehouseId;
 
     /**
      * 头程费

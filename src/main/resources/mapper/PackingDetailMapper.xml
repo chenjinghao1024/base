@@ -7,9 +7,10 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="packing_info_id" jdbcType="INTEGER" property="packingInfoId" />
-    <result column="country_id" jdbcType="VARCHAR" property="countryId" />
+    <result column="warehouse_id" jdbcType="VARCHAR" property="warehouseId" />
     <result column="eccang_sku" jdbcType="VARCHAR" property="eccangSku" />
     <result column="sku_num" jdbcType="INTEGER" property="skuNum" />
+    <result column="tariff" jdbcType="REAL" property="tariff" />
     <result column="first_carrier_freight_up" jdbcType="REAL" property="firstCarrierFreightUp" />
     <result column="op_declared_value" jdbcType="REAL" property="opDeclaredValue" />
     <result column="op_declared_currency" jdbcType="REAL" property="opDeclaredCurrency" />
@@ -86,8 +87,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, packing_info_id, country_id, eccang_sku, sku_num, first_carrier_freight_up, op_declared_value, 
-    op_declared_currency, declaration_customs_vat, output_tax_up, create_time, sku_taxes
+    id, packing_info_id, warehouse_id, eccang_sku, sku_num, tariff, first_carrier_freight_up, 
+    op_declared_value, op_declared_currency, declaration_customs_vat, output_tax_up, 
+    create_time, sku_taxes
   </sql>
   <select id="selectByExample" parameterType="com.chen.base.entity.PackingDetailExample" resultMap="BaseResultMap">
     <!--
@@ -135,16 +137,16 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into packing_detail (id, packing_info_id, country_id, 
-      eccang_sku, sku_num, first_carrier_freight_up, 
-      op_declared_value, op_declared_currency, declaration_customs_vat, 
-      output_tax_up, create_time, sku_taxes
-      )
-    values (#{id,jdbcType=INTEGER}, #{packingInfoId,jdbcType=INTEGER}, #{countryId,jdbcType=VARCHAR}, 
-      #{eccangSku,jdbcType=VARCHAR}, #{skuNum,jdbcType=INTEGER}, #{firstCarrierFreightUp,jdbcType=REAL}, 
-      #{opDeclaredValue,jdbcType=REAL}, #{opDeclaredCurrency,jdbcType=REAL}, #{declarationCustomsVat,jdbcType=REAL}, 
-      #{outputTaxUp,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{skuTaxes,jdbcType=REAL}
-      )
+    insert into packing_detail (id, packing_info_id, warehouse_id, 
+      eccang_sku, sku_num, tariff, 
+      first_carrier_freight_up, op_declared_value, op_declared_currency, 
+      declaration_customs_vat, output_tax_up, create_time, 
+      sku_taxes)
+    values (#{id,jdbcType=INTEGER}, #{packingInfoId,jdbcType=INTEGER}, #{warehouseId,jdbcType=VARCHAR}, 
+      #{eccangSku,jdbcType=VARCHAR}, #{skuNum,jdbcType=INTEGER}, #{tariff,jdbcType=REAL}, 
+      #{firstCarrierFreightUp,jdbcType=REAL}, #{opDeclaredValue,jdbcType=REAL}, #{opDeclaredCurrency,jdbcType=REAL}, 
+      #{declarationCustomsVat,jdbcType=REAL}, #{outputTaxUp,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{skuTaxes,jdbcType=REAL})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.PackingDetail">
     <!--
@@ -158,14 +160,17 @@
       <if test="packingInfoId != null">
         packing_info_id,
       </if>
-      <if test="countryId != null">
-        country_id,
+      <if test="warehouseId != null">
+        warehouse_id,
       </if>
       <if test="eccangSku != null">
         eccang_sku,
       </if>
       <if test="skuNum != null">
         sku_num,
+      </if>
+      <if test="tariff != null">
+        tariff,
       </if>
       <if test="firstCarrierFreightUp != null">
         first_carrier_freight_up,
@@ -196,14 +201,17 @@
       <if test="packingInfoId != null">
         #{packingInfoId,jdbcType=INTEGER},
       </if>
-      <if test="countryId != null">
-        #{countryId,jdbcType=VARCHAR},
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=VARCHAR},
       </if>
       <if test="eccangSku != null">
         #{eccangSku,jdbcType=VARCHAR},
       </if>
       <if test="skuNum != null">
         #{skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="tariff != null">
+        #{tariff,jdbcType=REAL},
       </if>
       <if test="firstCarrierFreightUp != null">
         #{firstCarrierFreightUp,jdbcType=REAL},
@@ -249,14 +257,17 @@
       <if test="record.packingInfoId != null">
         packing_info_id = #{record.packingInfoId,jdbcType=INTEGER},
       </if>
-      <if test="record.countryId != null">
-        country_id = #{record.countryId,jdbcType=VARCHAR},
+      <if test="record.warehouseId != null">
+        warehouse_id = #{record.warehouseId,jdbcType=VARCHAR},
       </if>
       <if test="record.eccangSku != null">
         eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
       </if>
       <if test="record.skuNum != null">
         sku_num = #{record.skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.tariff != null">
+        tariff = #{record.tariff,jdbcType=REAL},
       </if>
       <if test="record.firstCarrierFreightUp != null">
         first_carrier_freight_up = #{record.firstCarrierFreightUp,jdbcType=REAL},
@@ -291,9 +302,10 @@
     update packing_detail
     set id = #{record.id,jdbcType=INTEGER},
       packing_info_id = #{record.packingInfoId,jdbcType=INTEGER},
-      country_id = #{record.countryId,jdbcType=VARCHAR},
+      warehouse_id = #{record.warehouseId,jdbcType=VARCHAR},
       eccang_sku = #{record.eccangSku,jdbcType=VARCHAR},
       sku_num = #{record.skuNum,jdbcType=INTEGER},
+      tariff = #{record.tariff,jdbcType=REAL},
       first_carrier_freight_up = #{record.firstCarrierFreightUp,jdbcType=REAL},
       op_declared_value = #{record.opDeclaredValue,jdbcType=REAL},
       op_declared_currency = #{record.opDeclaredCurrency,jdbcType=REAL},
@@ -314,14 +326,17 @@
       <if test="packingInfoId != null">
         packing_info_id = #{packingInfoId,jdbcType=INTEGER},
       </if>
-      <if test="countryId != null">
-        country_id = #{countryId,jdbcType=VARCHAR},
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=VARCHAR},
       </if>
       <if test="eccangSku != null">
         eccang_sku = #{eccangSku,jdbcType=VARCHAR},
       </if>
       <if test="skuNum != null">
         sku_num = #{skuNum,jdbcType=INTEGER},
+      </if>
+      <if test="tariff != null">
+        tariff = #{tariff,jdbcType=REAL},
       </if>
       <if test="firstCarrierFreightUp != null">
         first_carrier_freight_up = #{firstCarrierFreightUp,jdbcType=REAL},
@@ -353,9 +368,10 @@
     -->
     update packing_detail
     set packing_info_id = #{packingInfoId,jdbcType=INTEGER},
-      country_id = #{countryId,jdbcType=VARCHAR},
+      warehouse_id = #{warehouseId,jdbcType=VARCHAR},
       eccang_sku = #{eccangSku,jdbcType=VARCHAR},
       sku_num = #{skuNum,jdbcType=INTEGER},
+      tariff = #{tariff,jdbcType=REAL},
       first_carrier_freight_up = #{firstCarrierFreightUp,jdbcType=REAL},
       op_declared_value = #{opDeclaredValue,jdbcType=REAL},
       op_declared_currency = #{opDeclaredCurrency,jdbcType=REAL},

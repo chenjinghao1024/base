@@ -2,12 +2,19 @@ package com.chen.base.service;
 
 import com.chen.base.entity.*;
 import com.chen.base.mapper.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.hssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
 public class CipherService {
+
+    @Resource
+    AdvertisementDetailMapper advertisementDetailMapper;
 
     @Resource
     PackingInfoMapper packingInfoMapper;
@@ -29,12 +36,26 @@ public class CipherService {
     @Resource
     OrderDetailMapper orderDetailMapper;
     @Resource
-    CountryMapper countryMapper;
-    @Resource
     CurrencyRateMapper currencyRateMapper;
 
     @Resource
     WarehouseRentMapper warehouseRentMapper;
+
+    @Resource
+    OutputTaxAllMapper outputTaxAllMapper;
+
+    ProductBySkuExample productBySkuExample = new ProductBySkuExample();
+    OutputTaxAllExample outputTaxAllExample = new OutputTaxAllExample();
+    OrderInfoExample orderInfoExample = new OrderInfoExample();
+    OrderDetailExample orderDetailExample = new OrderDetailExample();
+    PackingInfoExample packingInfoExample = new PackingInfoExample();
+    PackingDetailExample packingDetailExample = new PackingDetailExample();
+    WarehouseRentExample warehouseRentExample = new WarehouseRentExample();
+    AdvertisementDetailExample advertisementDetailExample = new AdvertisementDetailExample();
+
+    Map<String, Set<String>> platformSite = new HashMap<>();
+
+
     /**
      * 税费
      *
@@ -48,11 +69,10 @@ public class CipherService {
         for (PackingDetail packingDetail : packingDetails) {
             Float declaredValue = packingDetail.getOpDeclaredValue();
             String sku = packingDetail.getEccangSku();
-            String countryId = packingDetail.getCountryId();
 
             TariffRateExample tariffRateExample = new TariffRateExample();
             TariffRateExample.Criteria tariffRateExampleCriteria = tariffRateExample.createCriteria();
-            tariffRateExampleCriteria.andCountryIdEqualTo(Integer.valueOf(countryId));
+            tariffRateExampleCriteria.andCountryIdEqualTo(Integer.valueOf(0));
             tariffRateExampleCriteria.andEccangSkuEqualTo(sku);
             List<TariffRate> tariffRates = tariffRateMapper.selectByExample(tariffRateExample);
             TariffRate tariffRate = tariffRates.get(0);
@@ -76,9 +96,8 @@ public class CipherService {
         List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
         for (PackingDetail packingDetail : packingDetails) {
             Float declaredValue = packingDetail.getOpDeclaredValue();
-            String countryId = packingDetail.getCountryId();
 
-            DeclarationCustomsVatRate declarationCustomsVatRate = declarationCustomsVatRateMapper.selectByPrimaryKey(Integer.valueOf(countryId));
+            DeclarationCustomsVatRate declarationCustomsVatRate = declarationCustomsVatRateMapper.selectByPrimaryKey(Integer.valueOf(0));
             Float rate = declarationCustomsVatRate.getDeclarationCustomsVatRate();
             float CCVAT = declaredValue * rate;
 
@@ -138,101 +157,165 @@ public class CipherService {
     }
 
 
+    public Map<String, CipherResult> orderCipher() {
 
-
-    public List<CipherResult> orderCipher() {
-
-        Map siteTotal = getTotalBySite();
-
-        OrderInfoExample orderInfoExample = new OrderInfoExample();
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
-        orderInfoCriteria.andIdLessThanOrEqualTo(10);
-//        orderInfoCriteria.andIdEqualTo(163);
+        orderInfoCriteria.andIdLessThanOrEqualTo(100);
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
 
-        OrderDetailExample orderDetailExample = new OrderDetailExample();
-        PackingInfoExample packingInfoExample = new PackingInfoExample();
-        PackingDetailExample packingDetailExample = new PackingDetailExample();
-        CountryExample countryExample = new CountryExample();
-        WarehouseRentExample warehouseRentExample = new WarehouseRentExample();
 
-
-        List<CipherResult> cipherResults = new ArrayList<>();
-        Integer countryId;
+        Map<String, CipherResult> cipherResults = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-
-            CipherResult cipherResult = new CipherResult(orderInfo.getId(), orderInfo.getSaleOrderCode());
-            cipherResults.add(cipherResult);
 
             orderDetailExample.clear();
             OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
             criteria.andOrderInfoIdEqualTo(orderInfo.getId());
             String site = orderInfo.getSite();
-            String countryCode;
-            if (site.lastIndexOf('.') != -1) {
-                countryCode=site.substring(site.lastIndexOf('.') + 1, site.length());
-            } else {
-                countryCode = site;
-            }
-
-
-            countryExample.clear();
-            CountryExample.Criteria countryExampleCriteria = countryExample.createCriteria();
-            countryExampleCriteria.andCodeEqualTo(countryCode.toUpperCase());
-            List<Country> countries = countryMapper.selectByExample(countryExample);
-            if (countries.size() == 0) {
-                continue;
-            }else {
-                countryId = countries.get(0).getId();
-            }
 
 
             List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
             for (OrderDetail orderDetail : orderDetails) {
-                Integer quantity = orderDetail.getQuantity();
-
-                buyingPrice(cipherResult, orderDetail, quantity);
-
-                clearVAT(packingDetailExample, countryId, cipherResult,orderDetail,quantity);
-
-                outputTax(siteTotal, packingInfoExample, countryId, orderInfo, cipherResult, site, orderDetail, quantity);
-
-                String sku = orderDetail.getSku();
-                sku=sku.substring(0, sku.indexOf("*"));
-                warehouseRentExample.clear();
-                WarehouseRentExample.Criteria warehouseRentExampleCriteria = warehouseRentExample.createCriteria();
-                warehouseRentExampleCriteria.andSkuEqualTo(sku);
-                warehouseRentExampleCriteria.andCountryIdEqualTo(countryId);
-
-                List<WarehouseRent> warehouseRents = warehouseRentMapper.selectByExample(warehouseRentExample);
-                if (warehouseRents.size() > 0) {
-                    float rent = 0;
-                    for (WarehouseRent warehouseRent : warehouseRents) {
-                        CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(warehouseRent.getCurrency());
-                        Float rate = currencyRate.getCurrencyRate();
-                        rent += warehouseRent.getRent() * rate;
-                    }
-                    cipherResult.addToWarehouseRental(rent / warehouseRents.size());
+                String productSku = orderDetail.getProductSku();
+                CipherResult cipherResult = cipherResults.get(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku);
+                if (cipherResult == null) {
+                    cipherResult = new CipherResult(orderDetail.getProductSku());
+                    cipherResults.put(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku, cipherResult);
                 }
+                Set<String> sites = platformSite.get(orderInfo.getPlatform());
+                if (sites == null) {
+                    sites = new HashSet<>();
+                    platformSite.put(orderInfo.getPlatform(), sites);
+                }
+                sites.add(orderInfo.getSite());
+
+                cipherResult.setPlatform(orderInfo.getPlatform());
+
+                cipherResult.setSite(orderInfo.getSite());
+
+                productBySkuExample.clear();
+                ProductBySkuExample.Criteria productCriteria = productBySkuExample.createCriteria();
+                String sku = orderDetail.getSku();
+                sku=sku.substring(0, sku.indexOf('*'));
+                productCriteria.andProductSkuEqualTo(sku);
+
+                List<ProductBySku> products = productBySkuMapper.selectByExample(productBySkuExample);
+                if (products.size() > 0) {
+                    ProductBySku product = products.get(0);
+                    cipherResult.setProductDesc(product.getProductTitleCn());
+                    cipherResult.setCategory(product.getProcutCategoryName1());
+                }
+
+                Float rate = getRate(orderDetail.getCurrency());
+
+                Integer quantity = orderDetail.getQuantity();
+                // 销量
+                cipherResult.addToQuantity(quantity);
+
+                cipherResult.addToRefund(orderDetail.getRefund() * rate);
+                cipherResult.addToPaypalFee(orderDetail.getOpPaypalFee());
+                cipherResult.addToPlatformCost(orderDetail.getPlatformCost());
+                Float shippingFeeFba = orderDetail.getShippingFeeFba();
+                shippingFeeFba = shippingFeeFba == null ? 0 : shippingFeeFba;
+                cipherResult.addToShippingFeeFba(shippingFeeFba * rate);
+                Float shippingFee = orderDetail.getShippingFee();
+                shippingFee = shippingFee == null ? 0 : shippingFee;
+                cipherResult.addToShippingFee(shippingFee * rate);
+
+                cipherResult.addToSales(orderDetail.getPrice() * quantity * rate);
+
+                // 采购价格
+                buyingPrice(cipherResult, orderDetail, quantity);
+                // 清关 头程 税费
+                clearVAT(cipherResult,orderDetail,quantity);
+                // 销项
+                outputTax(orderInfo, cipherResult, site, orderDetail, quantity, 10);
+                // 仓租
+                warehouseRent(cipherResult, orderDetail);
+                // 广告
+                adv(orderInfo, cipherResult, site, orderDetail, quantity);
             }
-            System.out.println(cipherResult.toString());
         }
 
         return cipherResults;
     }
 
-    private void outputTax(Map siteTotal, PackingInfoExample packingInfoExample, Integer countryId, OrderInfo orderInfo,
-                           CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity) {
-        if (orderInfo.getPlatform().equals("amazon")){
-            Double total = (Double) siteTotal.get(site);
+    private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity) {
+        String platform = orderInfo.getPlatform();
+        orderInfoExample.clear();
+        OrderInfoExample.Criteria info = orderInfoExample.createCriteria();
+        info.andSiteEqualTo(site);
+        info.andPlatformEqualTo(platform);
+        List<OrderInfo> siteOrders = orderInfoMapper.selectByExample(orderInfoExample);
+        advertisementDetailExample.clear();
+        AdvertisementDetailExample.Criteria criteria1 = advertisementDetailExample.createCriteria();
+        criteria1.andSiteEqualTo(site);
+        criteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
+        List<AdvertisementDetail> advs = advertisementDetailMapper.selectByExample(advertisementDetailExample);
+
+
+        switch (platform) {
+            case "amazon":
+            case "ebay":
+                ArrayList<Integer> siteOrderIds = new ArrayList<>();
+                siteOrders.forEach(orderInfo1 -> siteOrderIds.add(orderInfo1.getId()));
+                orderDetailExample.clear();
+                OrderDetailExample.Criteria detailExampleCriteria = orderDetailExample.createCriteria();
+                detailExampleCriteria.andOrderInfoIdIn(siteOrderIds);
+                List<OrderDetail> orderDetails1 = orderDetailMapper.selectByExample(orderDetailExample);
+                int skuCount = orderDetails1.stream().mapToInt(orderDetail1 -> orderDetail.getQuantity()).sum();
+
+                if (advs.size() > 0) {
+                    AdvertisementDetail adv = advs.get(0);
+                    Float rate = getRate(adv.getCurrency());
+                    cipherResult.addToAdvCost((adv.getCost() * rate / skuCount) * quantity);
+                }
+
+                break;
+            case "cdiscount":
+                double siteSubTotal = siteOrders.stream().mapToDouble(orderDetail2 -> orderDetail2.getSubtotal()).sum();
+                if (advs.size() > 0) {
+                    AdvertisementDetail adv = advs.get(0);
+                    Float rate = getRate(adv.getCurrency());
+                    cipherResult.addToAdvCost(orderInfo.getSubtotal() / siteSubTotal * adv.getCost() * rate);
+                }
+                break;
+            default:
+        }
+    }
+
+    private void warehouseRent( CipherResult cipherResult, OrderDetail orderDetail) {
+        String sku = orderDetail.getSku();
+        sku=sku.substring(0, sku.indexOf("*"));
+        warehouseRentExample.clear();
+        WarehouseRentExample.Criteria warehouseRentExampleCriteria = warehouseRentExample.createCriteria();
+        warehouseRentExampleCriteria.andSkuEqualTo(sku);
+        warehouseRentExampleCriteria.andWarehouseIdEqualTo(orderDetail.getWarehouseId());
+
+        List<WarehouseRent> warehouseRents = warehouseRentMapper.selectByExample(warehouseRentExample);
+        if (warehouseRents.size() > 0) {
+            float rent = 0;
+            for (WarehouseRent warehouseRent : warehouseRents) {
+                Float rate = getRate(warehouseRent.getCurrency());
+                System.out.println(warehouseRent.getId() + ">" + warehouseRent.getRent() + "*" + rate);
+
+                rent += warehouseRent.getRent() == null ? 0 : warehouseRent.getRent() * rate;
+            }
+            cipherResult.addToWarehouseRental(rent / warehouseRents.size());
+        }
+    }
+
+    private void outputTax( OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity,int monthNum) {
+        if (orderInfo.getPlatform().equals("amazon")) {
+            int total = 0;
+            outputTaxAllExample.clear();
+            OutputTaxAllExample.Criteria criteria = outputTaxAllExample.createCriteria();
+            criteria.andSiteEqualTo(site);
+            criteria.andMonthNumEqualTo(monthNum);
+            List<OutputTaxAll> outputTaxAlls = outputTaxAllMapper.selectByExample(outputTaxAllExample);
             if (total > 0) {
                 double unitPriceRatio = orderDetail.getPrice() / total;
-                packingInfoExample.clear();
-                PackingInfoExample.Criteria packingInfoExampleCriteria = packingInfoExample.createCriteria();
-                packingInfoExampleCriteria.andCountryIdEqualTo(String.valueOf(countryId));
-                List<PackingInfo> packingInfos = packingInfoMapper.selectByExample(packingInfoExample);
-                if (packingInfos.size() > 0) {
-                    Float outputTaxVatAll = packingInfos.get(0).getOutputTaxVatAll();
+                if (outputTaxAlls.size() > 0) {
+                    Float outputTaxVatAll = outputTaxAlls.get(0).getOutputTaxAll();
                     if (outputTaxVatAll != null) {
                         double outputTax = outputTaxVatAll * unitPriceRatio;
                         cipherResult.addToOutputTax(outputTax * quantity);
@@ -242,27 +325,26 @@ public class CipherService {
         }
     }
 
-    private void clearVAT(PackingDetailExample packingDetailExample, Integer countryId, CipherResult cipherResult,OrderDetail orderDetail, Integer quantity) {
+    private void clearVAT( CipherResult cipherResult,OrderDetail orderDetail, Integer quantity) {
         // 清关VAT
 
         packingDetailExample.clear();
         PackingDetailExample.Criteria packingDetailExampleCriteria1 = packingDetailExample.createCriteria();
-        packingDetailExampleCriteria1.andCountryIdEqualTo(String.valueOf(countryId));
+        packingDetailExampleCriteria1.andWarehouseIdEqualTo(String.valueOf(orderDetail.getWarehouseId()));
         packingDetailExampleCriteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
 
         PackingDetailExample.Criteria packingDetailExampleCriteria2 = packingDetailExample.or();
-        packingDetailExampleCriteria2.andCountryIdEqualTo(String.valueOf(countryId));
+        packingDetailExampleCriteria2.andWarehouseIdEqualTo(String.valueOf(orderDetail.getWarehouseId()));
         String sku = orderDetail.getSku();
         sku=sku.substring(0, sku.indexOf("*"));
         packingDetailExampleCriteria2.andEccangSkuEqualTo(sku);
         List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
 
         if (packingDetails.size() > 0) {
-            cipherResult.addToClearVAT(packingDetails.get(0).getDeclarationCustomsVat()*quantity);
-            cipherResult.addToHeadway(packingDetails.get(0).getFirstCarrierFreightUp()*quantity);
-            cipherResult.addToTariff(packingDetails.get(0).getSkuTaxes()*quantity);
+            cipherResult.addToClearVAT(packingDetails.get(0).getDeclarationCustomsVat() * quantity);
+            cipherResult.addToHeadway(packingDetails.get(0).getFirstCarrierFreightUp() * quantity);
+            cipherResult.addToTariff(packingDetails.get(0).getTariff() * quantity);
         }
-
 
     }
 
@@ -295,12 +377,178 @@ public class CipherService {
             Double subtotal= (Double) map.get("subtotal");
             String currency= (String) map.get("currency");
 
-            CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(currency);
-            Float rate = currencyRate.getCurrencyRate();
+            Float rate = getRate(currency);
             if (site.startsWith("Amazon")) {
                 siteTotal.put(site, subtotal * rate);
             }
         }
         return siteTotal;
+    }
+
+    private Float getRate(String currency) {
+        CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(currency);
+        return currencyRate.getCurrencyRate();
+    }
+
+    public HSSFWorkbook export() {
+        Map<String, CipherResult> results = orderCipher();
+        return getXls(results);
+    }
+    private HSSFWorkbook getXls(Map<String, CipherResult> map){
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        String[] headers = {
+                "站点",
+                "易仓SKU",
+                "产品描述",
+                "款式(*)",
+                "品类",
+                "销量",
+                "库存",
+                "销售额",
+                "采购价",
+                "头程",
+                "转运费",
+                "产品毛利",
+                "产品毛利率",
+                "关税",
+                "清关VAT",
+                "销项VAT",
+                "Fba 派送运费",
+                "自发货派送运费",
+                "仓租",
+                "平台佣金",
+                "PayPal手续费",
+                "广告",
+                "刷单",
+                "退款",
+                "营业毛利",
+                "营业毛利率",
+        };
+        Set<String> keySet = platformSite.keySet();
+
+        Map<String, HSSFSheet> sheetMap = new HashMap<>();
+        for (String key : keySet) {
+            HSSFSheet sheet = workbook.createSheet(key + "-各站点SKU");
+            sheetMap.put(key, sheet);
+            HSSFPrintSetup printSetup = sheet.getPrintSetup();
+            // 横向
+            printSetup.setLandscape(true);
+            // 页脚
+            printSetup.setFooterMargin(0.76);
+            // 页眉
+            printSetup.setHeaderMargin(0.71);
+            // A4
+            printSetup.setPaperSize(HSSFPrintSetup.A4_PAPERSIZE);
+            HSSFRow headerRow = sheet.createRow(0);
+
+            for (int i = 0; i < headers.length; i++) {
+                HSSFCell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                sheet.setColumnWidth(i, 4200);
+            }
+        }
+
+
+        // 设置内容
+        HSSFCellStyle contentStyle = workbook.createCellStyle();
+        HSSFFont contentFont = workbook.createFont();
+        // 12号字
+        contentFont.setFontHeightInPoints((short) 12);
+        contentStyle.setFont(contentFont);
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+        for (String key : map.keySet()) {
+            CipherResult result = map.get(key);
+            String platform = result.getPlatform();
+            HSSFSheet sheet = sheetMap.get(platform);
+
+            HSSFRow row = sheet.createRow(sheet.getLastRowNum() + 1);
+            int cellNum = 0;
+            HSSFCell cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getSite());
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getSku());
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getProductDesc());
+            cell = row.createCell(cellNum++);
+            // 款式 - *
+            cell.setCellValue("*");
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getCategory());
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getQuantity());
+            cell = row.createCell(cellNum++);
+            // 库存 - 0
+            cell.setCellValue(0);
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getSales()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getBuyingPrice()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getHeadway()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getTransshipment()));
+            cell = row.createCell(cellNum++);
+
+            // 毛利润
+
+            cell.setCellValue(decimalFormat.format(result.grossProfit()));
+            cell = row.createCell(cellNum++);
+
+            // 毛利率
+            cell.setCellValue(decimalFormat.format(result.grossProfit() / result.getSales() * 100));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getTariff()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getClearVAT()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getOutputTax()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getShippingFeeFba()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getShippingFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getWarehouseRental()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getPlatformCost()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getPaypalFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getAdvCost()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getClickFarming()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getRefund()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.operatingMargin()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.operatingMargin() / result.grossProfit() * 100));
+            cell = row.createCell(cellNum++);
+        }
+
+        return workbook;
     }
 }

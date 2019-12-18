@@ -7,7 +7,7 @@ import lombok.Data;
  * 临时仓租表
  *
  * @author Mr.D
- * @date 2019/12/13
+ * @date 2019/12/18
  */
 @Data
 public class WarehouseRent implements Serializable {
@@ -17,9 +17,14 @@ public class WarehouseRent implements Serializable {
     private Integer id;
 
     /**
+     * 
+     */
+    private String warehouseCode;
+
+    /**
      * 国家ID
      */
-    private Integer countryId;
+    private Integer warehouseId;
 
     /**
      * 

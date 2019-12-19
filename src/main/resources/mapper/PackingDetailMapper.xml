@@ -13,7 +13,7 @@
     <result column="tariff" jdbcType="REAL" property="tariff" />
     <result column="first_carrier_freight_up" jdbcType="REAL" property="firstCarrierFreightUp" />
     <result column="op_declared_value" jdbcType="REAL" property="opDeclaredValue" />
-    <result column="op_declared_currency" jdbcType="REAL" property="opDeclaredCurrency" />
+    <result column="op_declared_currency" jdbcType="VARCHAR" property="opDeclaredCurrency" />
     <result column="declaration_customs_vat" jdbcType="REAL" property="declarationCustomsVat" />
     <result column="output_tax_up" jdbcType="REAL" property="outputTaxUp" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -144,7 +144,7 @@
       sku_taxes)
     values (#{id,jdbcType=INTEGER}, #{packingInfoId,jdbcType=INTEGER}, #{warehouseId,jdbcType=VARCHAR}, 
       #{eccangSku,jdbcType=VARCHAR}, #{skuNum,jdbcType=INTEGER}, #{tariff,jdbcType=REAL}, 
-      #{firstCarrierFreightUp,jdbcType=REAL}, #{opDeclaredValue,jdbcType=REAL}, #{opDeclaredCurrency,jdbcType=REAL}, 
+      #{firstCarrierFreightUp,jdbcType=REAL}, #{opDeclaredValue,jdbcType=REAL}, #{opDeclaredCurrency,jdbcType=VARCHAR}, 
       #{declarationCustomsVat,jdbcType=REAL}, #{outputTaxUp,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
       #{skuTaxes,jdbcType=REAL})
   </insert>
@@ -220,7 +220,7 @@
         #{opDeclaredValue,jdbcType=REAL},
       </if>
       <if test="opDeclaredCurrency != null">
-        #{opDeclaredCurrency,jdbcType=REAL},
+        #{opDeclaredCurrency,jdbcType=VARCHAR},
       </if>
       <if test="declarationCustomsVat != null">
         #{declarationCustomsVat,jdbcType=REAL},
@@ -276,7 +276,7 @@
         op_declared_value = #{record.opDeclaredValue,jdbcType=REAL},
       </if>
       <if test="record.opDeclaredCurrency != null">
-        op_declared_currency = #{record.opDeclaredCurrency,jdbcType=REAL},
+        op_declared_currency = #{record.opDeclaredCurrency,jdbcType=VARCHAR},
       </if>
       <if test="record.declarationCustomsVat != null">
         declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
@@ -308,7 +308,7 @@
       tariff = #{record.tariff,jdbcType=REAL},
       first_carrier_freight_up = #{record.firstCarrierFreightUp,jdbcType=REAL},
       op_declared_value = #{record.opDeclaredValue,jdbcType=REAL},
-      op_declared_currency = #{record.opDeclaredCurrency,jdbcType=REAL},
+      op_declared_currency = #{record.opDeclaredCurrency,jdbcType=VARCHAR},
       declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
       output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -345,7 +345,7 @@
         op_declared_value = #{opDeclaredValue,jdbcType=REAL},
       </if>
       <if test="opDeclaredCurrency != null">
-        op_declared_currency = #{opDeclaredCurrency,jdbcType=REAL},
+        op_declared_currency = #{opDeclaredCurrency,jdbcType=VARCHAR},
       </if>
       <if test="declarationCustomsVat != null">
         declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
@@ -374,7 +374,7 @@
       tariff = #{tariff,jdbcType=REAL},
       first_carrier_freight_up = #{firstCarrierFreightUp,jdbcType=REAL},
       op_declared_value = #{opDeclaredValue,jdbcType=REAL},
-      op_declared_currency = #{opDeclaredCurrency,jdbcType=REAL},
+      op_declared_currency = #{opDeclaredCurrency,jdbcType=VARCHAR},
       declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
       output_tax_up = #{outputTaxUp,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},

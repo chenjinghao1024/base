@@ -2,6 +2,7 @@ package com.chen.base.service;
 
 import com.chen.base.entity.*;
 import com.chen.base.mapper.*;
+import com.github.pagehelper.util.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +29,8 @@ public class ImportFileService {
     WarehouseRelationMapper warehouseRelationMapper;
     @Resource
     PackingInfoMapper packingInfoMapper;
+    @Resource
+    PackingDetailMapper packingDetailMapper;
 
     @Resource
     AdvertisementFileMapper advertisementFileMapper;
@@ -47,9 +51,7 @@ public class ImportFileService {
 
     WarehouseRelationExample warehouseRelationExample = new WarehouseRelationExample();
     PackingInfoExample packingInfoExample = new PackingInfoExample();
-
-
-
+    PackingDetailExample packingDetailExample = new PackingDetailExample();
 
     public void advImport(MultipartFile mFile, String advType) {
 
@@ -142,13 +144,14 @@ public class ImportFileService {
                 for (int i =firstRowNum+1;i <= lastRowNum;i++) {
                     Row row = sheet.getRow(i);
                     String packingId = getValue(row, 4);
-                    Integer packingInfoId = getPackingInfo(packingId, updateDate);
+                    Integer packingInfoId = getPackingInfo(packingId);
 
+                    String warehouseName = getValue(row, 1);
+                    Integer warehouseId = getWarehouseIdByName(warehouseName);
                     if (packingInfoId == -1) {
                         PackingInfo packingInfo = new PackingInfo();
                         packingInfo.setPackingId(getValue(row, 4));
-                        String warehouseName = getValue(row, 1);
-                        Integer warehouseId = getWarehouseIdByName(warehouseName);
+
                         packingInfo.setTargetWarehouseId(warehouseId);
                         packingInfo.setPcraddTime(updateDate);
                         packingInfoMapper.insertSelectiveReturnId(packingInfo);
@@ -157,26 +160,35 @@ public class ImportFileService {
 
                     PackingDetail packingDetail = new PackingDetail();
                     packingDetail.setPackingInfoId(packingInfoId);
-
-
+                    packingDetail.setEccangSku(getStringValue(row, 9));
+                    Double skuNum = Double.valueOf(getValue(row, 13));
+                    packingDetail.setSkuNum(skuNum.intValue());
+                    packingDetail.setCreateTime(updateDate);
+                    packingDetail.setWarehouseId(String.valueOf(warehouseId));
+                    packingDetailMapper.insertSelective(packingDetail);
                 }
             }
         } catch (Exception  e){
             e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
     private String getValue(Row row, int cellIndex) {
+        DecimalFormat df = new DecimalFormat("0");
         //遍历每行获取每列的数据
         Cell cell = row.getCell(cellIndex);
+        if (cell == null) {
+            return null;
+        }
         CellType cellType = cell.getCellType();
         //判断单元格value 调用不同的返回值获取数据
         String value = null;
 
         switch (cellType) {
             case NUMERIC:
-                double numericCellValue = cell.getNumericCellValue();
-                value = String.valueOf(numericCellValue);
+                value = String.valueOf(cell.getNumericCellValue());
+
                 break;
             case STRING:
                 value = cell.getStringCellValue();
@@ -187,11 +199,35 @@ public class ImportFileService {
         return value;
     }
 
-    private Integer getPackingInfo(String packingId, Date updateDate){
+
+    private String getStringValue(Row row, int cellIndex) {
+        DecimalFormat df = new DecimalFormat("0");
+        //遍历每行获取每列的数据
+        Cell cell = row.getCell(cellIndex);
+        if (cell == null) {
+            return null;
+        }
+        CellType cellType = cell.getCellType();
+        //判断单元格value 调用不同的返回值获取数据
+        String value = null;
+
+        switch (cellType) {
+            case NUMERIC:
+                value = df.format(cell.getNumericCellValue());
+                break;
+            case STRING:
+                value = cell.getStringCellValue();
+                break;
+            default:
+                break;
+        }
+        return value;
+    }
+
+    private Integer getPackingInfo(String packingId){
         packingInfoExample.clear();
         PackingInfoExample.Criteria criteria = packingInfoExample.createCriteria();
         criteria.andPackingIdEqualTo(packingId);
-        criteria.andPcraddTimeEqualTo(updateDate);
         List<PackingInfo> packingInfo = packingInfoMapper.selectByExample(packingInfoExample);
         if (packingInfo.size() > 0) {
             return packingInfo.get(0).getId();
@@ -239,7 +275,7 @@ public class ImportFileService {
                     clickFarmingDetail.setSaleOrderCodes(getValue(row, 4));
                     clickFarmingDetail.setEccangSku(getValue(row, 5));
                     clickFarmingDetail.setEccangSku(getValue(row, 5));
-                    clickFarmingDetail.setSendFlag(getValue(row, 9).equals("已发货") ? 1 : 0);
+                    clickFarmingDetail.setSendFlag("已发货".equals(getValue(row, 9)) ? 1 : 0);
                     clickFarmingDetail.setClickFarmingFee(Float.valueOf(getValue(row, 10)));
                     clickFarmingDetailMapper.insertSelective(clickFarmingDetail);
                 }
@@ -252,8 +288,6 @@ public class ImportFileService {
 
     public void declaredValueImport(MultipartFile file) {
         try{
-
-
             Iterator<Sheet> sheetIterator = getSheetIterator(file);
             while (sheetIterator.hasNext()){
                 Sheet sheet = sheetIterator.next();
@@ -263,15 +297,34 @@ public class ImportFileService {
                 for (int i =firstRowNum+1;i <= lastRowNum;i++) {
                     Row row = sheet.getRow(i);
                     String packingId = getValue(row, 0);
-                    String sku = getValue(row, 1);
+                    String sku = getStringValue(row, 1);
                     String cost = getValue(row, 2);
                     String currency = getValue(row, 3);
-
+                    if (StringUtil.isEmpty(sku)) {
+                        continue;
+                    }
+                    if ("#N/A".equals(cost)){
+                        cost = "0";
+                    }
                     packingInfoExample.clear();
                     PackingInfoExample.Criteria infoExampleCriteria = packingInfoExample.createCriteria();
                     infoExampleCriteria.andPackingIdEqualTo(packingId);
-
-
+                    List<PackingInfo> packingInfos = packingInfoMapper.selectByExample(packingInfoExample);
+                    if (packingInfos.size() > 0) {
+                        PackingInfo packingInfo = packingInfos.get(0);
+                        Integer packingInfoId = packingInfo.getId();
+                        packingDetailExample.clear();
+                        PackingDetailExample.Criteria criteria = packingDetailExample.createCriteria();
+                        criteria.andPackingInfoIdEqualTo(packingInfoId);
+                        criteria.andEccangSkuEqualTo(sku);
+                        List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
+                        if (packingDetails.size() > 0) {
+                            PackingDetail packingDetail = packingDetails.get(0);
+                            packingDetail.setOpDeclaredCurrency(currency);
+                            packingDetail.setOpDeclaredValue(Float.valueOf(cost));
+                            packingDetailMapper.updateByPrimaryKeySelective(packingDetail);
+                        }
+                    }
                 }
             }
         } catch (Exception  e){
@@ -324,5 +377,9 @@ public class ImportFileService {
             e.printStackTrace();
             throw new RuntimeException();
         }
+    }
+
+    public void update(PackingInfo packingInfo) {
+        packingInfoMapper.updateByPrimaryKeySelective(packingInfo);
     }
 }

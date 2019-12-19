@@ -15,6 +15,15 @@
     <result column="file_name_sysname" jdbcType="VARCHAR" property="fileNameSysname" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
   </resultMap>
+
+  <resultMap extends="BaseResultMap" id="warehouseMap" type="com.chen.base.entity.PackingInfo">
+    <association property="warehouse" javaType="com.chen.base.entity.WarehouseRelation">
+      <result column="warehouse_code" jdbcType="VARCHAR" property="warehouseCode" />
+      <result column="warehouse_desc" jdbcType="VARCHAR" property="warehouseDesc" />
+      <result column="country_id" jdbcType="INTEGER" property="countryId" />
+    </association>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <!--
     该方法由生成器生成,请勿修改
@@ -277,6 +286,22 @@
     select count(*) from packing_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectAndWarehouseByExample" parameterType="com.chen.base.entity.PackingInfoExample" resultMap="warehouseMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    packing_info.id, packing_id, target_warehouse_id, first_carrier_freight_all, output_tax_vat_all,
+    pcradd_time, flie_name, file_name_sysname, file_url ,warehouse_code,warehouse_desc,country_id
+    from packing_info
+    left join warehouse_relation on target_warehouse_id = warehouse_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+    order by ${orderByClause}
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">

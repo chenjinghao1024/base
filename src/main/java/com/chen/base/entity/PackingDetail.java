@@ -9,7 +9,7 @@ import lombok.Data;
 
  *
  * @author Mr.D
- * @date 2019/12/17
+ * @date 2019/12/19
  */
 @Data
 public class PackingDetail implements Serializable {
@@ -56,7 +56,7 @@ public class PackingDetail implements Serializable {
     /**
      * 申报价值币种
      */
-    private Float opDeclaredCurrency;
+    private String opDeclaredCurrency;
 
     /**
      * 清关VAT单价

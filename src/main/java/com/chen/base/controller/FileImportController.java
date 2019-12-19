@@ -1,5 +1,6 @@
 package com.chen.base.controller;
 
+import com.chen.base.entity.vo.ResultVO;
 import com.chen.base.service.ImportFileService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,12 +30,7 @@ public class FileImportController {
         return "import/import";
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/uploadExcel")
-    public String uploadExcel(MultipartFile file) {
-        importFileService.packImport(file);
-        return "";
-    }
+
 
     @ResponseBody
     @RequestMapping(value = "/uploadAdv")

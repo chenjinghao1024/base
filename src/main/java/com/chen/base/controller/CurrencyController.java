@@ -45,4 +45,15 @@ public class CurrencyController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping("/edit")
+    public ResultVO edit(CurrencyRate currencyRate) {
+        try {
+            currencyService.edit(currencyRate);
+            return ResultVO.succ().data(currencyRate);
+        } catch (Exception e) {
+            return ResultVO.fail();
+        }
+    }
+
 }

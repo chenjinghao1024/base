@@ -26,4 +26,8 @@ public class CurrencyService {
     public CurrencyRate getByPrimaryKey(String currencyCode) {
         return currencyRateMapper.selectByPrimaryKey(currencyCode);
     }
+
+    public void edit(CurrencyRate currencyRate) {
+        currencyRateMapper.updateByPrimaryKeySelective(currencyRate);
+    }
 }

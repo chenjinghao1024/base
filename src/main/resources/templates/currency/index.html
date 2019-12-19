@@ -22,13 +22,6 @@
             <div class="card">
                 <div class="card-header"><h4>税率维护</h4></div>
                 <div class="card-body">
-
-                    <div id="toolbar" class="toolbar-btn-action">
-                        <button type="button" class="btn btn-primary m-r-5"
-                                data-toggle="modal" data-target="#addUser" >
-                            <span class="mdi mdi-plus" aria-hidden="true"></span>新增
-                        </button>
-                    </div>
                     <table id="tb_departments"></table>
                 </div>
             </div>
@@ -44,10 +37,18 @@
                 </div>
                 <div class="modal-body">
                     <form id="user_form">
-                        <input type="hidden" name="primaryKey" id="primaryKey">
+                        <input type="hidden" name="currencyCode" id="primaryKey">
                         <div class="form-group">
-                            <label  class="control-label">用户名</label>
-                            <input type="text" class="form-control" name="loginName">
+                            <label  class="control-label">币种代码</label>
+                            <input type="text" disabled class="form-control" name="currencyCode">
+                        </div>
+                        <div class="form-group">
+                            <label  class="control-label">币种名称</label>
+                            <input type="text" disabled class="form-control" name="currencyName">
+                        </div>
+                        <div class="form-group">
+                            <label  class="control-label">汇率</label>
+                            <input type="number" class="form-control" name="currencyRate">
                         </div>
                     </form>
                 </div>
@@ -77,66 +78,6 @@
 
 <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
 <script type="text/javascript">
-
-    $('#user_form').bootstrapValidator({
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            loginName: {
-                message: '用户名无效!',
-                validators: {
-                    notEmpty: {
-                        message: '用户名不可为空!'
-                    },
-                    stringLength: {
-                        min: 6,
-                        max: 30,
-                        message: '用户名必须超过6个且少于30个字符!'
-                    },
-                    regexp: {
-                        regexp: /^[a-zA-Z0-9_\.]+$/,
-                        message: '用户名只能包含字母，数字，点和下划线!'
-                    }
-                }
-            },
-            nickName:{
-                validators: {
-                    notEmpty: {
-                        message: '用户名不可为空!'
-                    },
-                    stringLength: {
-                        max: 30,
-                        message: '用户名不能超过30个字符!'
-                    },
-                }
-            },
-            password: {
-                validators: {
-                    notEmpty: {
-                        message: '密码为必填项，不能为空!'
-                    },
-                    identical: {
-                        field: 'repeatPassword',
-                        message: '两次输入的密码不一致!'
-                    }
-                }
-            },
-            repeatPassword: {
-                validators: {
-                    notEmpty: {
-                        message: '确认密码为必填项，不能为空!'
-                    },
-                    identical: {
-                        field: 'password',
-                        message: '两次输入的密码不一致!'
-                    }
-                }
-            },
-        }
-    });
 
     $('#tb_departments').bootstrapTable({
         classes: 'table table-bordered table-hover table-striped',
@@ -173,9 +114,7 @@
         //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
         //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
         //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
-        columns: [{
-            checkbox: true    // 是否显示复选框
-        }, {
+        columns: [ {
             field: 'currencyCode',
             title: '币种代码'
         }, {
@@ -223,14 +162,12 @@
 
     $('#addUser').on('show.bs.modal', function (event) {
         let modal = $(this);
-        let userId = modal.find('.modal-body #primaryKey').val();
-
-        console.log(userId);
+        let primaryKey = modal.find('.modal-body #primaryKey').val();
 
         $.ajax({
             type: "post",
-            url: "/currency/getById",
-            data: {id: userId},
+            url: "/currency/getByPrimaryKey",
+            data: {currencyCode: primaryKey},
             dataType: 'json',
             success: function (result, status) {
                 console.log(result);
@@ -266,13 +203,12 @@
 
 
     function submit() {
-        let pass=$('#user_form').data('bootstrapValidator').validate();
 
         let params = $("#user_form").serializeObject();
-
+        console.log(params);
         $.ajax({
             type: "post",
-            url: "/currency/createOrEditUser",
+            url: "/currency/edit",
             data: params,
             dataType: 'json',
             success: function (data, status) {

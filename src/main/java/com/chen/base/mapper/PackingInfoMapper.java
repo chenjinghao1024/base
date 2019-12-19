@@ -32,12 +32,15 @@ public interface PackingInfoMapper {
      * insertSelective
      */
     int insertSelective(PackingInfo record);
+
     int insertSelectiveReturnId(PackingInfo packingInfo);
 
     /**
      * selectByExample
      */
     List<PackingInfo> selectByExample(PackingInfoExample example);
+
+    List<PackingInfo> selectAndWarehouseByExample(PackingInfoExample example);
 
     /**
      * selectByPrimaryKey

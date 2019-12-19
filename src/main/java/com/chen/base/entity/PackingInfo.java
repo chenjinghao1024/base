@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class PackingInfo implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -38,7 +38,7 @@ public class PackingInfo implements Serializable {
     private Float outputTaxVatAll;
 
     /**
-     * 
+     * 上传时间
      */
     private Date pcraddTime;
 
@@ -61,4 +61,9 @@ public class PackingInfo implements Serializable {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 仓库
+     */
+    private WarehouseRelation warehouse;
 }

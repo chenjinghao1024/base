@@ -7,7 +7,7 @@ import lombok.Data;
  * 清关VAT税率表
  *
  * @author Mr.D
- * @date 2019/12/07
+ * @date 2019/12/20
  */
 @Data
 public class DeclarationCustomsVatRate implements Serializable {
@@ -25,4 +25,6 @@ public class DeclarationCustomsVatRate implements Serializable {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
+
+    private Country country;
 }

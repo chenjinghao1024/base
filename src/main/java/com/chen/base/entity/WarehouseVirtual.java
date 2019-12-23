@@ -7,7 +7,7 @@ import lombok.Data;
  * 虚拟仓库表
  *
  * @author Mr.D
- * @date 2019/12/10
+ * @date 2019/12/20
  */
 @Data
 public class WarehouseVirtual implements Serializable {
@@ -35,7 +35,7 @@ public class WarehouseVirtual implements Serializable {
     /**
      * 币种
      */
-    private Float currency;
+    private String currency;
 
     /**
      * serialVersionUID

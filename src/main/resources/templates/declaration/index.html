@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><h4>税率维护</h4></div>
+                <div class="card-header"><h4>清关税率维护</h4></div>
                 <div class="card-body">
                     <table id="tb_departments"></table>
                 </div>
@@ -37,18 +37,14 @@
                 </div>
                 <div class="modal-body">
                     <form id="user_form">
-                        <input type="hidden" name="currencyCode" id="primaryKey">
+                        <input type="hidden" name="countryId" id="id">
                         <div class="form-group">
-                            <label  class="control-label">币种代码</label>
-                            <input type="text" disabled class="form-control" name="currencyCode">
+                            <label  class="control-label">国家代码</label>
+                            <input type="text" disabled class="form-control" name="countryId">
                         </div>
                         <div class="form-group">
-                            <label  class="control-label">币种名称</label>
-                            <input type="text" disabled class="form-control" name="currencyName">
-                        </div>
-                        <div class="form-group">
-                            <label  class="control-label">汇率</label>
-                            <input type="number" class="form-control" name="currencyRate">
+                            <label  class="control-label">税率</label>
+                            <input type="number" class="form-control" name="declarationCustomsVatRate">
                         </div>
                     </form>
                 </div>
@@ -82,7 +78,7 @@
     $('#tb_departments').bootstrapTable({
         classes: 'table table-bordered table-hover table-striped',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        url: '/currency/list',
+        url: '/declaration/list',
         dataField: 'list',
         method: 'post',
         dataType: 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
@@ -115,21 +111,18 @@
         //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
         //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
         columns: [ {
-            field: 'currencyCode',
-            title: '币种代码'
-        }, {
-            field: 'currencyName',
-            title: '币种名称'
-        }, {
-            field: 'currencyRate',
-            title: '汇率'
+            field: 'country.code',
+            title: '国家代码'
+        },{
+            field: 'declarationCustomsVatRate',
+            title: '清关税率'
         }, {
             field: 'operate',
             title: '操作',
             formatter: btnGroup,  // 自定义方法
             events: {
                 'click .edit-btn': function (event, value, row, index) {
-                    editUser(row.currencyCode);
+                    editUser(row);
                 }
             }
         }],
@@ -159,37 +152,6 @@
             $("[data-toggle='tooltip']").tooltip();
         }
     });
-    $('#addUser').on('hide.bs.modal', function (event) {
-        console.log("hide");
-        $('#user_form')[0].reset();
-    });
-
-    $('#addUser').on('show.bs.modal', function (event) {
-        let modal = $(this);
-        let primaryKey = modal.find('.modal-body #primaryKey').val();
-
-        $.ajax({
-            type: "post",
-            url: "/currency/getByPrimaryKey",
-            data: {currencyCode: primaryKey},
-            dataType: 'json',
-            success: function (result, status) {
-                console.log(result);
-                modal.find("#user_form").loadDatatoFrom(result.data);
-                if (result.code == '200') {
-                    // 这里的状态显示有自定义样式区分，做单行的更新
-                } else {
-                    alert(data.msg);
-                }
-            },
-            error: function () {
-                alert('修改失败，请稍后再试');
-            }
-        });
-
-
-
-    });
 
     // 操作按钮
     function btnGroup() {
@@ -199,11 +161,16 @@
     }
 
     // 操作方法 - 编辑
-    function editUser(id) {
-        $("#primaryKey").val(id);
+    function editUser(row) {
+        $("#user_form").loadDatatoFrom(row);
+
         $('#addUser').modal('show');
     }
 
+    $('#addUser').on('hide.bs.modal', function (event) {
+        console.log("hide");
+        $('#user_form')[0].reset();
+    });
 
     function submit() {
 
@@ -211,7 +178,7 @@
         console.log(params);
         $.ajax({
             type: "post",
-            url: "/currency/edit",
+            url: "/declaration/edit",
             data: params,
             dataType: 'json',
             success: function (data, status) {

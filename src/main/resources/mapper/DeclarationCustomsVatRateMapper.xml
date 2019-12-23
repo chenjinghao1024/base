@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chen.base.mapper.WarehouseVirtualMapper">
-  <resultMap id="BaseResultMap" type="com.chen.base.entity.WarehouseVirtual">
+<mapper namespace="com.chen.base.mapper.DeclarationCustomsVatRateMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.DeclarationCustomsVatRate">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
-    <result column="country_id" jdbcType="INTEGER" property="countryId" />
-    <result column="warehouse_storage_charges" jdbcType="REAL" property="warehouseStorageCharges" />
-    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <id column="country_id" jdbcType="INTEGER" property="countryId" />
+    <result column="declaration_customs_vat_rate" jdbcType="REAL" property="declarationCustomsVatRate" />
   </resultMap>
+
+  <resultMap extends="BaseResultMap" id="countryMap" type="com.chen.base.entity.DeclarationCustomsVatRate">
+    <association property="country" javaType="com.chen.base.entity.Country">
+      <result column="id" jdbcType="VARCHAR" property="id" />
+      <result column="code" jdbcType="VARCHAR" property="code" />
+    </association>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <!--
     该方法由生成器生成,请勿修改
@@ -79,9 +84,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, warehouse_name, country_id, warehouse_storage_charges, currency
+    country_id, declaration_customs_vat_rate
   </sql>
-  <select id="selectByExample" parameterType="com.chen.base.entity.WarehouseVirtualExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.chen.base.entity.DeclarationCustomsVatRateExample" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
@@ -90,7 +95,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from warehouse_virtual
+    from declaration_customs_vat_rate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -98,109 +103,104 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectCountryByExample" parameterType="com.chen.base.entity.DeclarationCustomsVatRateExample"
+          resultMap="countryMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    *
+    from declaration_customs_vat_rate
+    left join country on country_id = id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
-    from warehouse_virtual
-    where id = #{id,jdbcType=INTEGER}
+    from declaration_customs_vat_rate
+    where country_id = #{countryId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_virtual
-    where id = #{id,jdbcType=INTEGER}
+    delete from declaration_customs_vat_rate
+    where country_id = #{countryId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.chen.base.entity.WarehouseVirtualExample">
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.DeclarationCustomsVatRateExample">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    delete from warehouse_virtual
+    delete from declaration_customs_vat_rate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.chen.base.entity.WarehouseVirtual">
+  <insert id="insert" parameterType="com.chen.base.entity.DeclarationCustomsVatRate">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_virtual (id, warehouse_name, country_id, 
-      warehouse_storage_charges, currency)
-    values (#{id,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR}, #{countryId,jdbcType=INTEGER}, 
-      #{warehouseStorageCharges,jdbcType=REAL}, #{currency,jdbcType=VARCHAR})
+    insert into declaration_customs_vat_rate (country_id, declaration_customs_vat_rate
+      )
+    values (#{countryId,jdbcType=INTEGER}, #{declarationCustomsVatRate,jdbcType=REAL}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseVirtual">
+  <insert id="insertSelective" parameterType="com.chen.base.entity.DeclarationCustomsVatRate">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_virtual
+    insert into declaration_customs_vat_rate
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="warehouseName != null">
-        warehouse_name,
-      </if>
       <if test="countryId != null">
         country_id,
       </if>
-      <if test="warehouseStorageCharges != null">
-        warehouse_storage_charges,
-      </if>
-      <if test="currency != null">
-        currency,
+      <if test="declarationCustomsVatRate != null">
+        declaration_customs_vat_rate,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="warehouseName != null">
-        #{warehouseName,jdbcType=VARCHAR},
-      </if>
       <if test="countryId != null">
         #{countryId,jdbcType=INTEGER},
       </if>
-      <if test="warehouseStorageCharges != null">
-        #{warehouseStorageCharges,jdbcType=REAL},
-      </if>
-      <if test="currency != null">
-        #{currency,jdbcType=VARCHAR},
+      <if test="declarationCustomsVatRate != null">
+        #{declarationCustomsVatRate,jdbcType=REAL},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseVirtualExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.chen.base.entity.DeclarationCustomsVatRateExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select count(*) from warehouse_virtual
+    select count(*) from declaration_customs_vat_rate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_virtual
+    update declaration_customs_vat_rate
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.warehouseName != null">
-        warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
-      </if>
       <if test="record.countryId != null">
         country_id = #{record.countryId,jdbcType=INTEGER},
       </if>
-      <if test="record.warehouseStorageCharges != null">
-        warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
-      </if>
-      <if test="record.currency != null">
-        currency = #{record.currency,jdbcType=VARCHAR},
+      <if test="record.declarationCustomsVatRate != null">
+        declaration_customs_vat_rate = #{record.declarationCustomsVatRate,jdbcType=REAL},
       </if>
     </set>
     <if test="_parameter != null">
@@ -211,46 +211,31 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_virtual
-    set id = #{record.id,jdbcType=INTEGER},
-      warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
-      country_id = #{record.countryId,jdbcType=INTEGER},
-      warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
-      currency = #{record.currency,jdbcType=VARCHAR}
+    update declaration_customs_vat_rate
+    set country_id = #{record.countryId,jdbcType=INTEGER},
+      declaration_customs_vat_rate = #{record.declarationCustomsVatRate,jdbcType=REAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.WarehouseVirtual">
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.DeclarationCustomsVatRate">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_virtual
+    update declaration_customs_vat_rate
     <set>
-      <if test="warehouseName != null">
-        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
-      </if>
-      <if test="countryId != null">
-        country_id = #{countryId,jdbcType=INTEGER},
-      </if>
-      <if test="warehouseStorageCharges != null">
-        warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
-      </if>
-      <if test="currency != null">
-        currency = #{currency,jdbcType=VARCHAR},
+      <if test="declarationCustomsVatRate != null">
+        declaration_customs_vat_rate = #{declarationCustomsVatRate,jdbcType=REAL},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where country_id = #{countryId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.WarehouseVirtual">
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.DeclarationCustomsVatRate">
     <!--
     该方法由生成器生成,请勿修改
     -->
-    update warehouse_virtual
-    set warehouse_name = #{warehouseName,jdbcType=VARCHAR},
-      country_id = #{countryId,jdbcType=INTEGER},
-      warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
-      currency = #{currency,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    update declaration_customs_vat_rate
+    set declaration_customs_vat_rate = #{declarationCustomsVatRate,jdbcType=REAL}
+    where country_id = #{countryId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -3,6 +3,7 @@ package com.chen.base.service;
 import com.chen.base.entity.*;
 import com.chen.base.mapper.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.util.StringUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -160,7 +161,7 @@ public class CipherService {
     public Map<String, CipherResult> orderCipher() {
 
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
-        orderInfoCriteria.andIdLessThanOrEqualTo(100);
+        orderInfoCriteria.andIdGreaterThan(3661);
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
 
 
@@ -174,66 +175,79 @@ public class CipherService {
 
 
             List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
-            for (OrderDetail orderDetail : orderDetails) {
-                String productSku = orderDetail.getProductSku();
-                CipherResult cipherResult = cipherResults.get(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku);
-                if (cipherResult == null) {
-                    cipherResult = new CipherResult(orderDetail.getProductSku());
-                    cipherResults.put(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku, cipherResult);
+            try {
+                for (OrderDetail orderDetail : orderDetails) {
+                    String productSku = orderDetail.getProductSku();
+                    CipherResult cipherResult = cipherResults.get(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku);
+                    String sku = orderDetail.getSku();
+                    sku=sku.substring(0, sku.indexOf('*'));
+                    if (cipherResult == null) {
+                        cipherResult = new CipherResult(sku);
+                        cipherResults.put(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku, cipherResult);
+                    }
+                    Set<String> sites = platformSite.get(orderInfo.getPlatform());
+                    if (sites == null) {
+                        sites = new HashSet<>();
+                        platformSite.put(orderInfo.getPlatform(), sites);
+                    }
+                    sites.add(orderInfo.getSite());
+
+                    cipherResult.setPlatform(orderInfo.getPlatform());
+
+                    cipherResult.setSite(orderInfo.getSite());
+
+                    productBySkuExample.clear();
+                    ProductBySkuExample.Criteria productCriteria = productBySkuExample.createCriteria();
+
+                    productCriteria.andProductSkuEqualTo(sku);
+
+                    List<ProductBySku> products = productBySkuMapper.selectByExample(productBySkuExample);
+                    if (products.size() > 0) {
+                        ProductBySku product = products.get(0);
+                        cipherResult.setProductDesc(product.getProductTitleCn());
+                        cipherResult.setCategory(product.getProcutCategoryName1());
+                    }
+
+                    Float rate = getRate(orderDetail.getCurrency());
+
+                    Integer quantity = orderDetail.getQuantity();
+                    // 销量
+                    cipherResult.addToQuantity(quantity);
+                    float refund;
+                    if (orderDetail.getRefund() == null) {
+                        refund = 0;
+                    }else {
+                        refund = orderDetail.getRefund();
+                    }
+                    cipherResult.addToRefund(refund * rate);
+                    cipherResult.addToPaypalFee(orderDetail.getOpPaypalFee() == null ? 0.0f :orderDetail.getOpPaypalFee());
+                    cipherResult.addToPlatformCost(orderDetail.getPlatformCost() == null ? 0.0f : orderDetail.getPlatformCost());
+                    Float shippingFeeFba = orderDetail.getShippingFeeFba();
+                    shippingFeeFba = shippingFeeFba == null ? 0 : shippingFeeFba;
+                    cipherResult.addToShippingFeeFba(shippingFeeFba * rate);
+                    Float shippingFee = orderDetail.getShippingFee();
+                    shippingFee = shippingFee == null ? 0 : shippingFee;
+                    cipherResult.addToShippingFee(shippingFee * rate);
+
+                    Float price = orderDetail.getPrice();
+                    price = price == null ? 0 : price;
+                    cipherResult.addToSales(price * quantity * rate);
+
+                    // 采购价格
+                    buyingPrice(cipherResult, orderDetail, quantity);
+                    // 清关 头程 税费
+                    clearVAT(cipherResult,orderDetail,quantity);
+                    // 销项
+                    outputTax(orderInfo, cipherResult, site, orderDetail, quantity, 10);
+                    // 仓租
+                    warehouseRent(cipherResult, orderDetail);
+                    // 广告
+                    adv(orderInfo, cipherResult, site, orderDetail, quantity);
                 }
-                Set<String> sites = platformSite.get(orderInfo.getPlatform());
-                if (sites == null) {
-                    sites = new HashSet<>();
-                    platformSite.put(orderInfo.getPlatform(), sites);
-                }
-                sites.add(orderInfo.getSite());
-
-                cipherResult.setPlatform(orderInfo.getPlatform());
-
-                cipherResult.setSite(orderInfo.getSite());
-
-                productBySkuExample.clear();
-                ProductBySkuExample.Criteria productCriteria = productBySkuExample.createCriteria();
-                String sku = orderDetail.getSku();
-                sku=sku.substring(0, sku.indexOf('*'));
-                productCriteria.andProductSkuEqualTo(sku);
-
-                List<ProductBySku> products = productBySkuMapper.selectByExample(productBySkuExample);
-                if (products.size() > 0) {
-                    ProductBySku product = products.get(0);
-                    cipherResult.setProductDesc(product.getProductTitleCn());
-                    cipherResult.setCategory(product.getProcutCategoryName1());
-                }
-
-                Float rate = getRate(orderDetail.getCurrency());
-
-                Integer quantity = orderDetail.getQuantity();
-                // 销量
-                cipherResult.addToQuantity(quantity);
-
-                cipherResult.addToRefund(orderDetail.getRefund() * rate);
-                cipherResult.addToPaypalFee(orderDetail.getOpPaypalFee());
-                cipherResult.addToPlatformCost(orderDetail.getPlatformCost());
-                Float shippingFeeFba = orderDetail.getShippingFeeFba();
-                shippingFeeFba = shippingFeeFba == null ? 0 : shippingFeeFba;
-                cipherResult.addToShippingFeeFba(shippingFeeFba * rate);
-                Float shippingFee = orderDetail.getShippingFee();
-                shippingFee = shippingFee == null ? 0 : shippingFee;
-                cipherResult.addToShippingFee(shippingFee * rate);
-
-                cipherResult.addToSales(orderDetail.getPrice() * quantity * rate);
-
-                // 采购价格
-                buyingPrice(cipherResult, orderDetail, quantity);
-                // 清关 头程 税费
-                clearVAT(cipherResult,orderDetail,quantity);
-                // 销项
-                outputTax(orderInfo, cipherResult, site, orderDetail, quantity, 10);
-                // 仓租
-                warehouseRent(cipherResult, orderDetail);
-                // 广告
-                adv(orderInfo, cipherResult, site, orderDetail, quantity);
+            } catch (Exception e) {
+                System.out.println(orderInfo.getId() + " > " + e.getMessage());
             }
+
         }
 
         return cipherResults;
@@ -296,7 +310,6 @@ public class CipherService {
             float rent = 0;
             for (WarehouseRent warehouseRent : warehouseRents) {
                 Float rate = getRate(warehouseRent.getCurrency());
-                System.out.println(warehouseRent.getId() + ">" + warehouseRent.getRent() + "*" + rate);
 
                 rent += warehouseRent.getRent() == null ? 0 : warehouseRent.getRent() * rate;
             }
@@ -342,7 +355,9 @@ public class CipherService {
 
         if (packingDetails.size() > 0) {
             cipherResult.addToClearVAT(packingDetails.get(0).getDeclarationCustomsVat() * quantity);
+
             cipherResult.addToHeadway(packingDetails.get(0).getFirstCarrierFreightUp() * quantity);
+
             cipherResult.addToTariff(packingDetails.get(0).getTariff() * quantity);
         }
 
@@ -386,8 +401,16 @@ public class CipherService {
     }
 
     private Float getRate(String currency) {
-        CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(currency);
-        return currencyRate.getCurrencyRate();
+        if (StringUtil.isEmpty(currency )) {
+            return 0.0f;
+        }
+        CurrencyRate currencyRate = currencyRateMapper.selectByPrimaryKey(currency.trim());
+        if (currencyRate == null) {
+            System.out.println(currency);
+            return 0.0f;
+        } else {
+            return currencyRate.getCurrencyRate();
+        }
     }
 
     public HSSFWorkbook export() {

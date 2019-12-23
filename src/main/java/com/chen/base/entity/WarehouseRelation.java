@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class WarehouseRelation implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -37,7 +37,7 @@ public class WarehouseRelation implements Serializable {
     private String warehouseDesc;
 
     /**
-     * 仓库ID
+     * 城市
      */
     private Integer countryId;
 

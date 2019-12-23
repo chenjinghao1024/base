@@ -258,7 +258,7 @@ public class ImportFileService {
             clickFarmingInfo.setClickFarmingFileName(fileName);
             clickFarmingInfo.setPcraddTime(updateDate);
 
-            clickFarmingInfoMapper.insertSelective(clickFarmingInfo);
+            clickFarmingInfoMapper.insertSelectiveReturnId(clickFarmingInfo);
 
             Iterator<Sheet> sheetIterator = getSheetIterator(file);
             Integer clickFarmingInfoId = clickFarmingInfo.getId();
@@ -272,10 +272,10 @@ public class ImportFileService {
                     ClickFarmingDetail clickFarmingDetail = new ClickFarmingDetail();
                     clickFarmingDetail.setInfoId(clickFarmingInfoId);
                     clickFarmingDetail.setSite(getValue(row, 1));
+                    clickFarmingDetail.setUserAccounts(getValue(row, 2));
                     clickFarmingDetail.setSaleOrderCodes(getValue(row, 4));
                     clickFarmingDetail.setEccangSku(getValue(row, 5));
-                    clickFarmingDetail.setEccangSku(getValue(row, 5));
-                    clickFarmingDetail.setSendFlag("已发货".equals(getValue(row, 9)) ? 1 : 0);
+                    clickFarmingDetail.setSendFlag("发货".equals(getValue(row, 9)) ? 1 : 0);
                     clickFarmingDetail.setClickFarmingFee(Float.valueOf(getValue(row, 10)));
                     clickFarmingDetailMapper.insertSelective(clickFarmingDetail);
                 }

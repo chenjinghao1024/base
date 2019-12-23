@@ -38,6 +38,8 @@ public interface DeclarationCustomsVatRateMapper {
      */
     List<DeclarationCustomsVatRate> selectByExample(DeclarationCustomsVatRateExample example);
 
+    List<DeclarationCustomsVatRate> selectCountryByExample(DeclarationCustomsVatRateExample example);
+
     /**
      * selectByPrimaryKey
      */

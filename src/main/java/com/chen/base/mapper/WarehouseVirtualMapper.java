@@ -32,6 +32,7 @@ public interface WarehouseVirtualMapper {
      * insertSelective
      */
     int insertSelective(WarehouseVirtual record);
+    int insertSelectiveReturnId(WarehouseVirtual record);
 
     /**
      * selectByExample

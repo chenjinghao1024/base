@@ -1,6 +1,8 @@
 package com.chen.base.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -12,7 +14,7 @@ import lombok.Data;
 @Data
 public class WarehouseVirtual implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -41,4 +43,7 @@ public class WarehouseVirtual implements Serializable {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
+
+    private Country country;
+    private List<WarehouseRelation> warehouseRelations;
 }

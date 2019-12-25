@@ -11,7 +11,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -64,10 +66,13 @@ public class UserService {
         if (user.getId() != null) {
             count = sysUserMapper.updateByPrimaryKeySelective(user);
         } else {
-
-            String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
-            user.setSalt(salt);
-
+            ByteSource credentialsSalt01 = ByteSource.Util.bytes(user.getLoginName());
+            Object credential = user.getPassword();
+            String hashAlgorithmName = "MD5";//加密方式
+            //1024指的是加密的次数
+            Object simpleHash = new SimpleHash(hashAlgorithmName, credential,
+                    credentialsSalt01, 1024);
+            user.setPassword(simpleHash.toString());
             user.setCreateTime(new Date());
             count = sysUserMapper.insertSelective(user);
         }

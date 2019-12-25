@@ -4,7 +4,7 @@ INSERT INTO sys_role (id, role_name) VALUES (1, 'admin');
 INSERT INTO sys_role (id, role_name) VALUES (2, 'first');
 INSERT INTO sys_role (id, role_name) VALUES (3, 'second');
 
-INSERT INTO cost.sys_permission (id, name, url, method, `desc`) VALUES (1, 'C', null, 'first:create', null);
+INSERT INTO cost.sys_permission (id, name, url, method, `desc`) VALUES (1, 'C', null, 'first:createOrUpdate', null);
 INSERT INTO cost.sys_permission (id, name, url, method, `desc`) VALUES (2, 'R', null, 'first:read', null);
 INSERT INTO cost.sys_permission (id, name, url, method, `desc`) VALUES (3, 'U', null, 'first:update', null);
 INSERT INTO cost.sys_permission (id, name, url, method, `desc`) VALUES (4, 'D', null, 'first:delete', null);

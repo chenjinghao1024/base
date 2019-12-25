@@ -52,7 +52,7 @@ public class PackingController {
             importFileService.packImport(file);
             return ResultVO.succ();
         } catch (Exception e) {
-            return ResultVO.fail();
+            return ResultVO.fail().msg("上传文件异常,请检查文件!");
         }
     }
 
@@ -67,6 +67,11 @@ public class PackingController {
         }
     }
 
+    /**
+     * 申报价值
+     * @param file
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/uploadDeclaredValue")
     public ResultVO uploadDeclaredValue(MultipartFile file) {
@@ -74,7 +79,7 @@ public class PackingController {
             importFileService.declaredValueImport(file);
             return ResultVO.succ();
         } catch (Exception e) {
-            return ResultVO.fail();
+            return ResultVO.fail().msg(e.getMessage());
         }
     }
 }

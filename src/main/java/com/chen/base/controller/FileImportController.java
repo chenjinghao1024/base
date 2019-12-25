@@ -49,7 +49,6 @@ public class FileImportController {
     @ResponseBody
     @RequestMapping(value = "/uploadDeclaredValue")
     public String uploadDeclaredValue(MultipartFile file) {
-        importFileService.declaredValueImport(file);
         return "";
     }
 

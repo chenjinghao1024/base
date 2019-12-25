@@ -5,6 +5,7 @@ import com.chen.base.entity.PageParams;
 import com.chen.base.entity.TariffRate;
 import com.chen.base.entity.vo.ResultVO;
 import com.chen.base.service.TaxService;
+import com.chen.base.service.UtilServcie;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +24,11 @@ public class TaxController {
 
     @Resource
     TaxService taxService;
-
+    @Resource
+    UtilServcie utilServcie;
     @GetMapping({"/index"})
     public String index(Model model) {
-        model.addAttribute("countries",taxService.getCountry());
+        model.addAttribute("countries",utilServcie.getCountry());
         return "/tax/index";
     }
 

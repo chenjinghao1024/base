@@ -31,7 +31,6 @@ public class LoginController {
      * 登录接口，由于UserService中是模拟返回用户信息的，
      * 所以用户名随意，密码123456
      *
-     * @param body
      * @return
      */
     @PostMapping("/login")
@@ -96,7 +95,6 @@ public class LoginController {
     @PostMapping("/registered")
     @ResponseBody
     public String registered(RegisterVO register) {
-
         String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
         register.setSalt(salt);
         return "login";

@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.base.mapper.CipherResultMapper">
+  <resultMap id="BaseResultMap" type="com.chen.base.entity.CipherResult">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="year_month" jdbcType="VARCHAR" property="yearMonth" />
+    <result column="platform" jdbcType="VARCHAR" property="platform" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="Sales" jdbcType="REAL" property="sales" />
+    <result column="payment_platform_free" jdbcType="REAL" property="paymentPlatformFree" />
+    <result column="fba_fee" jdbcType="REAL" property="fbaFee" />
+    <result column="refund" jdbcType="REAL" property="refund" />
+    <result column="first_carrier_freight" jdbcType="REAL" property="firstCarrierFreight" />
+    <result column="declaration_customs_vat" jdbcType="REAL" property="declarationCustomsVat" />
+    <result column="tariff_fee" jdbcType="REAL" property="tariffFee" />
+    <result column="output_tax_up" jdbcType="REAL" property="outputTaxUp" />
+    <result column="shipping_fee_fba" jdbcType="REAL" property="shippingFeeFba" />
+    <result column="shipping_fee" jdbcType="REAL" property="shippingFee" />
+    <result column="paypal_fee" jdbcType="REAL" property="paypalFee" />
+    <result column="platform_cost" jdbcType="REAL" property="platformCost" />
+    <result column="warehouse_storage_charges" jdbcType="REAL" property="warehouseStorageCharges" />
+    <result column="purchase_taxation_fee" jdbcType="REAL" property="purchaseTaxationFee" />
+    <result column="purchase_shipping_fee" jdbcType="REAL" property="purchaseShippingFee" />
+    <result column="purchase_cost" jdbcType="REAL" property="purchaseCost" />
+    <result column="advertisement_cost" jdbcType="REAL" property="advertisementCost" />
+    <result column="click_farming_fee" jdbcType="REAL" property="clickFarmingFee" />
+    <result column="is_fba" jdbcType="INTEGER" property="isFba" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    id, year_month, platform, category_name, sku, site, product_name, quantity, Sales,
+    payment_platform_free, fba_fee, refund, first_carrier_freight, declaration_customs_vat,
+    tariff_fee, output_tax_up, shipping_fee_fba, shipping_fee, paypal_fee, platform_cost,
+    warehouse_storage_charges, purchase_taxation_fee, purchase_shipping_fee, purchase_cost,
+    advertisement_cost, click_farming_fee, is_fba
+  </sql>
+  <select id="selectByExample" parameterType="com.chen.base.entity.CipherResultExample" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cipher_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from cipher_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from cipher_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chen.base.entity.CipherResultExample">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    delete from cipher_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chen.base.entity.CipherResult">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into cipher_result (id, year_month, platform,
+      category_name, sku, site,
+      product_name, quantity, Sales,
+      payment_platform_free, fba_fee, refund,
+      first_carrier_freight, declaration_customs_vat, tariff_fee,
+      output_tax_up, shipping_fee_fba, shipping_fee,
+      paypal_fee, platform_cost, warehouse_storage_charges,
+      purchase_taxation_fee, purchase_shipping_fee, purchase_cost,
+      advertisement_cost, click_farming_fee, is_fba
+      )
+    values (#{id,jdbcType=INTEGER}, #{yearMonth,jdbcType=VARCHAR}, #{platform,jdbcType=VARCHAR},
+      #{categoryName,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{site,jdbcType=VARCHAR},
+      #{productName,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{sales,jdbcType=REAL},
+      #{paymentPlatformFree,jdbcType=REAL}, #{fbaFee,jdbcType=REAL}, #{refund,jdbcType=REAL},
+      #{firstCarrierFreight,jdbcType=REAL}, #{declarationCustomsVat,jdbcType=REAL}, #{tariffFee,jdbcType=REAL},
+      #{outputTaxUp,jdbcType=REAL}, #{shippingFeeFba,jdbcType=REAL}, #{shippingFee,jdbcType=REAL},
+      #{paypalFee,jdbcType=REAL}, #{platformCost,jdbcType=REAL}, #{warehouseStorageCharges,jdbcType=REAL},
+      #{purchaseTaxationFee,jdbcType=REAL}, #{purchaseShippingFee,jdbcType=REAL}, #{purchaseCost,jdbcType=REAL},
+      #{advertisementCost,jdbcType=REAL}, #{clickFarmingFee,jdbcType=REAL}, #{isFba,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chen.base.entity.CipherResult">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    insert into cipher_result
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="yearMonth != null">
+        year_month,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="site != null">
+        site,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="sales != null">
+        Sales,
+      </if>
+      <if test="paymentPlatformFree != null">
+        payment_platform_free,
+      </if>
+      <if test="fbaFee != null">
+        fba_fee,
+      </if>
+      <if test="refund != null">
+        refund,
+      </if>
+      <if test="firstCarrierFreight != null">
+        first_carrier_freight,
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat,
+      </if>
+      <if test="tariffFee != null">
+        tariff_fee,
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up,
+      </if>
+      <if test="shippingFeeFba != null">
+        shipping_fee_fba,
+      </if>
+      <if test="shippingFee != null">
+        shipping_fee,
+      </if>
+      <if test="paypalFee != null">
+        paypal_fee,
+      </if>
+      <if test="platformCost != null">
+        platform_cost,
+      </if>
+      <if test="warehouseStorageCharges != null">
+        warehouse_storage_charges,
+      </if>
+      <if test="purchaseTaxationFee != null">
+        purchase_taxation_fee,
+      </if>
+      <if test="purchaseShippingFee != null">
+        purchase_shipping_fee,
+      </if>
+      <if test="purchaseCost != null">
+        purchase_cost,
+      </if>
+      <if test="advertisementCost != null">
+        advertisement_cost,
+      </if>
+      <if test="clickFarmingFee != null">
+        click_farming_fee,
+      </if>
+      <if test="isFba != null">
+        is_fba,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=REAL},
+      </if>
+      <if test="paymentPlatformFree != null">
+        #{paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="fbaFee != null">
+        #{fbaFee,jdbcType=REAL},
+      </if>
+      <if test="refund != null">
+        #{refund,jdbcType=REAL},
+      </if>
+      <if test="firstCarrierFreight != null">
+        #{firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="tariffFee != null">
+        #{tariffFee,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="shippingFeeFba != null">
+        #{shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="shippingFee != null">
+        #{shippingFee,jdbcType=REAL},
+      </if>
+      <if test="paypalFee != null">
+        #{paypalFee,jdbcType=REAL},
+      </if>
+      <if test="platformCost != null">
+        #{platformCost,jdbcType=REAL},
+      </if>
+      <if test="warehouseStorageCharges != null">
+        #{warehouseStorageCharges,jdbcType=REAL},
+      </if>
+      <if test="purchaseTaxationFee != null">
+        #{purchaseTaxationFee,jdbcType=REAL},
+      </if>
+      <if test="purchaseShippingFee != null">
+        #{purchaseShippingFee,jdbcType=REAL},
+      </if>
+      <if test="purchaseCost != null">
+        #{purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="advertisementCost != null">
+        #{advertisementCost,jdbcType=REAL},
+      </if>
+      <if test="clickFarmingFee != null">
+        #{clickFarmingFee,jdbcType=REAL},
+      </if>
+      <if test="isFba != null">
+        #{isFba,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+    <insert id="insertSelectiveReturnId" parameterType="com.chen.base.entity.CipherResult"
+            useGeneratedKeys="true" keyProperty="id">
+      <!--
+      该方法由生成器生成,请勿修改
+      -->
+      insert into cipher_result
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          id,
+        </if>
+        <if test="yearMonth != null">
+          year_month,
+        </if>
+        <if test="platform != null">
+          platform,
+        </if>
+        <if test="categoryName != null">
+          category_name,
+        </if>
+        <if test="sku != null">
+          sku,
+        </if>
+        <if test="site != null">
+          site,
+        </if>
+        <if test="productName != null">
+          product_name,
+        </if>
+        <if test="quantity != null">
+          quantity,
+        </if>
+        <if test="sales != null">
+          Sales,
+        </if>
+        <if test="paymentPlatformFree != null">
+          payment_platform_free,
+        </if>
+        <if test="fbaFee != null">
+          fba_fee,
+        </if>
+        <if test="refund != null">
+          refund,
+        </if>
+        <if test="firstCarrierFreight != null">
+          first_carrier_freight,
+        </if>
+        <if test="declarationCustomsVat != null">
+          declaration_customs_vat,
+        </if>
+        <if test="tariffFee != null">
+          tariff_fee,
+        </if>
+        <if test="outputTaxUp != null">
+          output_tax_up,
+        </if>
+        <if test="shippingFeeFba != null">
+          shipping_fee_fba,
+        </if>
+        <if test="shippingFee != null">
+          shipping_fee,
+        </if>
+        <if test="paypalFee != null">
+          paypal_fee,
+        </if>
+        <if test="platformCost != null">
+          platform_cost,
+        </if>
+        <if test="warehouseStorageCharges != null">
+          warehouse_storage_charges,
+        </if>
+        <if test="purchaseTaxationFee != null">
+          purchase_taxation_fee,
+        </if>
+        <if test="purchaseShippingFee != null">
+          purchase_shipping_fee,
+        </if>
+        <if test="purchaseCost != null">
+          purchase_cost,
+        </if>
+        <if test="advertisementCost != null">
+          advertisement_cost,
+        </if>
+        <if test="clickFarmingFee != null">
+          click_farming_fee,
+        </if>
+        <if test="isFba != null">
+          is_fba,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          #{id,jdbcType=INTEGER},
+        </if>
+        <if test="yearMonth != null">
+          #{yearMonth,jdbcType=VARCHAR},
+        </if>
+        <if test="platform != null">
+          #{platform,jdbcType=VARCHAR},
+        </if>
+        <if test="categoryName != null">
+          #{categoryName,jdbcType=VARCHAR},
+        </if>
+        <if test="sku != null">
+          #{sku,jdbcType=VARCHAR},
+        </if>
+        <if test="site != null">
+          #{site,jdbcType=VARCHAR},
+        </if>
+        <if test="productName != null">
+          #{productName,jdbcType=VARCHAR},
+        </if>
+        <if test="quantity != null">
+          #{quantity,jdbcType=INTEGER},
+        </if>
+        <if test="sales != null">
+          #{sales,jdbcType=REAL},
+        </if>
+        <if test="paymentPlatformFree != null">
+          #{paymentPlatformFree,jdbcType=REAL},
+        </if>
+        <if test="fbaFee != null">
+          #{fbaFee,jdbcType=REAL},
+        </if>
+        <if test="refund != null">
+          #{refund,jdbcType=REAL},
+        </if>
+        <if test="firstCarrierFreight != null">
+          #{firstCarrierFreight,jdbcType=REAL},
+        </if>
+        <if test="declarationCustomsVat != null">
+          #{declarationCustomsVat,jdbcType=REAL},
+        </if>
+        <if test="tariffFee != null">
+          #{tariffFee,jdbcType=REAL},
+        </if>
+        <if test="outputTaxUp != null">
+          #{outputTaxUp,jdbcType=REAL},
+        </if>
+        <if test="shippingFeeFba != null">
+          #{shippingFeeFba,jdbcType=REAL},
+        </if>
+        <if test="shippingFee != null">
+          #{shippingFee,jdbcType=REAL},
+        </if>
+        <if test="paypalFee != null">
+          #{paypalFee,jdbcType=REAL},
+        </if>
+        <if test="platformCost != null">
+          #{platformCost,jdbcType=REAL},
+        </if>
+        <if test="warehouseStorageCharges != null">
+          #{warehouseStorageCharges,jdbcType=REAL},
+        </if>
+        <if test="purchaseTaxationFee != null">
+          #{purchaseTaxationFee,jdbcType=REAL},
+        </if>
+        <if test="purchaseShippingFee != null">
+          #{purchaseShippingFee,jdbcType=REAL},
+        </if>
+        <if test="purchaseCost != null">
+          #{purchaseCost,jdbcType=REAL},
+        </if>
+        <if test="advertisementCost != null">
+          #{advertisementCost,jdbcType=REAL},
+        </if>
+        <if test="clickFarmingFee != null">
+          #{clickFarmingFee,jdbcType=REAL},
+        </if>
+        <if test="isFba != null">
+          #{isFba,jdbcType=INTEGER},
+        </if>
+      </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.chen.base.entity.CipherResultExample" resultType="java.lang.Long">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    select count(*) from cipher_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update cipher_result
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.yearMonth != null">
+        year_month = #{record.yearMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platform != null">
+        platform = #{record.platform,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryName != null">
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.site != null">
+        site = #{record.site,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.sales != null">
+        Sales = #{record.sales,jdbcType=REAL},
+      </if>
+      <if test="record.paymentPlatformFree != null">
+        payment_platform_free = #{record.paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="record.fbaFee != null">
+        fba_fee = #{record.fbaFee,jdbcType=REAL},
+      </if>
+      <if test="record.refund != null">
+        refund = #{record.refund,jdbcType=REAL},
+      </if>
+      <if test="record.firstCarrierFreight != null">
+        first_carrier_freight = #{record.firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="record.declarationCustomsVat != null">
+        declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="record.tariffFee != null">
+        tariff_fee = #{record.tariffFee,jdbcType=REAL},
+      </if>
+      <if test="record.outputTaxUp != null">
+        output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="record.shippingFeeFba != null">
+        shipping_fee_fba = #{record.shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="record.shippingFee != null">
+        shipping_fee = #{record.shippingFee,jdbcType=REAL},
+      </if>
+      <if test="record.paypalFee != null">
+        paypal_fee = #{record.paypalFee,jdbcType=REAL},
+      </if>
+      <if test="record.platformCost != null">
+        platform_cost = #{record.platformCost,jdbcType=REAL},
+      </if>
+      <if test="record.warehouseStorageCharges != null">
+        warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
+      </if>
+      <if test="record.purchaseTaxationFee != null">
+        purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL},
+      </if>
+      <if test="record.purchaseShippingFee != null">
+        purchase_shipping_fee = #{record.purchaseShippingFee,jdbcType=REAL},
+      </if>
+      <if test="record.purchaseCost != null">
+        purchase_cost = #{record.purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="record.advertisementCost != null">
+        advertisement_cost = #{record.advertisementCost,jdbcType=REAL},
+      </if>
+      <if test="record.clickFarmingFee != null">
+        click_farming_fee = #{record.clickFarmingFee,jdbcType=REAL},
+      </if>
+      <if test="record.isFba != null">
+        is_fba = #{record.isFba,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update cipher_result
+    set id = #{record.id,jdbcType=INTEGER},
+      year_month = #{record.yearMonth,jdbcType=VARCHAR},
+      platform = #{record.platform,jdbcType=VARCHAR},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      site = #{record.site,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      Sales = #{record.sales,jdbcType=REAL},
+      payment_platform_free = #{record.paymentPlatformFree,jdbcType=REAL},
+      fba_fee = #{record.fbaFee,jdbcType=REAL},
+      refund = #{record.refund,jdbcType=REAL},
+      first_carrier_freight = #{record.firstCarrierFreight,jdbcType=REAL},
+      declaration_customs_vat = #{record.declarationCustomsVat,jdbcType=REAL},
+      tariff_fee = #{record.tariffFee,jdbcType=REAL},
+      output_tax_up = #{record.outputTaxUp,jdbcType=REAL},
+      shipping_fee_fba = #{record.shippingFeeFba,jdbcType=REAL},
+      shipping_fee = #{record.shippingFee,jdbcType=REAL},
+      paypal_fee = #{record.paypalFee,jdbcType=REAL},
+      platform_cost = #{record.platformCost,jdbcType=REAL},
+      warehouse_storage_charges = #{record.warehouseStorageCharges,jdbcType=REAL},
+      purchase_taxation_fee = #{record.purchaseTaxationFee,jdbcType=REAL},
+      purchase_shipping_fee = #{record.purchaseShippingFee,jdbcType=REAL},
+      purchase_cost = #{record.purchaseCost,jdbcType=REAL},
+      advertisement_cost = #{record.advertisementCost,jdbcType=REAL},
+      click_farming_fee = #{record.clickFarmingFee,jdbcType=REAL},
+      is_fba = #{record.isFba,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chen.base.entity.CipherResult">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update cipher_result
+    <set>
+      <if test="yearMonth != null">
+        year_month = #{yearMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        platform = #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="site != null">
+        site = #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null">
+        Sales = #{sales,jdbcType=REAL},
+      </if>
+      <if test="paymentPlatformFree != null">
+        payment_platform_free = #{paymentPlatformFree,jdbcType=REAL},
+      </if>
+      <if test="fbaFee != null">
+        fba_fee = #{fbaFee,jdbcType=REAL},
+      </if>
+      <if test="refund != null">
+        refund = #{refund,jdbcType=REAL},
+      </if>
+      <if test="firstCarrierFreight != null">
+        first_carrier_freight = #{firstCarrierFreight,jdbcType=REAL},
+      </if>
+      <if test="declarationCustomsVat != null">
+        declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      </if>
+      <if test="tariffFee != null">
+        tariff_fee = #{tariffFee,jdbcType=REAL},
+      </if>
+      <if test="outputTaxUp != null">
+        output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      </if>
+      <if test="shippingFeeFba != null">
+        shipping_fee_fba = #{shippingFeeFba,jdbcType=REAL},
+      </if>
+      <if test="shippingFee != null">
+        shipping_fee = #{shippingFee,jdbcType=REAL},
+      </if>
+      <if test="paypalFee != null">
+        paypal_fee = #{paypalFee,jdbcType=REAL},
+      </if>
+      <if test="platformCost != null">
+        platform_cost = #{platformCost,jdbcType=REAL},
+      </if>
+      <if test="warehouseStorageCharges != null">
+        warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
+      </if>
+      <if test="purchaseTaxationFee != null">
+        purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL},
+      </if>
+      <if test="purchaseShippingFee != null">
+        purchase_shipping_fee = #{purchaseShippingFee,jdbcType=REAL},
+      </if>
+      <if test="purchaseCost != null">
+        purchase_cost = #{purchaseCost,jdbcType=REAL},
+      </if>
+      <if test="advertisementCost != null">
+        advertisement_cost = #{advertisementCost,jdbcType=REAL},
+      </if>
+      <if test="clickFarmingFee != null">
+        click_farming_fee = #{clickFarmingFee,jdbcType=REAL},
+      </if>
+      <if test="isFba != null">
+        is_fba = #{isFba,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chen.base.entity.CipherResult">
+    <!--
+    该方法由生成器生成,请勿修改
+    -->
+    update cipher_result
+    set year_month = #{yearMonth,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      site = #{site,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      Sales = #{sales,jdbcType=REAL},
+      payment_platform_free = #{paymentPlatformFree,jdbcType=REAL},
+      fba_fee = #{fbaFee,jdbcType=REAL},
+      refund = #{refund,jdbcType=REAL},
+      first_carrier_freight = #{firstCarrierFreight,jdbcType=REAL},
+      declaration_customs_vat = #{declarationCustomsVat,jdbcType=REAL},
+      tariff_fee = #{tariffFee,jdbcType=REAL},
+      output_tax_up = #{outputTaxUp,jdbcType=REAL},
+      shipping_fee_fba = #{shippingFeeFba,jdbcType=REAL},
+      shipping_fee = #{shippingFee,jdbcType=REAL},
+      paypal_fee = #{paypalFee,jdbcType=REAL},
+      platform_cost = #{platformCost,jdbcType=REAL},
+      warehouse_storage_charges = #{warehouseStorageCharges,jdbcType=REAL},
+      purchase_taxation_fee = #{purchaseTaxationFee,jdbcType=REAL},
+      purchase_shipping_fee = #{purchaseShippingFee,jdbcType=REAL},
+      purchase_cost = #{purchaseCost,jdbcType=REAL},
+      advertisement_cost = #{advertisementCost,jdbcType=REAL},
+      click_farming_fee = #{clickFarmingFee,jdbcType=REAL},
+      is_fba = #{isFba,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

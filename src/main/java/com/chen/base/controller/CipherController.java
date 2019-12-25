@@ -4,6 +4,7 @@ import com.chen.base.entity.CipherResult;
 import com.chen.base.service.CipherService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +22,11 @@ public class CipherController {
 
     @Resource
     CipherService cipherService;
+
+    @GetMapping({"/index"})
+    public String index(Model model) {
+        return "cipher/index";
+    }
 
     @RequestMapping("/cipher")
     public Map<String, CipherResult> cipher() {

@@ -1,173 +1,191 @@
 package com.chen.base.entity;
 
+import java.io.Serializable;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-// 产品毛利  销售额 - 采购价 - 头程
 /**
- * 计算结果
+ *
+ *
+ * @author Mr.D
+ * @date 2019/12/25
  */
 @Data
-@RequiredArgsConstructor
-public class CipherResult {
-
-    @NonNull
-    private String sku;
+public class CipherResult implements Serializable {
     /**
-     * 站点
+     *
      */
-    private String site;
+    private Integer id;
+
+    /**
+     *
+     */
+    private String yearMonth;
+
     /**
      * 平台
      */
     private String platform;
 
     /**
-     * 产品描述
+     * 品类名称
      */
-    private String productDesc;
+    private String categoryName;
 
     /**
-     * 品类
+     * 易仓SKU
      */
-    private String category;
-    /**
-     * 销量
-     */
-    private int quantity;
-    /**
-     * 库存
-     */
-    private String stock;
+    private String sku;
 
     /**
-     * 销售额 sku 单价总和
+     * 站点
      */
-    private float sales;
+    private String site;
 
     /**
-     * 采购价格
+     * 产品名称
      */
-    private float buyingPrice;
-    /**
-     * 头程
-     */
-    private float headway;
+    private String productName;
 
     /**
-     * 关税
+     * 数量
      */
-    private float tariff;
-    /**
-     * 转运费  留空
-     */
-    private float transshipment;
+    private Integer quantity;
 
     /**
-     * 销项税
+     * 销售额
      */
-    private float outputTax;
-    /**
-     * 清关VAT
-     */
-    private float clearVAT;
+    private Float sales;
 
     /**
-     * 仓租
+     *  采购运费+采购成本
      */
-    private float warehouseRental;
+    private Float paymentPlatformFree;
 
     /**
-     * 广告费用
+     * fba费用
      */
-    private float advCost;
+    private Float fbaFee;
 
     /**
-     * 退款
+     * 退款金额
      */
-    private float refund;
+    private Float refund;
+
     /**
-     * FBA派送费
+     * 头程运费
      */
-    private float shippingFeeFba;
+    private Float firstCarrierFreight;
+
     /**
-     * 目的地派送费
+     * 清关VAT单价
      */
-    private float shippingFee;
+    private Float declarationCustomsVat;
+
     /**
-     * paypal手续费
+     * 关税费
      */
-    private float paypalFee;
+    private Float tariffFee;
+
+    /**
+     * 销项VAT单价
+     */
+    private Float outputTaxUp;
+
+    /**
+     * FBA配送费
+     */
+    private Float shippingFeeFba;
+
+    /**
+     * 配送费
+     */
+    private Float shippingFee;
+
+    /**
+     * palpay手续费
+     */
+    private Float paypalFee;
+
     /**
      * 平台手续费
      */
-    private float platformCost;
+    private Float platformCost;
+
     /**
-     * 平台手续费
+     * 仓租，自己算的
      */
-    private float clickFarming;
+    private Float warehouseStorageCharges;
 
+    /**
+     * 采购税费
+     */
+    private Float purchaseTaxationFee;
 
-    public void addToBuyingPrice(float buyingPrice) {
-        this.buyingPrice += buyingPrice;
-    }
+    /**
+     * 采购运费
+     */
+    private Float purchaseShippingFee;
 
-    public void addToClearVAT(float clearVAT) {
-        this.clearVAT += clearVAT;
-    }
+    /**
+     * 采购成本
+     */
+    private Float purchaseCost;
 
-    public void addToHeadway(float headway){
-        this.headway += headway;
-    }
+    /**
+     * 广告费
+     */
+    private Float advertisementCost;
 
-    public void addToTariff(float tariff){
-        this.tariff += tariff;
-    }
-    public void addToOutputTax(double outputTax){
-        this.outputTax += outputTax;
-    }
-    public void addToWarehouseRental(float warehouseRental){
-        this.warehouseRental += warehouseRental;
-    }
+    /**
+     * 刷单费
+     */
+    private Float clickFarmingFee;
 
-    public void addToAdvCost(double advCost) {
-        this.advCost += advCost;
-    }
+    /**
+     *
+     */
+    private Integer isFba;
 
-    public void addToQuantity(Integer quantity){
-        this.quantity += quantity;
-    }
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-    public void addToRefund(double refund) {
-        this.refund += refund;
-    }
-    public void addToShippingFee(double shippingFee) {
-        this.shippingFee += shippingFee;
-    }
-
-    public void addToShippingFeeFba(double shippingFeeFba) {
+    public void addToShippingFeeFba(float shippingFeeFba) {
         this.shippingFeeFba += shippingFeeFba;
     }
 
-    public void addToPaypalFee(double paypalFee) {
+    public void addToPaypalFee(float paypalFee) {
         this.paypalFee += paypalFee;
     }
-    public void addToPlatformCost(double platformCost) {
+    public void addToPlatformCost(float platformCost) {
         this.platformCost += platformCost;
     }
-    public void addToSales(double sales) {
+    public void addToSales(float sales) {
         this.sales += sales;
     }
 
-
-    public float grossProfit(){
-        return sales - headway - buyingPrice;
+    public void addToPurchaseCost(float platformCost) {
+        this.platformCost += platformCost;
     }
 
-    public float operatingMargin(){
-        return grossProfit() - refund - clickFarming - advCost - paypalFee - platformCost - warehouseRental - shippingFee
-                - shippingFeeFba - clearVAT - outputTax - tariff;
+    public void addToRefund(float refund) {
+        this.refund += refund;
     }
 
+    public void addToShippingFee(float shippingFee) {
+        this.shippingFee += shippingFee;
+    }
+
+    public void addToPurchaseShippingFee(float purchaseShippingFee) {
+        this.purchaseShippingFee += purchaseShippingFee;
+    }
+
+    public void addToPurchaseTaxationFee(float purchaseTaxationFee) {
+        this.purchaseTaxationFee += purchaseTaxationFee;
+    }
+
+    public void addToQuantity(Integer quantity) {
+        this.quantity += quantity;
+    }
 }

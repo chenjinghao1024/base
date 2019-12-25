@@ -60,10 +60,27 @@
                 <div class="modal-body">
                     <div>
                         <form id="warehouse_form" οnkeypress="return event.keyCode != 13;">
-                            <input id="id" hidden />
+                            <input name="id" hidden/>
                             <div class="form-group" >
                                 <label  class="control-label">虚拟仓名称</label>
                                 <input name="warehouseName" type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">国家</label>
+                                <select name="countryId" type="text" class="form-control">
+                                    <option th:each="country : ${countries}" th:text="${country.code}" th:value="${country.id}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">币种</label>
+                                <select name="currency" type="text" class="form-control">
+                                    <option th:each="currencyRate : ${currencyRates}" th:text="${currencyRate.currencyCode +'|'+ currencyRate.currencyName}" th:value="${currencyRate.currencyCode}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">仓库仓储费</label>
+                                <input type="number" class="form-control" name="warehouseStorageCharges">
                             </div>
                             <div class="form-group" >
                                 <label  class="control-label">仓库列表</label>
@@ -71,7 +88,7 @@
                                     <select id="warehouse_list" type="text" class="form-control">
                                     </select>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" onclick="addWarehouse()" type="button">搜索</button>
+                                        <button class="btn btn-default" onclick="addWarehouse()" type="button">添加仓库</button>
                                     </span>
                                 </div>
                             </div>
@@ -132,7 +149,6 @@
         sortOrder: "asc",                    // 排序方式
         queryParamsType: "",
         queryParams: function (params) {
-            console.log(params)
             var param = {
                 pageNumber: params.pageNumber,
                 pageSize: params.pageSize,
@@ -179,7 +195,6 @@
             }
         }],
         onLoadSuccess: function (data) {
-            console.log(data);
             $("[data-toggle='tooltip']").tooltip();
         }
     });
@@ -191,8 +206,9 @@
             data: {},
             dataType: 'json',
             success: function (result, status) {
+                $("#warehouse_list").html("");
                 for (let warehouse of result) {
-                    $("#warehouse_list").append('<option value="'+warehouse.id+'">'+warehouse.warehouseCode+'|'+warehouse.warehouseDesc+'</option>');
+                    $("#warehouse_list").append('<option value="'+warehouse.warehouseId+'">'+warehouse.warehouseCode+'|'+warehouse.warehouseDesc+'</option>');
                 }
             },
             error: function () {
@@ -219,7 +235,6 @@
         sortOrder: "asc",                    // 排序方式
         queryParamsType: "",
         queryParams: function (params) {
-            console.log(params)
             let param = {
                 pageNumber: params.pageNumber,
                 pageSize: params.pageSize,
@@ -250,7 +265,6 @@
             title: '仓库描述'
         },],
         onLoadSuccess: function (data) {
-            console.log(data);
             $("[data-toggle='tooltip']").tooltip();
         }
     });
@@ -258,6 +272,7 @@
     // 操作按钮
     function btnGroup() {
         let html =
+            '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>'+
             '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="详情" data-toggle="tooltip"><i class="mdi mdi-file-document"></i></a>';
         return html;
     }
@@ -265,25 +280,60 @@
     function addWarehouse() {
         let warehouseId = $("#warehouse_list option:selected").val();
         let warehouseName = $("#warehouse_list option:selected").text();
-        console.log($('#input_tag').tagExist(warehouseId + '|' + warehouseName));
         if (!$('#input_tag').tagExist(warehouseId + '|' + warehouseName)) {
             $("#input_tag").addTag(warehouseId + '|' + warehouseName);
         }
     }
+
+    $('#warehouse_upload_modal').on('hide.bs.modal', function (event) {
+        $('#warehouse_form')[0].reset();
+        $("#input_tag").importTags('');
+    });
 
     function submit() {
         let params = $("#warehouse_form").serializeObject();
         let warehouses=$('#input_tag').val().split(',');
         let warehouseIds = [];
         for(let warehouse of warehouses){
-            let warehouseId=warehouse.substr(0, "14|AJPGC|安吉拼柜仓".indexOf('|'));
+            let warehouseId=warehouse.substr(0, warehouse.indexOf('|'));
             warehouseIds.push(warehouseId);
         }
-        params.warehouses = warehouseIds;
-        console.log(params);
+        params.warehouseIds = warehouseIds.toString();
 
+        $.ajax({
+            type: "post",
+            url: "/warehouse/createOrUpdate",
+            data: params,
+            dataType: 'json',
+            success: function (result, status) {
+                $('#warehouse_upload_modal').modal('hide');
+                // 这里的状态显示有自定义样式区分，做单行的更新
+                $('#warehouse_info').bootstrapTable('refresh');
+            },
+            error: function () {
+                alert('修改失败，请稍后再试');
+            }
+        });
     }
+    function edit(row) {
+        $('#warehouse_upload_modal').modal('show');
+        $("#warehouse_form").loadDatatoFrom(row);
 
+        $.ajax({
+            type: "post",
+            url: "/warehouse/getById",
+            data: row,
+            dataType: 'json',
+            success: function (result) {
+                let warehouseRelations=result.data.warehouseRelations
+                for (let warehouseRelation of warehouseRelations) {
+                    $("#input_tag").addTag(warehouseRelation.warehouseId + '|' + warehouseRelation.warehouseCode+'|'+warehouseRelation.warehouseDesc);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
 
 </script>
 </body>

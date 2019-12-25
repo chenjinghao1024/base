@@ -45,6 +45,17 @@ public class ImportFileService {
     OrderInfoMapper orderInfoMapper;
     @Resource
     OrderDetailMapper orderDetailMapper;
+    @Resource
+    CipherService cipherService;
+
+    @Resource
+    TariffRateMapper tariffRateMapper;
+
+    @Resource
+    DeclarationCustomsVatRateMapper declarationCustomsVatRateMapper;
+
+
+    TariffRateExample tariffRateExample = new TariffRateExample();
 
     OrderInfoExample orderInfoExample = new OrderInfoExample();
     OrderDetailExample orderDetailExample = new OrderDetailExample();
@@ -130,47 +141,42 @@ public class ImportFileService {
      * 装箱单
      * @return
      */
-    public void packImport(MultipartFile mFile){
+    public void packImport(MultipartFile mFile) throws Exception {
 
         Date updateDate = new Date();
         //将file 转换成MultipartFile
-        try{
-            Iterator<Sheet> sheetIterator = getSheetIterator(mFile);
-            while (sheetIterator.hasNext()){
-                Sheet sheet = sheetIterator.next();
-                //遍历获取每行
-                int firstRowNum = sheet.getFirstRowNum();
-                int lastRowNum = sheet.getLastRowNum();
-                for (int i =firstRowNum+1;i <= lastRowNum;i++) {
-                    Row row = sheet.getRow(i);
-                    String packingId = getValue(row, 4);
-                    Integer packingInfoId = getPackingInfo(packingId);
+        Iterator<Sheet> sheetIterator = getSheetIterator(mFile);
+        while (sheetIterator.hasNext()){
+            Sheet sheet = sheetIterator.next();
+            //遍历获取每行
+            int firstRowNum = sheet.getFirstRowNum();
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i =firstRowNum+1;i <= lastRowNum;i++) {
+                Row row = sheet.getRow(i);
+                String packingId = getValue(row, 4);
+                Integer packingInfoId = getPackingInfo(packingId);
 
-                    String warehouseName = getValue(row, 1);
-                    Integer warehouseId = getWarehouseIdByName(warehouseName);
-                    if (packingInfoId == -1) {
-                        PackingInfo packingInfo = new PackingInfo();
-                        packingInfo.setPackingId(getValue(row, 4));
+                String warehouseName = getValue(row, 1);
+                Integer warehouseId = getWarehouseIdByName(warehouseName);
+                if (packingInfoId == -1) {
+                    PackingInfo packingInfo = new PackingInfo();
+                    packingInfo.setPackingId(getValue(row, 4));
 
-                        packingInfo.setTargetWarehouseId(warehouseId);
-                        packingInfo.setPcraddTime(updateDate);
-                        packingInfoMapper.insertSelectiveReturnId(packingInfo);
-                        packingInfoId = packingInfo.getId();
-                    }
-
-                    PackingDetail packingDetail = new PackingDetail();
-                    packingDetail.setPackingInfoId(packingInfoId);
-                    packingDetail.setEccangSku(getStringValue(row, 9));
-                    Double skuNum = Double.valueOf(getValue(row, 13));
-                    packingDetail.setSkuNum(skuNum.intValue());
-                    packingDetail.setCreateTime(updateDate);
-                    packingDetail.setWarehouseId(String.valueOf(warehouseId));
-                    packingDetailMapper.insertSelective(packingDetail);
+                    packingInfo.setTargetWarehouseId(warehouseId);
+                    packingInfo.setPcraddTime(updateDate);
+                    packingInfoMapper.insertSelectiveReturnId(packingInfo);
+                    packingInfoId = packingInfo.getId();
                 }
+
+                PackingDetail packingDetail = new PackingDetail();
+                packingDetail.setPackingInfoId(packingInfoId);
+                packingDetail.setEccangSku(getStringValue(row, 9));
+                Double skuNum = Double.valueOf(getValue(row, 13));
+                packingDetail.setSkuNum(skuNum.intValue());
+                packingDetail.setCreateTime(updateDate);
+                packingDetail.setWarehouseId(String.valueOf(warehouseId));
+                packingDetailMapper.insertSelective(packingDetail);
             }
-        } catch (Exception  e){
-            e.printStackTrace();
-            throw new RuntimeException();
         }
     }
 
@@ -286,33 +292,39 @@ public class ImportFileService {
         }
     }
 
-    public void declaredValueImport(MultipartFile file) {
-        try{
-            Iterator<Sheet> sheetIterator = getSheetIterator(file);
-            while (sheetIterator.hasNext()){
-                Sheet sheet = sheetIterator.next();
-                //遍历获取每行
-                int firstRowNum = sheet.getFirstRowNum();
-                int lastRowNum = sheet.getLastRowNum();
-                for (int i =firstRowNum+1;i <= lastRowNum;i++) {
-                    Row row = sheet.getRow(i);
-                    String packingId = getValue(row, 0);
-                    String sku = getStringValue(row, 1);
-                    String cost = getValue(row, 2);
-                    String currency = getValue(row, 3);
-                    if (StringUtil.isEmpty(sku)) {
-                        continue;
-                    }
-                    if ("#N/A".equals(cost)){
-                        cost = "0";
-                    }
-                    packingInfoExample.clear();
-                    PackingInfoExample.Criteria infoExampleCriteria = packingInfoExample.createCriteria();
-                    infoExampleCriteria.andPackingIdEqualTo(packingId);
-                    List<PackingInfo> packingInfos = packingInfoMapper.selectByExample(packingInfoExample);
-                    if (packingInfos.size() > 0) {
-                        PackingInfo packingInfo = packingInfos.get(0);
-                        Integer packingInfoId = packingInfo.getId();
+    public void declaredValueImport(MultipartFile file) throws Exception {
+        Iterator<Sheet> sheetIterator = getSheetIterator(file);
+        while (sheetIterator.hasNext()){
+            Sheet sheet = sheetIterator.next();
+            //遍历获取每行
+            int firstRowNum = sheet.getFirstRowNum();
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i =firstRowNum+1;i <= lastRowNum;i++) {
+                Row row = sheet.getRow(i);
+                String packingId = getValue(row, 0);
+                String sku = getStringValue(row, 1);
+                String cost = getValue(row, 2);
+                String currency = getValue(row, 3);
+                if (StringUtil.isEmpty(sku)) {
+                    continue;
+                }
+                if ("#N/A".equals(cost)){
+                    cost = "0";
+                }
+                packingInfoExample.clear();
+                PackingInfoExample.Criteria infoExampleCriteria = packingInfoExample.createCriteria();
+                infoExampleCriteria.andPackingIdEqualTo(packingId);
+                List<PackingInfo> packingInfos = packingInfoMapper.selectByExample(packingInfoExample);
+                if (packingInfos.size() > 0) {
+                    PackingInfo packingInfo = packingInfos.get(0);
+                    Integer packingInfoId = packingInfo.getId();
+                    Integer warehouseId = packingInfo.getTargetWarehouseId();
+                    warehouseRelationExample.clear();
+                    warehouseRelationExample.createCriteria().andWarehouseIdEqualTo(warehouseId);
+                    List<WarehouseRelation> warehouses = warehouseRelationMapper.selectByExample(warehouseRelationExample);
+                    if (warehouses.size() > 0) {
+                        Integer country = warehouses.get(0).getCountryId();
+
                         packingDetailExample.clear();
                         PackingDetailExample.Criteria criteria = packingDetailExample.createCriteria();
                         criteria.andPackingInfoIdEqualTo(packingInfoId);
@@ -322,20 +334,44 @@ public class ImportFileService {
                             PackingDetail packingDetail = packingDetails.get(0);
                             packingDetail.setOpDeclaredCurrency(currency);
                             packingDetail.setOpDeclaredValue(Float.valueOf(cost));
+
+                            tariffRateExample.createCriteria().andCountryIdEqualTo(country).andEccangSkuEqualTo(sku);
+
+                            List<TariffRate> tariffRates = tariffRateMapper.selectByExample(tariffRateExample);
+                            if (tariffRates.size() > 0) {
+                                TariffRate tariffRate = tariffRates.get(0);
+                                packingDetail.setTariff(packingDetail.getOpDeclaredValue() * tariffRate.getTariffRate());
+                            }else {
+                                packingDetail.setTariff(0.0f);
+                            }
+
+                            DeclarationCustomsVatRate declarationCustomsVatRate = declarationCustomsVatRateMapper.selectByPrimaryKey(country);
+                            if (declarationCustomsVatRate != null) {
+                                Float rate = declarationCustomsVatRate.getDeclarationCustomsVatRate();
+                                float vat = packingDetail.getOpDeclaredValue() * rate;
+                                packingDetail.setDeclarationCustomsVat(vat);
+                            }else {
+                                packingDetail.setDeclarationCustomsVat(0.0f);
+                            }
+
                             packingDetailMapper.updateByPrimaryKeySelective(packingDetail);
+                        }else {
+                            throw new Exception("["+sku+"]未找到对应SKU!");
                         }
+                    }else {
+                        throw new Exception("["+warehouseId+"]未找到对应仓库!");
                     }
+                }else {
+                    throw new Exception("["+packingId+"]未找到对应装箱单!");
                 }
             }
-        } catch (Exception  e){
-            e.printStackTrace();
-            throw new RuntimeException();
         }
+
+
     }
 
     public void cdRefundImport(MultipartFile file) {
         try{
-
             Iterator<Sheet> sheetIterator = getSheetIterator(file);
             while (sheetIterator.hasNext()){
                 Sheet sheet = sheetIterator.next();
@@ -381,5 +417,8 @@ public class ImportFileService {
 
     public void update(PackingInfo packingInfo) {
         packingInfoMapper.updateByPrimaryKeySelective(packingInfo);
+        cipherService.firstWayCipher(packingInfo.getId());
     }
+
+
 }

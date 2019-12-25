@@ -12,7 +12,7 @@ public class ResultVO extends HashMap<String, Object> {
 
     /////////////////////// 默认的键 ///////////////////////
     private static final String KEY_OPER = "oper";
-    private static final String KEY_SUCC = "succ";
+    private static final String KEY_SUCC = "success";
     private static final String KEY_CODE = "code";
     private static final String KEY_MSG = "msg";
     private static final String KEY_DATA = "data";

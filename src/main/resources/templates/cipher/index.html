@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>表单向导 - 光年(Light Year Admin)后台管理系统模板</title>
+  <link rel="icon" href="favicon.ico" type="image/ico">
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+  <link th:href="@{/css/style.min.css}" rel="stylesheet">
+  <link th:href="@{/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}" rel="stylesheet">
+  <link th:href="@{/js/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+  <link th:href="@{/js/jquery-tags-input/jquery.tagsinput.min.css}" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header"><h4>表单向导</h4></div>
+        <div class="card-body">
+
+          <form action="javascript:void(0)" class="guide-box" data-navigateable="true">
+            <ul class="nav-step step-dots">
+              <li class="nav-step-item active">
+                <span>选择订单范围</span>
+                <a class="active" data-toggle="tab" href="#step-1"></a>
+              </li>
+
+              <li class="nav-step-item">
+                <span>选择广告</span>
+                <a data-toggle="tab" href="#step-2"></a>
+              </li>
+
+              <li class="nav-step-item">
+                <span>选择刷单</span>
+                <a data-toggle="tab" href="#step-3"></a>
+              </li>
+
+              <li class="nav-step-item">
+                <span>上传CD退单信息</span>
+                <a data-toggle="tab" href="#step-4"></a>
+              </li>
+            </ul>
+            <!--对应内容-->
+            <div class="nav-step-content">
+              <div class="nav-step-pane hidden active" id="step-1">
+                <label>订单时间范围</label>
+                <div class="input-daterange input-group">
+                  <input class="form-control js-datepicker" data-date-format="yyyy-mm-dd" type="text" id="start_date" name="example-daterange1" placeholder="从">
+                  <span class="input-group-addon"><i class="mdi mdi-chevron-right"></i></span>
+                  <input class="form-control js-datepicker" data-date-format="yyyy-mm-dd" type="text" id="end_date" name="example-daterange2" placeholder="至">
+                </div>
+              </div>
+
+              <div class="nav-step-pane hidden" id="step-2">
+                <input style="height: 100px" name="advs" readonly  id="adv_tag" type="text" class="form-control">
+                <table id="adv_info"></table>
+              </div>
+
+              <div class="nav-step-pane hidden" id="step-3">
+                <input style="height: 100px" name="cfs" readonly  id="cf_tag" type="text" class="form-control">
+                <table id="cf_info"></table>
+              </div>
+
+              <div class="nav-step-pane hidden" id="step-4">
+                <div class="row">
+                  <div class="col-md-6 col-md-push-3">
+                    <button class="btn btn-info btn-block" type="button"
+                            data-toggle="modal" data-target="#cd_refund_modal">上传CD刷单文件</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--End 对应内容-->
+            <hr>
+            <div class="nav-step-button">
+              <button class="btn btn-secondary disabled" data-wizard="prev" type="button">上一步</button>
+              <button class="btn btn-secondary" data-wizard="next" type="button">下一步</button>
+              <button class="btn btn-primary hidden" data-wizard="finish" type="button" onclick="submit()">完成</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="modal fade" id="cd_refund_modal" tabindex="-1" role="dialog" aria-labelledby="cd_refund_modalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="cd_refund_modalLabel">CD退款</h4>
+      </div>
+      <div class="modal-body">
+        <form id="cdR_upload_form">
+          <input type="hidden" name="currencyCode" id="primaryKey">
+          <div class="form-group">
+            <label  class="control-label">CD退款</label>
+            <input type="file" name="file" multiple="multiple">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" onclick="cf_upload()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<!--向导插件-->
+<script type="text/javascript" th:src="@{/js/jquery.bootstrap.wizard.min.js}"></script>
+<!--日期选择插件-->
+<script th:src="@{/js/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/bootstrap-table/bootstrap-table.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table/bootstrap-table-zh-CN.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-tags-input/jquery.tagsinput.min.js}"></script>
+
+
+<script type="text/javascript">
+
+  $(function () {
+    $("#adv_tag").tagsInput({'width':'100%','height': '100px'});
+    $("#cf_tag").tagsInput({'width':'100%','height': '100px'});
+
+    $('.guide-box').bootstrapWizard({
+      'tabClass': 'nav-step',
+      'nextSelector': '[data-wizard="next"]',
+      'previousSelector': '[data-wizard="prev"]',
+      'finishSelector': '[data-wizard="finish"]',
+      'onTabClick': function (e, t, i) {
+        if (!$('.guide-box').is('[data-navigateable="true"]')) return !1
+      },
+      'onTabShow': function (e, t, i) {
+        t.children(":gt(" + i + ").complete").removeClass("complete");
+        t.children(":lt(" + i + "):not(.complete)").addClass("complete");
+      },
+      'onFinish': function (e, t, i) {
+        // 点击完成后处理提交
+        console.log("finish")
+      }
+    });
+    $('#start_date').datepicker({
+      todayBtn: "linked",
+      autoclose: true,
+      todayHighlight: true,
+      endDate: new Date()
+    }).on('changeDate', function (e) {
+      let startTime = e.date;
+      $('#end_date').datepicker('setStartDate', startTime);
+    });
+    //结束时间：
+    $('#end_date').datepicker({
+      todayBtn: "linked",
+      autoclose: true,
+      todayHighlight: true,
+      endDate: new Date()
+    }).on('changeDate', function (e) {
+      let endTime = e.date;
+      $('#start_date').datepicker('setEndDate', endTime);
+    });
+
+    $('#adv_info').bootstrapTable({
+      classes: 'table table-bordered table-hover table-striped',
+      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+      url: '/adv/list',
+      dataField: 'list',
+      method: 'post',
+      dataType: 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+      uniqueId: 'id',
+      idField: 'id',             // 每行的唯一标识字段
+      toolbar: '#toolbar',       // 工具按钮容器
+      //clickToSelect: true,     // 是否启用点击选中行
+      showColumns: true,         // 是否显示所有的列
+      showRefresh: true,         // 是否显示刷新按钮
+      //showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+      pagination: true,                    // 是否显示分页
+      sortOrder: "asc",                    // 排序方式
+      queryParamsType: "",
+      queryParams: function (params) {
+        console.log(params)
+        var param = {
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+          searchMap:{
+            endDate:$("#end_date").val(),
+          }
+        };
+        return param;
+      },                                   // 传递参数
+      sidePagination: "server",            // 分页方式：client客户端分页，server服务端分页
+      pageNumber: 1,                       // 初始化加载第一页，默认第一页
+      pageSize: 10,                        // 每页的记录行数
+      // pageList: [],         // 可供选择的每页的行数
+      //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+      //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+      //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+      columns: [ {
+        title: '序号',
+        align: 'center',
+        formatter: function (value, row, index) {
+          return  index + 1;
+        }
+      },{
+        field: 'advertisementFileName',
+        title: '文件名称'
+      },{
+        field: 'pcraddTime',
+        title: '上传时间'
+      }, {
+        field: 'operate',
+        title: '操作',
+        formatter: btnGroup,  // 自定义方法
+        events: {
+          'click .mdi-check': function (event, value, row, index) {
+            selectAdv(row);
+          }
+        }
+      }],
+      onLoadSuccess: function (data) {
+        $("[data-toggle='tooltip']").tooltip();
+      }
+    });
+
+    $('#cf_info').bootstrapTable({
+      classes: 'table table-bordered table-hover table-striped',
+      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+      url: '/cf/list',
+      dataField: 'list',
+      method: 'post',
+      dataType: 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+      uniqueId: 'id',
+      idField: 'id',             // 每行的唯一标识字段
+      toolbar: '#toolbar',       // 工具按钮容器
+      //clickToSelect: true,     // 是否启用点击选中行
+      showColumns: true,         // 是否显示所有的列
+      showRefresh: true,         // 是否显示刷新按钮
+      //showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+      pagination: true,                    // 是否显示分页
+      sortOrder: "asc",                    // 排序方式
+      queryParamsType: "",
+      queryParams: function (params) {
+        console.log(params)
+        var param = {
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+          searchMap:{
+            endDate:$("#end_date").val(),
+          }
+        };
+        return param;
+      },                                   // 传递参数
+      sidePagination: "server",            // 分页方式：client客户端分页，server服务端分页
+      pageNumber: 1,                       // 初始化加载第一页，默认第一页
+      pageSize: 10,                        // 每页的记录行数
+      // pageList: [],         // 可供选择的每页的行数
+      //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+      //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+      //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+      columns: [ {
+        title: '序号',
+        align: 'center',
+        formatter: function (value, row, index) {
+          return  index + 1;
+        }
+      },{
+        field: 'clickFarmingFileName',
+        title: '文件名称'
+      },{
+        field: 'pcraddTime',
+        title: '上传时间'
+      }, {
+        field: 'operate',
+        title: '操作',
+        formatter: btnGroup,  // 自定义方法
+        events: {
+          'click .mdi-check': function (event, value, row, index) {
+            selectCF(row);
+          }
+        }
+      }],
+      onLoadSuccess: function (data) {
+        $("[data-toggle='tooltip']").tooltip();
+      }
+    });
+  });
+
+  // 操作按钮
+  function btnGroup() {
+    let html =
+            '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="选择" data-toggle="tooltip"><i class="mdi mdi-check"></i></a>';
+    return html;
+  }
+
+  function selectAdv(row) {
+    let tag=row.id + '|' + row.advertisementFileName;
+    if (!$('#adv_tag').tagExist(tag)) {
+      $("#adv_tag").addTag(tag);
+    }
+  }
+
+  function selectCF(row) {
+    let tag=row.id + '|' + row.clickFarmingFileName;
+    if (!$('#cf_tag').tagExist(tag)) {
+      $("#cf_tag").addTag(tag);
+    }
+  }
+
+  function cf_upload() {
+    let formData = new FormData($('#cdR_upload_form')[0]);
+    $.ajax({
+      type: 'post',
+      url: "/import/uploadCDRefund",
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+    }).success(function (data) {
+      $('#cd_refund_modal').modal('hide');
+      $('#cdR_upload_form')[0].reset()
+    }).error(function () {
+      alert("上传失败");
+    });
+  }
+
+</script>
+</body>
+</html>

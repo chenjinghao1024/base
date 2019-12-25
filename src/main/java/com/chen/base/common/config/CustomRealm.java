@@ -24,17 +24,6 @@ public class CustomRealm extends AuthorizingRealm {
     @Resource
     private LoginService loginService;
 
-    //告诉shiro如何根据获取到的用户信息中的密码和盐值来校验密码
-    {
-        //设置用于匹配密码的CredentialsMatcher
-        HashedCredentialsMatcher hashMatcher = new HashedCredentialsMatcher();
-        hashMatcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
-        hashMatcher.setStoredCredentialsHexEncoded(true);
-        hashMatcher.setHashIterations(1024);
-        this.setCredentialsMatcher(hashMatcher);
-    }
-
-
     /**
      * 定义如何获取用户的角色和权限的逻辑，给shiro做权限判断
      * @param principals
@@ -42,6 +31,8 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+
+
         //null usernames are invalid
         if (principals == null) {
             throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
@@ -86,8 +77,11 @@ public class CustomRealm extends AuthorizingRealm {
         Set<String> perms = loginService.getPermissionByUserId(userDB.getId());
         userDB.getRoles().addAll(roles);
         userDB.getPermissions().addAll(perms);
+        ByteSource credentialsSalt = ByteSource.Util.bytes(username);
+//        ByteSource credentialsSalt = userDB.getSalt();
+        SimpleAuthenticationInfo info;
+        info = new SimpleAuthenticationInfo(userDB, userDB.getPassword(), credentialsSalt, this.getName());
 
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDB, userDB.getPassword(), getName());
         if (userDB.getSalt() != null) {
             info.setCredentialsSalt(ByteSource.Util.bytes(userDB.getSalt()));
         }

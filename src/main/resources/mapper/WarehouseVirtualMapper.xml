@@ -102,7 +102,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    select 
+    select
     <include refid="Base_Column_List" />
     from warehouse_virtual
     where id = #{id,jdbcType=INTEGER}
@@ -127,9 +127,9 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into warehouse_virtual (id, warehouse_name, country_id, 
+    insert into warehouse_virtual (id, warehouse_name, country_id,
       warehouse_storage_charges, currency)
-    values (#{id,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR}, #{countryId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR}, #{countryId,jdbcType=INTEGER},
       #{warehouseStorageCharges,jdbcType=REAL}, #{currency,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.chen.base.entity.WarehouseVirtual">
@@ -172,7 +172,45 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.chen.base.entity.WarehouseVirtualExample" resultType="java.lang.Long">
+    <insert id="insertSelectiveReturnId" parameterType="com.chen.base.entity.WarehouseVirtual"
+            useGeneratedKeys="true" keyProperty="id">
+      insert into warehouse_virtual
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          id,
+        </if>
+        <if test="warehouseName != null">
+          warehouse_name,
+        </if>
+        <if test="countryId != null">
+          country_id,
+        </if>
+        <if test="warehouseStorageCharges != null">
+          warehouse_storage_charges,
+        </if>
+        <if test="currency != null">
+          currency,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+          #{id,jdbcType=INTEGER},
+        </if>
+        <if test="warehouseName != null">
+          #{warehouseName,jdbcType=VARCHAR},
+        </if>
+        <if test="countryId != null">
+          #{countryId,jdbcType=INTEGER},
+        </if>
+        <if test="warehouseStorageCharges != null">
+          #{warehouseStorageCharges,jdbcType=REAL},
+        </if>
+        <if test="currency != null">
+          #{currency,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.chen.base.entity.WarehouseVirtualExample" resultType="java.lang.Long">
     <!--
     该方法由生成器生成,请勿修改
     -->

@@ -64,8 +64,8 @@
                 <div class="modal-body">
                     <form id="pack_upload_form">
                         <div class="form-group">
-                            <label class="col-xs-12" >装箱单上传</label>
-                            <div class="col-xs-12">
+                            <label >装箱单上传</label>
+                            <div class="form-group">
                                 <input type="file" name="file" multiple="multiple">
                             </div>
                         </div>
@@ -89,8 +89,8 @@
                 <div class="modal-body">
                     <form id="declared_value_form">
                         <div class="form-group">
-                            <label class="col-xs-12" >申报价值上传</label>
-                            <div class="col-xs-12">
+                            <label>申报价值上传</label>
+                            <div class="form-group">
                                 <input type="file" name="file" multiple="multiple">
                             </div>
                         </div>
@@ -303,6 +303,9 @@
             processData: false,
             contentType: false,
         }).success(function (data) {
+            if (!data.success){
+                alert(data.msg);
+            }
             $('#packing_upload_modal').modal('hide');
             // 这里的状态显示有自定义样式区分，做单行的更新
             $('#packing_info').bootstrapTable('refresh');
@@ -351,6 +354,10 @@
             processData: false,
             contentType: false,
         }).success(function (data) {
+            console.log(data)
+            if (!data.success){
+                alert(data.msg);
+            }
             $('#packing_upload_modal').modal('hide');
             // 这里的状态显示有自定义样式区分，做单行的更新
             $('#packing_info').bootstrapTable('refresh');

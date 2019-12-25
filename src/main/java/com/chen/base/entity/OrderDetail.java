@@ -8,8 +8,9 @@ import lombok.RequiredArgsConstructor;
 
 /**
  *
+ *
  * @author Mr.D
- * @date 2019/12/14
+ * @date 2019/12/25
  */
 @Data
 @NoArgsConstructor
@@ -97,6 +98,11 @@ public class OrderDetail implements Serializable {
     private Float declarationCustomsVat;
 
     /**
+     * 关税费用
+     */
+    private Float tariffFee;
+
+    /**
      * 销项VAT单价
      */
     private Float outputTaxUp;
@@ -140,6 +146,11 @@ public class OrderDetail implements Serializable {
      * 仓库ID
      */
     private Integer warehouseId;
+
+    /**
+     *
+     */
+    private Integer isFba;
 
     /**
      * serialVersionUID

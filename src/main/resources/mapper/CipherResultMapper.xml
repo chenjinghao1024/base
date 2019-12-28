@@ -6,7 +6,7 @@
     该方法由生成器生成,请勿修改
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="year_month" jdbcType="VARCHAR" property="yearMonth" />
+    <result column="year_and_month" jdbcType="VARCHAR" property="yearMonth" />
     <result column="platform" jdbcType="VARCHAR" property="platform" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
@@ -101,7 +101,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    id, year_month, platform, category_name, sku, site, product_name, quantity, Sales,
+    id, year_and_month, platform, category_name, sku, site, product_name, quantity, Sales,
     payment_platform_free, fba_fee, refund, first_carrier_freight, declaration_customs_vat,
     tariff_fee, output_tax_up, shipping_fee_fba, shipping_fee, paypal_fee, platform_cost,
     warehouse_storage_charges, purchase_taxation_fee, purchase_shipping_fee, purchase_cost,
@@ -153,7 +153,7 @@
     <!--
     该方法由生成器生成,请勿修改
     -->
-    insert into cipher_result (id, year_month, platform,
+    insert into cipher_result (id, year_and_month, platform,
       category_name, sku, site,
       product_name, quantity, Sales,
       payment_platform_free, fba_fee, refund,
@@ -184,7 +184,7 @@
         id,
       </if>
       <if test="yearMonth != null">
-        year_month,
+        year_and_month,
       </if>
       <if test="platform != null">
         platform,
@@ -357,7 +357,7 @@
           id,
         </if>
         <if test="yearMonth != null">
-          year_month,
+          year_and_month,
         </if>
         <if test="platform != null">
           platform,
@@ -538,7 +538,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.yearMonth != null">
-        year_month = #{record.yearMonth,jdbcType=VARCHAR},
+        year_and_month = #{record.yearMonth,jdbcType=VARCHAR},
       </if>
       <if test="record.platform != null">
         platform = #{record.platform,jdbcType=VARCHAR},
@@ -626,7 +626,7 @@
     -->
     update cipher_result
     set id = #{record.id,jdbcType=INTEGER},
-      year_month = #{record.yearMonth,jdbcType=VARCHAR},
+      year_and_month = #{record.yearMonth,jdbcType=VARCHAR},
       platform = #{record.platform,jdbcType=VARCHAR},
       category_name = #{record.categoryName,jdbcType=VARCHAR},
       sku = #{record.sku,jdbcType=VARCHAR},
@@ -663,7 +663,7 @@
     update cipher_result
     <set>
       <if test="yearMonth != null">
-        year_month = #{yearMonth,jdbcType=VARCHAR},
+        year_and_month = #{yearMonth,jdbcType=VARCHAR},
       </if>
       <if test="platform != null">
         platform = #{platform,jdbcType=VARCHAR},
@@ -748,7 +748,7 @@
     该方法由生成器生成,请勿修改
     -->
     update cipher_result
-    set year_month = #{yearMonth,jdbcType=VARCHAR},
+    set year_and_month = #{yearMonth,jdbcType=VARCHAR},
       platform = #{platform,jdbcType=VARCHAR},
       category_name = #{categoryName,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},

@@ -102,7 +102,7 @@ public class InterfaceService {
                     orderJSON.put("datePaidPlatform", datePaid);
                 }
 
-                orderInfo.setDateWarehouseShipping(orderJSON.getDate("datePaidPlatform"));
+                orderInfo.setDateWarehouseShipping(orderJSON.getDate("dateWarehouseShipping"));
 
                 String dateStr = orderJSON.getString("createdDate");
                 if (!dateStr.contains(" ")) {

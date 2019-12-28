@@ -3,16 +3,13 @@ package com.chen.base.service;
 import com.chen.base.entity.*;
 import com.chen.base.mapper.*;
 import com.chen.base.util.CommonUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.util.StringUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -27,12 +24,6 @@ public class CipherService {
 
     @Resource
     PackingDetailMapper packingDetailMapper;
-
-    @Resource
-    TariffRateMapper tariffRateMapper;
-
-    @Resource
-    DeclarationCustomsVatRateMapper declarationCustomsVatRateMapper;
 
     @Resource
     ProductBySkuMapper productBySkuMapper;
@@ -53,6 +44,8 @@ public class CipherService {
     @Resource
     CipherResultMapper cipherResultMapper;
 
+    @Resource
+    ClickFarmingDetailMapper clickFarmingDetailMapper;
 
     Map<String, Set<String>> platformSite = new HashMap<>();
 
@@ -115,9 +108,7 @@ public class CipherService {
 
         OrderInfoExample orderInfoExample = new OrderInfoExample();
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
-//        orderInfoCriteria.andIdGreaterThan(5624);
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
-
 
         Map<String, CipherResult> cipherResults = new HashMap<>();
 
@@ -130,20 +121,34 @@ public class CipherService {
             OrderDetailExample.Criteria criteria = orderDetailExample.createCriteria();
             criteria.andOrderInfoIdEqualTo(orderInfo.getId());
             String site = orderInfo.getSite();
-            Date shipDate = orderInfo.getDateWarehouseShipping();
 
-
-
+            ClickFarmingDetailExample clickFarmingDetailExample = new ClickFarmingDetailExample();
             List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(orderDetailExample);
             try {
                 for (OrderDetail orderDetail : orderDetails) {
                     String productSku = orderDetail.getProductSku();
                     String sku = orderDetail.getSku();
                     sku=sku.substring(0, sku.indexOf('*'));
-// ----------------
-                    String yearMouth = CommonUtil.formatter(orderInfo.getDateWarehouseShipping());
-                    CipherResult cipherResult = getCipherResult(yearMouth,orderInfo.getPlatform(), sku, orderInfo.getSite(),orderDetail.getIsFba());
 
+                    clickFarmingDetailExample.clear();
+                    ClickFarmingDetailExample.Criteria clickFarmingCriteria = clickFarmingDetailExample.createCriteria();
+                    clickFarmingCriteria.andSaleOrderCodesEqualTo(orderInfo.getSaleOrderCode());
+                    Float clickFarmingFee = 0.0f;
+
+                    List<ClickFarmingDetail> clickFarmingDetails = clickFarmingDetailMapper.selectByExample(clickFarmingDetailExample);
+                    if (clickFarmingDetails.size() > 0) {
+                        ClickFarmingDetail clickFarmingDetail = clickFarmingDetails.get(0);
+                        if (clickFarmingDetail.getSendFlag() == 1) {
+                            sku = clickFarmingDetail.getEccangSku();
+                            clickFarmingFee = clickFarmingDetail.getClickFarmingFee();
+                        }
+                    }
+
+                    String yearMouth = CommonUtil.formatter(orderInfo.getDateWarehouseShipping());
+
+                    yearMouth = "201910";
+                    CipherResult cipherResult = getCipherResult(yearMouth,orderInfo.getPlatform(), sku, orderInfo.getSite(),orderDetail.getIsFba());
+                    cipherResult.addToClickFarmingFee(clickFarmingFee);
                     if (cipherResult == null) {
                         cipherResults.put(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku, cipherResult);
                     }
@@ -163,29 +168,8 @@ public class CipherService {
                     Float rate = getRate(orderDetail.getCurrency());
                     // 销售数量
                     Integer quantity = orderDetail.getQuantity();
-                    // 销量
-                    cipherResult.addToQuantity(quantity);
-                    float refund;
-                    if (orderDetail.getRefund() == null) {
-                        refund = 0;
-                    }else {
-                        refund = orderDetail.getRefund();
-                    }
-                    cipherResult.addToRefund(refund * rate);
-                    cipherResult.addToPaypalFee(orderDetail.getOpPaypalFee() == null ? 0.0f :orderDetail.getOpPaypalFee());
-                    cipherResult.addToPlatformCost(orderDetail.getPlatformCost() == null ? 0.0f : orderDetail.getPlatformCost());
-                    Float shippingFeeFba = orderDetail.getShippingFeeFba();
-                    shippingFeeFba = shippingFeeFba == null ? 0 : shippingFeeFba;
-                    cipherResult.addToShippingFeeFba(shippingFeeFba * rate);
-                    Float shippingFee = orderDetail.getShippingFee();
-                    shippingFee = shippingFee == null ? 0 : shippingFee;
-                    cipherResult.addToShippingFee(shippingFee * rate);
+                    orderStatistics(orderDetail, cipherResult, rate, quantity);
 
-                    Float price = orderDetail.getPrice();
-                    price = price == null ? 0 : price;
-                    cipherResult.addToSales(price * quantity * rate);
-
-                    // 采购价格
                     buyingPrice(cipherResult, orderDetail, quantity);
                     // 清关 头程 税费
                     clearVAT(cipherResult,orderDetail,quantity);
@@ -195,14 +179,40 @@ public class CipherService {
                     warehouseRent(cipherResult, orderDetail);
                     // 广告
                     adv(orderInfo, cipherResult, site, orderDetail, quantity);
+                    cipherResultMapper.updateByPrimaryKeySelective(cipherResult);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println(orderInfo.getId() + " > " + e.getMessage());
             }
 
         }
 
         return cipherResults;
+    }
+
+    private void orderStatistics(OrderDetail orderDetail, CipherResult cipherResult, Float rate, Integer quantity) {
+        // 销量
+        cipherResult.addToQuantity(quantity);
+        float refund;
+        if (orderDetail.getRefund() == null) {
+            refund = 0;
+        }else {
+            refund = orderDetail.getRefund();
+        }
+        cipherResult.addToRefund(refund * rate);
+        cipherResult.addToPaypalFee(orderDetail.getOpPaypalFee() == null ? 0.0f :orderDetail.getOpPaypalFee());
+        cipherResult.addToPlatformCost(orderDetail.getPlatformCost() == null ? 0.0f : orderDetail.getPlatformCost());
+        Float shippingFeeFba = orderDetail.getShippingFeeFba();
+        shippingFeeFba = shippingFeeFba == null ? 0 : shippingFeeFba;
+        cipherResult.addToShippingFeeFba(shippingFeeFba * rate);
+        Float shippingFee = orderDetail.getShippingFee();
+        shippingFee = shippingFee == null ? 0 : shippingFee;
+        cipherResult.addToShippingFee(shippingFee * rate);
+
+        Float price = orderDetail.getPrice();
+        price = price == null ? 0 : price;
+        cipherResult.addToSales(price * quantity * rate);
     }
 
     private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity) {
@@ -233,7 +243,7 @@ public class CipherService {
                 if (advs.size() > 0) {
                     AdvertisementDetail adv = advs.get(0);
                     Float rate = getRate(adv.getCurrency());
-//                    cipherResult.addToAdvCost((adv.getCost() * rate / skuCount) * quantity);
+                    cipherResult.addToAdvCost((adv.getCost() * rate / skuCount) * quantity);
                 }
 
                 break;
@@ -242,7 +252,9 @@ public class CipherService {
                 if (advs.size() > 0) {
                     AdvertisementDetail adv = advs.get(0);
                     Float rate = getRate(adv.getCurrency());
-//                    cipherResult.addToAdvCost(orderInfo.getSubtotal() / siteSubTotal * adv.getCost() * rate);
+                    Double advCost = orderInfo.getSubtotal() / siteSubTotal * adv.getCost() * rate;
+
+                    cipherResult.addToAdvCost(advCost.floatValue());
                 }
                 break;
             default:
@@ -265,7 +277,7 @@ public class CipherService {
 
                 rent += warehouseRent.getRent() == null ? 0 : warehouseRent.getRent() * rate;
             }
-//            cipherResult.addToWarehouseRental(rent / warehouseRents.size());
+            cipherResult.addToWarehouseRental(rent / warehouseRents.size());
         }
     }
 
@@ -282,8 +294,8 @@ public class CipherService {
                 if (outputTaxAlls.size() > 0) {
                     Float outputTaxVatAll = outputTaxAlls.get(0).getOutputTaxAll();
                     if (outputTaxVatAll != null) {
-                        double outputTax = outputTaxVatAll * unitPriceRatio;
-//                        cipherResult.addToOutputTax(outputTax * quantity);
+                        Double outputTax = outputTaxVatAll * unitPriceRatio;
+                        cipherResult.addToOutputTax(outputTax.floatValue() * quantity);
                     }
                 }
             }
@@ -306,11 +318,11 @@ public class CipherService {
         List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
 
         if (packingDetails.size() > 0) {
-//            cipherResult.addToClearVAT(packingDetails.get(0).getDeclarationCustomsVat() * quantity);
+            cipherResult.addToDeclarationCustomsVat(packingDetails.get(0).getDeclarationCustomsVat() * quantity);
 
-//            cipherResult.addToHeadway(packingDetails.get(0).getFirstCarrierFreightUp() * quantity);
+            cipherResult.addToFirstCarrierFreight(packingDetails.get(0).getFirstCarrierFreightUp() * quantity);
 
-//            cipherResult.addToTariff(packingDetails.get(0).getTariff() * quantity);
+            cipherResult.addToTariff(packingDetails.get(0).getTariff() * quantity);
         }
 
     }
@@ -332,10 +344,9 @@ public class CipherService {
         }if (purchaseShippingFee == null) {
             purchaseShippingFee = 0.0f;
         }
-        float buyingPrice = purchaseCost + purchaseShippingFee + purchaseTaxationFee;
-        cipherResult.addToPurchaseCost(quantity*purchaseCost);
-        cipherResult.addToPurchaseShippingFee(quantity*purchaseShippingFee);
-        cipherResult.addToPurchaseTaxationFee(quantity*purchaseTaxationFee);
+        cipherResult.addToPurchaseCost(quantity * purchaseCost);
+        cipherResult.addToPurchaseShippingFee(quantity * purchaseShippingFee);
+        cipherResult.addToPurchaseTaxationFee(quantity * purchaseTaxationFee);
     }
 
     private Map getTotalBySite(){
@@ -371,6 +382,7 @@ public class CipherService {
         Map<String, CipherResult> results = orderCipher();
         return getXls(results);
     }
+
     private HSSFWorkbook getXls(Map<String, CipherResult> map){
         HSSFWorkbook workbook = new HSSFWorkbook();
         String[] headers = {
@@ -449,13 +461,15 @@ public class CipherService {
 
             cell.setCellValue(result.getSku());
             cell = row.createCell(cellNum++);
-
         }
 
         return workbook;
     }
 
     private CipherResult getCipherResult(String yearMouth, String platform, String sku, String site, Integer isFba){
+        if (isFba == null) {
+            isFba = 0;
+        }
         CipherResultExample cipherResultExample = new CipherResultExample();
         CipherResultExample.Criteria criteria = cipherResultExample.createCriteria();
         criteria.andYearMonthEqualTo(yearMouth);
@@ -470,8 +484,7 @@ public class CipherService {
         CipherResult cipherResult = new CipherResult();
         cipherResult.setYearMonth(yearMouth);
         cipherResult.setPlatform(platform);
-        cipherResult.setPlatform(sku);
-        cipherResult.setPlatform(sku);
+        cipherResult.setSku(sku);
         cipherResult.setSite(site);
         cipherResult.setIsFba(isFba);
         cipherResultMapper.insertSelectiveReturnId(cipherResult);

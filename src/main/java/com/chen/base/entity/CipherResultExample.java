@@ -212,72 +212,72 @@ public class CipherResultExample {
         }
 
         public Criteria andYearMonthIsNull() {
-            addCriterion("year_month is null");
+            addCriterion("year_and_month is null");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthIsNotNull() {
-            addCriterion("year_month is not null");
+            addCriterion("year_and_month is not null");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthEqualTo(String value) {
-            addCriterion("year_month =", value, "yearMonth");
+            addCriterion("year_and_month =", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthNotEqualTo(String value) {
-            addCriterion("year_month <>", value, "yearMonth");
+            addCriterion("year_and_month <>", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthGreaterThan(String value) {
-            addCriterion("year_month >", value, "yearMonth");
+            addCriterion("year_and_month >", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthGreaterThanOrEqualTo(String value) {
-            addCriterion("year_month >=", value, "yearMonth");
+            addCriterion("year_and_month >=", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthLessThan(String value) {
-            addCriterion("year_month <", value, "yearMonth");
+            addCriterion("year_and_month <", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthLessThanOrEqualTo(String value) {
-            addCriterion("year_month <=", value, "yearMonth");
+            addCriterion("year_and_month <=", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthLike(String value) {
-            addCriterion("year_month like", value, "yearMonth");
+            addCriterion("year_and_month like", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthNotLike(String value) {
-            addCriterion("year_month not like", value, "yearMonth");
+            addCriterion("year_and_month not like", value, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthIn(List<String> values) {
-            addCriterion("year_month in", values, "yearMonth");
+            addCriterion("year_and_month in", values, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthNotIn(List<String> values) {
-            addCriterion("year_month not in", values, "yearMonth");
+            addCriterion("year_and_month not in", values, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthBetween(String value1, String value2) {
-            addCriterion("year_month between", value1, value2, "yearMonth");
+            addCriterion("year_and_month between", value1, value2, "yearMonth");
             return (Criteria) this;
         }
 
         public Criteria andYearMonthNotBetween(String value1, String value2) {
-            addCriterion("year_month not between", value1, value2, "yearMonth");
+            addCriterion("year_and_month not between", value1, value2, "yearMonth");
             return (Criteria) this;
         }
 

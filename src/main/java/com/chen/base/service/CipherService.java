@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+//@Transactional(rollbackFor = Exception.class)
 public class CipherService {
 
     @Resource
@@ -153,6 +153,11 @@ public class CipherService {
                         cipherResults.put(orderInfo.getPlatform() + "_" + orderInfo.getSite() + "_" + productSku, cipherResult);
                     }
 
+                    Float cost = orderDetail.getPurchaseCost();
+                    if (cost == null) {
+                        continue;
+                    }
+
                     productBySkuExample.clear();
                     ProductBySkuExample.Criteria productCriteria = productBySkuExample.createCriteria();
 
@@ -185,7 +190,7 @@ public class CipherService {
                 e.printStackTrace();
                 System.out.println(orderInfo.getId() + " > " + e.getMessage());
             }
-
+            System.out.println("end > "+orderInfo.getId());
         }
 
         return cipherResults;
@@ -232,15 +237,14 @@ public class CipherService {
         switch (platform) {
             case "amazon":
             case "ebay":
-                ArrayList<Integer> siteOrderIds = new ArrayList<>();
-                siteOrders.forEach(orderInfo1 -> siteOrderIds.add(orderInfo1.getId()));
-                OrderDetailExample orderDetailExample = new OrderDetailExample();
-                OrderDetailExample.Criteria detailExampleCriteria = orderDetailExample.createCriteria();
-                detailExampleCriteria.andOrderInfoIdIn(siteOrderIds);
-                List<OrderDetail> orderDetails1 = orderDetailMapper.selectByExample(orderDetailExample);
-                int skuCount = orderDetails1.stream().mapToInt(orderDetail1 -> orderDetail.getQuantity()).sum();
-
                 if (advs.size() > 0) {
+                    ArrayList<Integer> siteOrderIds = new ArrayList<>();
+                    siteOrders.forEach(orderInfo1 -> siteOrderIds.add(orderInfo1.getId()));
+                    OrderDetailExample orderDetailExample = new OrderDetailExample();
+                    OrderDetailExample.Criteria detailExampleCriteria = orderDetailExample.createCriteria();
+                    detailExampleCriteria.andOrderInfoIdIn(siteOrderIds);
+                    List<OrderDetail> orderDetails1 = orderDetailMapper.selectByExample(orderDetailExample);
+                    int skuCount = orderDetails1.stream().mapToInt(orderDetail1 -> orderDetail.getQuantity()).sum();
                     AdvertisementDetail adv = advs.get(0);
                     Float rate = getRate(adv.getCurrency());
                     cipherResult.addToAdvCost((adv.getCost() * rate / skuCount) * quantity);
@@ -248,8 +252,9 @@ public class CipherService {
 
                 break;
             case "cdiscount":
-                double siteSubTotal = siteOrders.stream().mapToDouble(orderDetail2 -> orderDetail2.getSubtotal()).sum();
                 if (advs.size() > 0) {
+                    double siteSubTotal = siteOrders.stream().mapToDouble(orderDetail2 -> orderDetail2.getSubtotal()).sum();
+
                     AdvertisementDetail adv = advs.get(0);
                     Float rate = getRate(adv.getCurrency());
                     Double advCost = orderInfo.getSubtotal() / siteSubTotal * adv.getCost() * rate;
@@ -379,11 +384,11 @@ public class CipherService {
     }
 
     public HSSFWorkbook export() {
-        Map<String, CipherResult> results = orderCipher();
-        return getXls(results);
+        List<CipherResult> cipherResults = cipherResultMapper.selectByExample(null);
+        return getXls(cipherResults);
     }
 
-    private HSSFWorkbook getXls(Map<String, CipherResult> map){
+    private HSSFWorkbook getXls(List<CipherResult> results){
         HSSFWorkbook workbook = new HSSFWorkbook();
         String[] headers = {
                 "站点",
@@ -413,8 +418,10 @@ public class CipherService {
                 "营业毛利",
                 "营业毛利率",
         };
-        Set<String> keySet = platformSite.keySet();
-
+        Set<String> keySet = new HashSet<>();
+        keySet.add("amazon");
+        keySet.add("ebay");
+        keySet.add("cdiscount");
         Map<String, HSSFSheet> sheetMap = new HashMap<>();
         for (String key : keySet) {
             HSSFSheet sheet = workbook.createSheet(key + "-各站点SKU");
@@ -447,8 +454,7 @@ public class CipherService {
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        for (String key : map.keySet()) {
-            CipherResult result = map.get(key);
+        for (CipherResult result : results) {
             String platform = result.getPlatform();
             HSSFSheet sheet = sheetMap.get(platform);
 
@@ -461,6 +467,79 @@ public class CipherService {
 
             cell.setCellValue(result.getSku());
             cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getProductName());
+            cell = row.createCell(cellNum++);
+
+            // 款式
+            cell.setCellValue("*");
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getCategoryName());
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(result.getQuantity());
+            cell = row.createCell(cellNum++);
+
+            // 库存
+            cell.setCellValue(0);
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getSales()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getPurchasePriceExport()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getFirstCarrierFreight()));
+            cell = row.createCell(cellNum++);
+            // 转运费
+            cell.setCellValue(0);
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.grossProfit()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.grossProfit() / result.getSales() * 100));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getTariffFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getDeclarationCustomsVat()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getOutputTaxUp()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getShippingFeeFba()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getShippingFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getWarehouseStorageCharges()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getPlatformCost()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getPaypalFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getAdvertisementCost()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getClickFarmingFee()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.getRefund()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.operatingMargin()));
+            cell = row.createCell(cellNum++);
+
+            cell.setCellValue(decimalFormat.format(result.operatingMargin() / result.grossProfit() * 100));
         }
 
         return workbook;

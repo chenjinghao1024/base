@@ -166,7 +166,7 @@ public class CipherResult implements Serializable {
     }
 
     public void addToPurchaseCost(float paymentPlatformFree) {
-        this.paymentPlatformFree += paymentPlatformFree;
+        this.purchaseCost += paymentPlatformFree;
     }
 
     public void addToRefund(float refund) {
@@ -217,4 +217,18 @@ public class CipherResult implements Serializable {
     public void addToClickFarmingFee(float clickFarmingFee) {
         this.clickFarmingFee += clickFarmingFee;
     }
+
+    public float getPurchasePriceExport(){
+        return this.purchaseCost + this.purchaseShippingFee + this.purchaseTaxationFee;
+    }
+
+    public float grossProfit(){
+        return sales - firstCarrierFreight - getPurchasePriceExport();
+    }
+
+    public float operatingMargin(){
+        return grossProfit() - refund - clickFarmingFee - advertisementCost - paypalFee - platformCost -
+                warehouseStorageCharges - shippingFee - shippingFeeFba - declarationCustomsVat - outputTaxUp - tariffFee;
+    }
+
 }

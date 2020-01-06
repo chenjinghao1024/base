@@ -471,7 +471,6 @@
   <select id="selectAMZTotalSalesGroupBySite" resultType="java.util.Map">
     select site,  sum(subtotal) as subtotal,currency
     from order_info
-    where platform = 'amazon'
     group by site;
   </select>
 </mapper>

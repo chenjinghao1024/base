@@ -62,4 +62,5 @@ public interface OrderDetailMapper {
      * updateByPrimaryKey
      */
     int updateByPrimaryKey(OrderDetail record);
+
 }

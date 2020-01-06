@@ -105,7 +105,7 @@ public class CipherService {
 
 
     public Map<String, CipherResult> orderCipher() {
-
+        Map<String,Double> totalBySite = getTotalBySite();
         OrderInfoExample orderInfoExample = new OrderInfoExample();
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
@@ -179,11 +179,11 @@ public class CipherService {
                     // 清关 头程 税费
                     clearVAT(cipherResult,orderDetail,quantity);
                     // 销项
-                    outputTax(orderInfo, cipherResult, site, orderDetail, quantity, 10);
+                    outputTax(orderInfo, cipherResult, site, orderDetail, quantity, 10,totalBySite);
                     // 仓租
                     warehouseRent(cipherResult, orderDetail);
                     // 广告
-                    adv(orderInfo, cipherResult, site, orderDetail, quantity);
+                    adv(orderInfo, cipherResult, site, orderDetail, quantity, sku, totalBySite);
                     cipherResultMapper.updateByPrimaryKeySelective(cipherResult);
                 }
             } catch (Exception e) {
@@ -220,24 +220,35 @@ public class CipherService {
         cipherResult.addToSales(price * quantity * rate);
     }
 
-    private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity) {
+    private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity, String sku, Map<String, Double> totalBySite) {
         String platform = orderInfo.getPlatform();
-        OrderInfoExample orderInfoExample = new OrderInfoExample();
-        OrderInfoExample.Criteria info = orderInfoExample.createCriteria();
-        info.andSiteEqualTo(site);
-        info.andPlatformEqualTo(platform);
-        List<OrderInfo> siteOrders = orderInfoMapper.selectByExample(orderInfoExample);
+
         AdvertisementDetailExample advertisementDetailExample = new AdvertisementDetailExample();
         AdvertisementDetailExample.Criteria criteria1 = advertisementDetailExample.createCriteria();
-        criteria1.andSiteEqualTo(site);
-        criteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
-        List<AdvertisementDetail> advs = advertisementDetailMapper.selectByExample(advertisementDetailExample);
 
+        AdvertisementDetailExample.Criteria criteria = advertisementDetailExample.or();
+        if (!"ebay".equals(site)){
+            criteria.andEccangSkuEqualTo(sku);
+            criteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
+        }
+        if (!"cdiscount".equals(site)){
+            criteria.andSiteEqualTo(site);
+            criteria1.andSiteEqualTo(site);
+        }else {
+            criteria.andSiteEqualTo("FR");
+            criteria1.andSiteEqualTo("FR");
+        }
+        List<AdvertisementDetail> advs = advertisementDetailMapper.selectByExample(advertisementDetailExample);
 
         switch (platform) {
             case "amazon":
             case "ebay":
                 if (advs.size() > 0) {
+                    OrderInfoExample orderInfoExample = new OrderInfoExample();
+                    OrderInfoExample.Criteria info = orderInfoExample.createCriteria();
+                    info.andSiteEqualTo(site);
+                    info.andPlatformEqualTo(platform);
+                    List<OrderInfo> siteOrders = orderInfoMapper.selectByExample(orderInfoExample);
                     ArrayList<Integer> siteOrderIds = new ArrayList<>();
                     siteOrders.forEach(orderInfo1 -> siteOrderIds.add(orderInfo1.getId()));
                     OrderDetailExample orderDetailExample = new OrderDetailExample();
@@ -253,8 +264,7 @@ public class CipherService {
                 break;
             case "cdiscount":
                 if (advs.size() > 0) {
-                    double siteSubTotal = siteOrders.stream().mapToDouble(orderDetail2 -> orderDetail2.getSubtotal()).sum();
-
+                    Double siteSubTotal = totalBySite.get(site);
                     AdvertisementDetail adv = advs.get(0);
                     Float rate = getRate(adv.getCurrency());
                     Double advCost = orderInfo.getSubtotal() / siteSubTotal * adv.getCost() * rate;
@@ -286,14 +296,14 @@ public class CipherService {
         }
     }
 
-    private void outputTax( OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity,int monthNum) {
+    private void outputTax(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity, int monthNum, Map<String,Double> totalBySite) {
         if (orderInfo.getPlatform().equals("amazon")) {
-            int total = 0;
             OutputTaxAllExample outputTaxAllExample = new OutputTaxAllExample();
             OutputTaxAllExample.Criteria criteria = outputTaxAllExample.createCriteria();
             criteria.andSiteEqualTo(site);
             criteria.andMonthNumEqualTo(monthNum);
             List<OutputTaxAll> outputTaxAlls = outputTaxAllMapper.selectByExample(outputTaxAllExample);
+            Double total = totalBySite.get(site);
             if (total > 0) {
                 double unitPriceRatio = orderDetail.getPrice() / total;
                 if (outputTaxAlls.size() > 0) {
@@ -354,18 +364,13 @@ public class CipherService {
         cipherResult.addToPurchaseTaxationFee(quantity * purchaseTaxationFee);
     }
 
-    private Map getTotalBySite(){
-        Map siteTotal = new HashMap();
+    private Map<String,Double> getTotalBySite(){
+        Map<String,Double> siteTotal = new HashMap();
         List<Map> maps = orderInfoMapper.selectAMZTotalSalesGroupBySite();
         for (Map map : maps) {
             String site = (String) map.get("site");
             Double subtotal= (Double) map.get("subtotal");
-            String currency= (String) map.get("currency");
-
-            Float rate = getRate(currency);
-            if (site.startsWith("Amazon")) {
-                siteTotal.put(site, subtotal * rate);
-            }
+            siteTotal.put(site, subtotal);
         }
         return siteTotal;
     }

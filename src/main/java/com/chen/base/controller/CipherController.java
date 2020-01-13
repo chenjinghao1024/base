@@ -30,7 +30,7 @@ public class CipherController {
 
     @RequestMapping("/cipher")
     public Map<String, CipherResult> cipher() {
-        return cipherService.orderCipher();
+        return cipherService.orderCipher(null);
     }
 
     @GetMapping("/export")
@@ -38,7 +38,7 @@ public class CipherController {
 
         ServletOutputStream outputStream = null;
         try {
-            HSSFWorkbook workbook = cipherService.export();
+            HSSFWorkbook workbook = cipherService.export("201911");
             outputStream = response.getOutputStream();
 
             SimpleDateFormat sdf = new SimpleDateFormat();

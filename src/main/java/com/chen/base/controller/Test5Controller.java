@@ -36,7 +36,7 @@ public class Test5Controller {
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问
     @RequestMapping("/cipher")
     public Map<String, CipherResult> cipher() {
-        return cipherService.orderCipher();
+        return cipherService.orderCipher(null);
     }
 
     // 由于ShiroConfig中配置了该路径可以匿名访问，所以这接口不需要登录就能访问

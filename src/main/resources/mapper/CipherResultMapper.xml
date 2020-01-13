@@ -528,7 +528,34 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+    <select id="selectByGroup" resultType="java.util.Map" parameterType="java.lang.String">
+      select ${groupByClause},
+             sum(Sales)                                   as xse,
+             sum(first_carrier_freight + tariff_fee)      as cgyf,
+             sum(purchase_cost)                           as cgcb,
+             sum(declaration_customs_vat + output_tax_up) as vat,
+             sum(shipping_fee_fba + shipping_fee)         as yjf,
+             sum(warehouse_storage_charges)               as cz,
+             sum(click_farming_fee)                       as sd,
+             sum(advertisement_cost)                      as adv,
+             sum(platform_cost + paypal_fee)              as sxf,
+             sum(refund)                                  as refund
+
+      from cipher_result
+      <if test="_parameter != null">
+        <include refid="Example_Where_Clause" />
+      </if>
+      group by ${groupByClause}
+      order by ${groupByClause}
+    </select>
+    <select id="selectSiteByPlatform" resultType="java.lang.String">
+      select distinct site
+      from cipher_result
+      where platform = #{platform,jdbcType=VARCHAR}
+        and site != ''
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
     <!--
     该方法由生成器生成,请勿修改
     -->

@@ -9,6 +9,8 @@ public class CipherResultExample {
      */
     protected String orderByClause;
 
+    protected String groupByClause;
+
     /**
      * distinct
      */
@@ -1934,5 +1936,13 @@ public class CipherResultExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
+    }
+
+    public String getGroupByClause() {
+        return groupByClause;
+    }
+
+    public void setGroupByClause(String groupByClause) {
+        this.groupByClause = groupByClause;
     }
 }

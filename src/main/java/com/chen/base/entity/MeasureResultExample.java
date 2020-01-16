@@ -3,13 +3,11 @@ package com.chen.base.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CipherResultExample {
+public class MeasureResultExample {
     /**
      * orderByClause
      */
     protected String orderByClause;
-
-    protected String groupByClause;
 
     /**
      * distinct
@@ -22,9 +20,9 @@ public class CipherResultExample {
     protected List<Criteria> oredCriteria;
 
     /**
-     * CipherResultExample
+     * MeasureResultExample
      */
-    public CipherResultExample() {
+    public MeasureResultExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -110,7 +108,7 @@ public class CipherResultExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/25
+     * @date 2019/12/31
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -213,73 +211,73 @@ public class CipherResultExample {
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthIsNull() {
+        public Criteria andYearAndMonthIsNull() {
             addCriterion("year_and_month is null");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthIsNotNull() {
+        public Criteria andYearAndMonthIsNotNull() {
             addCriterion("year_and_month is not null");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthEqualTo(String value) {
-            addCriterion("year_and_month =", value, "yearMonth");
+        public Criteria andYearAndMonthEqualTo(String value) {
+            addCriterion("year_and_month =", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthNotEqualTo(String value) {
-            addCriterion("year_and_month <>", value, "yearMonth");
+        public Criteria andYearAndMonthNotEqualTo(String value) {
+            addCriterion("year_and_month <>", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthGreaterThan(String value) {
-            addCriterion("year_and_month >", value, "yearMonth");
+        public Criteria andYearAndMonthGreaterThan(String value) {
+            addCriterion("year_and_month >", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthGreaterThanOrEqualTo(String value) {
-            addCriterion("year_and_month >=", value, "yearMonth");
+        public Criteria andYearAndMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("year_and_month >=", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthLessThan(String value) {
-            addCriterion("year_and_month <", value, "yearMonth");
+        public Criteria andYearAndMonthLessThan(String value) {
+            addCriterion("year_and_month <", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthLessThanOrEqualTo(String value) {
-            addCriterion("year_and_month <=", value, "yearMonth");
+        public Criteria andYearAndMonthLessThanOrEqualTo(String value) {
+            addCriterion("year_and_month <=", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthLike(String value) {
-            addCriterion("year_and_month like", value, "yearMonth");
+        public Criteria andYearAndMonthLike(String value) {
+            addCriterion("year_and_month like", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthNotLike(String value) {
-            addCriterion("year_and_month not like", value, "yearMonth");
+        public Criteria andYearAndMonthNotLike(String value) {
+            addCriterion("year_and_month not like", value, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthIn(List<String> values) {
-            addCriterion("year_and_month in", values, "yearMonth");
+        public Criteria andYearAndMonthIn(List<String> values) {
+            addCriterion("year_and_month in", values, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthNotIn(List<String> values) {
-            addCriterion("year_and_month not in", values, "yearMonth");
+        public Criteria andYearAndMonthNotIn(List<String> values) {
+            addCriterion("year_and_month not in", values, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthBetween(String value1, String value2) {
-            addCriterion("year_and_month between", value1, value2, "yearMonth");
+        public Criteria andYearAndMonthBetween(String value1, String value2) {
+            addCriterion("year_and_month between", value1, value2, "yearAndMonth");
             return (Criteria) this;
         }
 
-        public Criteria andYearMonthNotBetween(String value1, String value2) {
-            addCriterion("year_and_month not between", value1, value2, "yearMonth");
+        public Criteria andYearAndMonthNotBetween(String value1, String value2) {
+            addCriterion("year_and_month not between", value1, value2, "yearAndMonth");
             return (Criteria) this;
         }
 
@@ -1832,13 +1830,83 @@ public class CipherResultExample {
             addCriterion("is_fba not between", value1, value2, "isFba");
             return (Criteria) this;
         }
+
+        public Criteria andRefundFeeIsNull() {
+            addCriterion("refund_fee is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeIsNotNull() {
+            addCriterion("refund_fee is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeEqualTo(String value) {
+            addCriterion("refund_fee =", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeNotEqualTo(String value) {
+            addCriterion("refund_fee <>", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeGreaterThan(String value) {
+            addCriterion("refund_fee >", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeGreaterThanOrEqualTo(String value) {
+            addCriterion("refund_fee >=", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeLessThan(String value) {
+            addCriterion("refund_fee <", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeLessThanOrEqualTo(String value) {
+            addCriterion("refund_fee <=", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeLike(String value) {
+            addCriterion("refund_fee like", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeNotLike(String value) {
+            addCriterion("refund_fee not like", value, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeIn(List<String> values) {
+            addCriterion("refund_fee in", values, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeNotIn(List<String> values) {
+            addCriterion("refund_fee not in", values, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeBetween(String value1, String value2) {
+            addCriterion("refund_fee between", value1, value2, "refundFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundFeeNotBetween(String value1, String value2) {
+            addCriterion("refund_fee not between", value1, value2, "refundFee");
+            return (Criteria) this;
+        }
     }
 
     /**
      * This class was generated by MyBatis Generator.
-     * This class corresponds to the database table cipher_result
+     * This class corresponds to the database table measure_result
      *
-     * @mbg.generated do_not_delete_during_merge Wed Dec 25 14:45:21 CST 2019
+     * @mbg.generated do_not_delete_during_merge Tue Dec 31 14:22:26 CST 2019
      */
     public static class Criteria extends GeneratedCriteria {
 
@@ -1850,7 +1918,7 @@ public class CipherResultExample {
     /**
      *
      * @author  Generator
-     * @date 2019/12/25
+     * @date 2019/12/31
      */
     public static class Criterion {
         private String condition;
@@ -1936,13 +2004,5 @@ public class CipherResultExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-    }
-
-    public String getGroupByClause() {
-        return groupByClause;
-    }
-
-    public void setGroupByClause(String groupByClause) {
-        this.groupByClause = groupByClause;
     }
 }

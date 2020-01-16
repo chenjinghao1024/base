@@ -1,12 +1,12 @@
 package com.chen.base.service;
 
 import com.chen.base.entity.*;
+import com.chen.base.entity.vo.RequestVO;
 import com.chen.base.mapper.*;
 import com.chen.base.util.CommonUtil;
 import com.github.pagehelper.util.StringUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
@@ -15,6 +15,8 @@ import java.util.*;
 @Service
 //@Transactional(rollbackFor = Exception.class)
 public class CipherService {
+
+    DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @Resource
     AdvertisementDetailMapper advertisementDetailMapper;
@@ -48,6 +50,76 @@ public class CipherService {
     ClickFarmingDetailMapper clickFarmingDetailMapper;
 
     Map<String, Set<String>> platformSite = new HashMap<>();
+
+    List<String> strs = Arrays.asList("科目","*销售收入*",
+            "   采购运费",
+            "   采购成本",
+            "*销售成本*",
+            "*销售毛利*",
+            "  *销售费用*",
+            "      * 销项VAT*",
+            "      *运费/仓储*",
+            "             邮寄费/转运费/FBA",
+            "             仓储费",
+            "             包装费",
+            "      *广促费*",
+            "           业务推广费",
+            "           广宣费",
+            "          促销费用",
+            "",
+            "      *平台费用*",
+            "           交易手续费",
+            "           基础物流服务费",
+            "           订阅费",
+            "           联盟佣金",
+            "           买家运费",
+            "           退款佣金",
+            "           刊登费",
+            "           退货损失费用",
+            "           类目审核费和平台费",
+            "",
+            "*经营利润*",
+            "      *部门费用*",
+            "          工资",
+            "          社会保险费-养老保险",
+            "          住房公积金",
+            "          职工福利费",
+            "          业务招待费",
+            "          交通费",
+            "          差旅费",
+            "          咨询费",
+            "          房租",
+            "          水电",
+            "          物业管理费",
+            "          注册费",
+            "          技术服务费",
+            "          维护修理费",
+            "          办公用品",
+            "          开办费",
+            "          阿里云服务费",
+            "          电话费",
+            "          样品采购费用",
+            "          折旧及摊销",
+            "费用小计",
+            "*营业利润*",
+            "  管理费用",
+            "      管理部门",
+            "      税金及附加",
+            "  财务费用",
+            "      其他业务收入",
+            "      其他业务成本",
+            "*其他业务利润*",
+            "营业外收入",
+            "营业外支出",
+            "      其中：非流动资产处置损失",
+            "*利润总额*",
+            "  减：所得税费用",
+            "*净利润*",
+            "   归属于母公司所有者的净利润",
+            "   少数股东损益",
+            "每股收益：",
+            "  （一）基本每股收益",
+            "  （二）稀释每股收益");
 
     /**
      * 头程运费
@@ -104,10 +176,12 @@ public class CipherService {
     }
 
 
-    public Map<String, CipherResult> orderCipher() {
+    public Map<String, CipherResult> orderCipher(RequestVO requestVO) {
         Map<String,Double> totalBySite = getTotalBySite();
         OrderInfoExample orderInfoExample = new OrderInfoExample();
         OrderInfoExample.Criteria orderInfoCriteria = orderInfoExample.createCriteria();
+        orderInfoCriteria.andDateWarehouseShippingGreaterThanOrEqualTo(requestVO.getStartDate());
+        orderInfoCriteria.andDateWarehouseShippingLessThanOrEqualTo(requestVO.getEndDate());
         List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(orderInfoExample);
 
         Map<String, CipherResult> cipherResults = new HashMap<>();
@@ -132,6 +206,7 @@ public class CipherService {
 
                     clickFarmingDetailExample.clear();
                     ClickFarmingDetailExample.Criteria clickFarmingCriteria = clickFarmingDetailExample.createCriteria();
+                    clickFarmingCriteria.andInfoIdIn(requestVO.getCfIds());
                     clickFarmingCriteria.andSaleOrderCodesEqualTo(orderInfo.getSaleOrderCode());
                     Float clickFarmingFee = 0.0f;
 
@@ -183,7 +258,8 @@ public class CipherService {
                     // 仓租
                     warehouseRent(cipherResult, orderDetail);
                     // 广告
-                    adv(orderInfo, cipherResult, site, orderDetail, quantity, sku, totalBySite);
+                    adv(orderInfo, cipherResult, site, orderDetail, quantity, sku, totalBySite,requestVO.getAdvIds());
+
                     cipherResultMapper.updateByPrimaryKeySelective(cipherResult);
                 }
             } catch (Exception e) {
@@ -220,7 +296,7 @@ public class CipherService {
         cipherResult.addToSales(price * quantity * rate);
     }
 
-    private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity, String sku, Map<String, Double> totalBySite) {
+    private void adv(OrderInfo orderInfo, CipherResult cipherResult, String site, OrderDetail orderDetail, Integer quantity, String sku, Map<String, Double> totalBySite, List<Integer> advIds) {
         String platform = orderInfo.getPlatform();
 
         AdvertisementDetailExample advertisementDetailExample = new AdvertisementDetailExample();
@@ -238,6 +314,9 @@ public class CipherService {
             criteria.andSiteEqualTo("FR");
             criteria1.andSiteEqualTo("FR");
         }
+        criteria1.andSiteEqualTo(site);
+        criteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
+        criteria1.andAdvertisementFileIdIn(advIds);
         List<AdvertisementDetail> advs = advertisementDetailMapper.selectByExample(advertisementDetailExample);
 
         switch (platform) {
@@ -317,6 +396,12 @@ public class CipherService {
         }
     }
 
+    /**
+     * 计算头程 减库存
+     * @param cipherResult
+     * @param orderDetail
+     * @param quantity
+     */
     private void clearVAT( CipherResult cipherResult,OrderDetail orderDetail, Integer quantity) {
         // 清关VAT
 
@@ -324,20 +409,34 @@ public class CipherService {
         PackingDetailExample.Criteria packingDetailExampleCriteria1 = packingDetailExample.createCriteria();
         packingDetailExampleCriteria1.andWarehouseIdEqualTo(String.valueOf(orderDetail.getWarehouseId()));
         packingDetailExampleCriteria1.andEccangSkuEqualTo(orderDetail.getProductSku());
+        packingDetailExampleCriteria1.andSkuNumGreaterThan(0);
 
         PackingDetailExample.Criteria packingDetailExampleCriteria2 = packingDetailExample.or();
         packingDetailExampleCriteria2.andWarehouseIdEqualTo(String.valueOf(orderDetail.getWarehouseId()));
         String sku = orderDetail.getSku();
         sku=sku.substring(0, sku.indexOf("*"));
         packingDetailExampleCriteria2.andEccangSkuEqualTo(sku);
+        packingDetailExampleCriteria2.andSkuNumGreaterThan(0);
         List<PackingDetail> packingDetails = packingDetailMapper.selectByExample(packingDetailExample);
 
         if (packingDetails.size() > 0) {
-            cipherResult.addToDeclarationCustomsVat(packingDetails.get(0).getDeclarationCustomsVat() * quantity);
+            PackingDetail packingDetail = packingDetails.get(0);
+            Integer skuNum = packingDetail.getSkuNum();
+            if (skuNum >= quantity) {
+                cipherResult.addToDeclarationCustomsVat(packingDetail.getDeclarationCustomsVat() * quantity);
+                cipherResult.addToFirstCarrierFreight(packingDetail.getFirstCarrierFreightUp() * quantity);
+                cipherResult.addToTariff(packingDetail.getTariff() * quantity);
+                packingDetail.setSkuNum(skuNum - quantity);
+                packingDetailMapper.updateByPrimaryKeySelective(packingDetail);
+            }else {
+                cipherResult.addToDeclarationCustomsVat(packingDetail.getDeclarationCustomsVat() * skuNum);
+                cipherResult.addToFirstCarrierFreight(packingDetail.getFirstCarrierFreightUp() * skuNum);
+                cipherResult.addToTariff(packingDetail.getTariff() * skuNum);
+                packingDetailMapper.updateByPrimaryKeySelective(packingDetail);
 
-            cipherResult.addToFirstCarrierFreight(packingDetails.get(0).getFirstCarrierFreightUp() * quantity);
+                clearVAT(cipherResult, orderDetail, quantity - skuNum);
+            }
 
-            cipherResult.addToTariff(packingDetails.get(0).getTariff() * quantity);
         }
 
     }
@@ -375,7 +474,7 @@ public class CipherService {
         return siteTotal;
     }
 
-    private Float getRate(String currency) {
+    Float getRate(String currency) {
         if (StringUtil.isEmpty(currency )) {
             return 0.0f;
         }
@@ -388,12 +487,12 @@ public class CipherService {
         }
     }
 
-    public HSSFWorkbook export() {
+    public HSSFWorkbook export(String yearMouth) {
         List<CipherResult> cipherResults = cipherResultMapper.selectByExample(null);
-        return getXls(cipherResults);
+        return getXls(cipherResults,yearMouth);
     }
 
-    private HSSFWorkbook getXls(List<CipherResult> results){
+    private HSSFWorkbook getXls(List<CipherResult> results,String yearMouth){
         HSSFWorkbook workbook = new HSSFWorkbook();
         String[] headers = {
                 "站点",
@@ -457,7 +556,6 @@ public class CipherService {
         contentFont.setFontHeightInPoints((short) 12);
         contentStyle.setFont(contentFont);
 
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         for (CipherResult result : results) {
             String platform = result.getPlatform();
@@ -547,7 +645,313 @@ public class CipherService {
             cell.setCellValue(decimalFormat.format(result.operatingMargin() / result.grossProfit() * 100));
         }
 
+        for (String platform : keySet) {
+            switch (platform) {
+                case "ebay":
+                    getEbayBySite(workbook,yearMouth,platform);
+                    getEbayByMouth(workbook,platform);
+                    break;
+                case "amazon":
+                    getEbayBySite(workbook,yearMouth,platform);
+                    getEbayByMouth(workbook,platform);
+                    break;
+                case "cd":
+                    break;
+                default:
+            }
+
+        }
+
         return workbook;
+    }
+
+    private void getEbayByMouth(HSSFWorkbook workbook,String platform) {
+        List<String> sites=cipherResultMapper.selectSiteByPlatform(platform);
+        sites.add("");
+        for (String site : sites) {
+
+            HSSFSheet sheet = workbook.createSheet(platform+"-每月"+site);
+            HSSFRow row = sheet.createRow(0);
+            HSSFCell cell = row.createCell(0);
+            cell.setCellValue(platform+"-"+site+"损益表");
+            row = sheet.createRow(1);
+            cell = row.createCell(0);
+            cell.setCellValue("单位：元");
+
+            CipherResultExample example = new CipherResultExample();
+            CipherResultExample.Criteria criteria = example.createCriteria();
+            criteria.andPlatformEqualTo(platform);
+            example.setGroupByClause("year_and_month");
+            if (StringUtil.isNotEmpty(site)) {
+                criteria.andSiteEqualTo(site);
+            }
+
+            List<Map> siteMap = cipherResultMapper.selectByGroup(example);
+
+            setFirstCell(sheet);
+
+            detail(sheet, siteMap, 2);
+        }
+    }
+
+    private void getEbayBySite(HSSFWorkbook workbook, String yearMouth,String platform) {
+        HSSFSheet sheet = workbook.createSheet(platform+"-整体各站点");
+        HSSFRow row = sheet.createRow(0);
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue(platform+"站点损益表-" + yearMouth);
+        row = sheet.createRow(1);
+        cell = row.createCell(0);
+        cell.setCellValue("单位：元");
+
+        CipherResultExample example = new CipherResultExample();
+        example.createCriteria().andPlatformEqualTo("ebay");
+        example.setGroupByClause("site");
+
+        List<Map> siteMap = cipherResultMapper.selectByGroup(example);
+
+        setFirstCell(sheet);
+
+        detail(sheet, siteMap, 1);
+    }
+
+
+
+    private void setFirstCell(HSSFSheet sheet) {
+        HSSFRow row;
+        HSSFCell cell;
+        sheet.setColumnWidth(0, 30 * 256);
+
+        for (String str : strs) {
+            row=sheet.createRow(sheet.getLastRowNum()+1);
+            cell=row.createCell(0);
+            cell.setCellValue(str);
+        }
+    }
+
+    private void detail(HSSFSheet sheet, List<Map> siteMap,int mode) {
+        HSSFCell cell;
+        HSSFRow row;
+        int rowNum = 2;
+        HSSFRow head =sheet.getRow(rowNum);
+
+
+        double totalAll = 0;
+        double cgyfAll = 0;
+        double cgcbAll = 0;
+        double vatAll = 0;
+        double yjfAll = 0;
+        double czAll = 0;
+        double sdAll = 0;
+        double advAll = 0;
+        double sxfAll = 0;
+        double refundAll = 0;
+        for (Map map : siteMap) {
+            rowNum = 2;
+
+            String title = "";
+            if (mode == 1) {
+                title = (String) map.get("site");
+            } else if (mode == 2) {
+                title = (String) map.get("year_and_month");
+
+            }
+            short aCell = head.getLastCellNum();
+            cell = head.createCell(aCell);
+            cell.setCellValue(title);
+
+            short bCell = head.getLastCellNum();
+            cell = head.createCell(bCell);
+            cell.setCellValue("占比");
+            double total = (double) map.get("xse");
+            totalAll += total;
+
+            row=sheet.getRow(++rowNum);
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(total));
+            cell = row.createCell(bCell);
+            cell.setCellValue(decimalFormat.format(total / total * 100 )+ "%");
+
+            row=sheet.getRow(++rowNum);
+            double cgyf = (double) map.get("cgyf");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(cgyf));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(cgyf / total * 100) + "%");
+            cgyfAll += cgyf;
+
+            row=sheet.getRow(++rowNum);
+            double cgcb = (double) map.get("cgcb");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(cgcb));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(cgcb / total * 100) + "%");
+            cgcbAll += cgcb;
+
+            row=sheet.getRow(++rowNum);
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(cgcb+cgyf));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format((cgcb+cgyf) / total * 100) + "%");
+
+            row=sheet.getRow(++rowNum);
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(total-cgcb-cgyf));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format((total-cgcb-cgyf) / total * 100) + "%");
+
+            rowNum++;
+
+            row=sheet.getRow(++rowNum);
+            double vat = (double) map.get("vat");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(vat));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(vat / total * 100) + "%");
+            vatAll += vat;
+            rowNum++;
+
+            row=sheet.getRow(++rowNum);
+            double yjf = (double) map.get("yjf");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(yjf));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(yjf / total * 100) + "%");
+            yjfAll += yjf;
+
+            row=sheet.getRow(++rowNum);
+            double cz = (double) map.get("cz");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(cz));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(cz / total * 100) + "%");
+            czAll += cz;
+            rowNum += 2;
+
+            row=sheet.getRow(++rowNum);
+            double sd = (double) map.get("sd");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(sd));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(sd / total * 100) + "%");
+            sdAll += sd;
+
+            row=sheet.getRow(++rowNum);
+            double adv = (double) map.get("adv");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(adv));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(adv / total * 100) + "%");
+            advAll += adv;
+            rowNum += 3;
+
+            row=sheet.getRow(++rowNum);
+            double sxf = (double) map.get("sxf");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(sxf));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(sxf / total * 100) + "%");
+            sxfAll += sxf;
+            rowNum += 6;
+            row=sheet.getRow(++rowNum);
+            double refund = (double) map.get("refund");
+            cell = row.createCell(aCell);
+            cell.setCellValue(format(refund));
+            cell = row.createCell(bCell);
+            cell.setCellValue(format(refund / total * 100) + "%");
+            refundAll += refund;
+        }
+
+        rowNum = 2;
+
+        short aCell = head.getLastCellNum();
+        cell = head.createCell(head.getLastCellNum());
+        cell.setCellValue("合计");
+        short bCell = head.getLastCellNum();
+        cell = head.createCell(head.getLastCellNum());
+        cell.setCellValue("占比");
+
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(totalAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(decimalFormat.format(totalAll / totalAll * 100 )+ "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(cgyfAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(cgyfAll / totalAll * 100) + "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(cgcbAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(cgcbAll / totalAll * 100) + "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(cgcbAll+cgyfAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format((cgcbAll+cgyfAll) / totalAll * 100) + "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(totalAll - cgcbAll - cgyfAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format((totalAll - cgcbAll - cgyfAll) / totalAll * 100) + "%");
+
+        rowNum++;
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(vatAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(vatAll / totalAll * 100) + "%");
+        rowNum++;
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(yjfAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(yjfAll / totalAll * 100) + "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(czAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(czAll / totalAll * 100) + "%");
+        rowNum += 2;
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(sdAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(sdAll / totalAll * 100) + "%");
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(advAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(advAll / totalAll * 100) + "%");
+        rowNum += 3;
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(sxfAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(sxfAll / totalAll * 100) + "%");
+        rowNum += 6;
+
+        row=sheet.getRow(++rowNum);
+        cell = row.createCell(aCell);
+        cell.setCellValue(format(refundAll));
+        cell = row.createCell(bCell);
+        cell.setCellValue(format(refundAll / totalAll * 100) + "%");
+    }
+
+    private String format(double num) {
+        return decimalFormat.format(num);
     }
 
     private CipherResult getCipherResult(String yearMouth, String platform, String sku, String site, Integer isFba){
@@ -575,4 +979,8 @@ public class CipherService {
 
         return cipherResult;
     }
+
+
+
+
 }

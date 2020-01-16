@@ -3,6 +3,8 @@ package com.chen.base.mapper;
 import com.chen.base.entity.CipherResult;
 import com.chen.base.entity.CipherResultExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -63,4 +65,8 @@ public interface CipherResultMapper {
      * updateByPrimaryKey
      */
     int updateByPrimaryKey(CipherResult record);
+
+    List<Map> selectByGroup(CipherResultExample example);
+
+    List<String> selectSiteByPlatform(String platform);
 }
